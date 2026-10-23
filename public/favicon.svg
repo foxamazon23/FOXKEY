@@ -1,15 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <rect width="64" height="64" rx="12" fill="#0B4EA2"/>
-  <rect x="3" y="3" width="58" height="58" rx="9" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
-  <g transform="translate(13.5 9) scale(0.58)">
-  <polygon points="4,4 22,16 32,16 32,54 4,30" fill="#F26A1B"/>
-  <polygon points="60,4 42,16 32,16 32,54 60,30" fill="#D55A12"/>
-  <polygon points="19,31 45,31 32,50" fill="#FFFFFF"/>
-  <polygon points="18,22 27,24 22,30" fill="#0B0C0C"/>
-  <polygon points="46,22 37,24 42,30" fill="#0B0C0C"/>
-  <polygon points="29,41 35,41 32,46" fill="#0B0C0C"/>
-  <circle cx="32" cy="11" r="3.2" fill="#0B4EA2"/>
-  <rect x="29" y="50" width="6" height="22" rx="1" fill="#F26A1B"/>
-  <rect x="35" y="57" width="6" height="3.5" rx="0.5" fill="#F26A1B"/>
-  <rect x="35" y="64" width="4.5" height="3.5" rx="0.5" fill="#F26A1B"/></g>
+  <rect x="3.5" y="3.5" width="57" height="57" rx="8.5" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+  <g transform="translate(13 11) scale(0.594)"><path fill="#FFFFFF" fill-rule="evenodd" d="M3 2 L23 18 H41 L61 2 L59 29 L32 56 L5 29 Z M10 10 L19 17.5 L11 21.5 Z M54 10 L45 17.5 L53 21.5 Z M16 27 L27.5 29 L25 33 Z M48 27 L36.5 29 L39 33 Z M5 30 L32 50 L59 30 L59 33.5 L32 53.5 L5 33.5 Z"/><path fill="#FFFFFF" d="M29.2 52 H34.8 V73 H29.2 Z M34.8 58 H41 V61.5 H34.8 Z M34.8 65 H39.5 V68.5 H34.8 Z"/></g>
 </svg>

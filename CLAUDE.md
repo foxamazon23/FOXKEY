@@ -4,7 +4,7 @@ Astro 5 + Tailwind 4 static site. All content lives in `src/config/site.ts`. Bui
 
 ## Current design system: Direction A, "UK road signage" (rebuilt from zero)
 
-- Idea: the site looks like British road furniture. White ground, motorway-sign blue (`sign` #0B4EA2) for structure and page heads, number-plate yellow (`plate` #FFD500, black text) as the only filled colour for the primary action, prohibition red (`stop` #C2271D) only for "What we don't do". Fox orange lives in the logo only.
+- Idea: the site looks like British road furniture. White ground, motorway-sign blue (`sign` #0B4EA2) for structure and page heads, number-plate yellow (`plate` #FFD500, black text) as the only filled colour for the primary action, prohibition red (`stop` #C2271D) only for "What we don't do". The logo is one colour: a white fox pictogram (chin runs into a key blade) on a small blue sign tile (`.sign-tile`), shape shared from `src/brand/fox.mjs`. No orange anywhere.
 - Type: Overpass Variable (open-source face derived from highway sign lettering), self-hosted via `@fontsource-variable/overpass` and preloaded. Scale in `src/styles/global.css`: `t-display`, `t-display-long`, `t-h1`, `t-h2`, `t-h3`, `t-lead`, `t-body`, `t-ui`, `t-small`, `t-label`.
 - Tokens in `@theme`: paper, surface, line, line-soft, ink, ink-soft, muted, sign, sign-dark, sign-soft, on-sign, on-sign-muted, plate, plate-hover, plate-soft, plate-ink, plate-band, fox, fox-dark, stop, stop-soft, whatsapp. Radii: `rounded-sm` 4, `rounded-md` 8, sign 14.
 - Buttons: `btn-call` (yellow, the one primary), `btn-ink`, `btn-outline`, `btn-outline-light` (on blue). WhatsApp gets `btn-wa` (green icon only).

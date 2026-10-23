@@ -26,7 +26,7 @@ const lanes = [
   <section class="on-sign bg-sign text-on-sign">
     <div class="wrap grid items-center gap-x-14 gap-y-10 pt-10 pb-14 md:pt-14 md:pb-20 lg:grid-cols-[1.12fr_0.88fr] [&>*]:min-w-0">
       <div>
-        <p class="t-label mb-5 flex items-center gap-2"><Icon name="clock" class="h-4 w-4 shrink-0" /><span>Mobile auto locksmith · Open {SITE.hoursShort} · {SITE.baseTown}</span></p>
+        <p class="t-label mb-5 flex flex-wrap items-center gap-x-2 gap-y-1"><Icon name="clock" class="h-4 w-4 shrink-0" /><span>Mobile auto locksmith</span><span class="flex gap-2"><span aria-hidden="true">·</span>Open {SITE.hoursShort}</span><span class="flex gap-2"><span aria-hidden="true">·</span>{SITE.baseTown}</span></p>
         <h1 class="t-display">{HOME.heroTitle}</h1>
         <p class="mt-6 max-w-xl text-[1.1875rem] leading-relaxed text-on-sign-muted">{HOME.heroSubtitle}</p>
         <div id="hero-cta" class="mt-9 flex flex-wrap gap-3">
@@ -114,7 +114,7 @@ const lanes = [
         <div class="hidden grid-cols-[0.8fr_1fr_1.15fr] border-b-2 border-ink md:grid" aria-hidden="true">
           <p class="px-6 py-4"></p>
           <p class="t-label px-6 py-4 text-muted">Main dealer</p>
-          <p class="t-label flex items-center gap-2 bg-sign px-6 py-4 text-on-sign"><FoxMark class="h-6 w-5" hole="#0B4EA2" />FoxKey</p>
+          <p class="t-label flex items-center gap-2 bg-sign px-6 py-4 text-on-sign"><FoxMark class="h-6 w-5" />FoxKey</p>
         </div>
         <dl>
           {DEALER_COMPARE.map((r) => (

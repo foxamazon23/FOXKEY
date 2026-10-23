@@ -1,12 +1,15 @@
 ---
 import FoxMark from './FoxMark.astro';
 import { SITE } from '../config/site';
-/** `tone="dark"` for light grounds (ink wordmark), `tone="light"` for dark or blue grounds (white wordmark). */
-interface Props { tone?: 'dark' | 'light'; hole?: string; class?: string }
-const { tone = 'dark', hole = tone === 'dark' ? '#FFFFFF' : '#0B0C0C', class: className = '' } = Astro.props;
+/**
+ * Fox pictogram on a small motorway-blue sign tile, then the wordmark.
+ * `tone="dark"` for light grounds (ink wordmark), `tone="light"` for dark grounds (white wordmark).
+ */
+interface Props { tone?: 'dark' | 'light'; class?: string }
+const { tone = 'dark', class: className = '' } = Astro.props;
 ---
 <a href="/" class={`inline-flex items-center gap-2.5 no-underline ${className}`} aria-label={`${SITE.name}, home`}>
-  <FoxMark class="h-10 w-9 shrink-0" hole={hole} />
+  <span class="sign-tile h-11 w-11"><FoxMark class="mt-[6%] w-[58%]" /></span>
   <span class:list={['flex flex-col leading-none', tone === 'dark' ? 'text-ink' : 'text-on-sign']}>
     <span class="text-[1.4rem] font-black tracking-[-0.01em]">FOXKEY</span>
     <span class:list={['mt-1 text-[0.6875rem] font-extrabold tracking-[0.22em] whitespace-nowrap', tone === 'dark' ? 'text-sign' : 'text-on-sign-muted']}>AUTO &amp; HGV</span>

@@ -8,28 +8,17 @@
 import { writeFileSync, readFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import sharp from 'sharp';
 import { chromium } from 'playwright-core';
+import { FOX_HEAD, FOX_BLADE, foxSvg } from '../src/brand/fox.mjs';
 
 mkdirSync('public', { recursive: true });
 
-const C = { sign: '#0B4EA2', plate: '#FFD500', ink: '#0B0C0C', paper: '#FFFFFF', fox: '#F26A1B', foxDark: '#D55A12', muted: '#DCE7F5' };
+const C = { sign: '#0B4EA2', plate: '#FFD500', ink: '#0B0C0C', paper: '#FFFFFF', muted: '#DCE7F5' };
 
-const mark = (hole) => `
-  <polygon points="4,4 22,16 32,16 32,54 4,30" fill="${C.fox}"/>
-  <polygon points="60,4 42,16 32,16 32,54 60,30" fill="${C.foxDark}"/>
-  <polygon points="19,31 45,31 32,50" fill="${C.paper}"/>
-  <polygon points="18,22 27,24 22,30" fill="${C.ink}"/>
-  <polygon points="46,22 37,24 42,30" fill="${C.ink}"/>
-  <polygon points="29,41 35,41 32,46" fill="${C.ink}"/>
-  <circle cx="32" cy="11" r="3.2" fill="${hole}"/>
-  <rect x="29" y="50" width="6" height="22" rx="1" fill="${C.fox}"/>
-  <rect x="35" y="57" width="6" height="3.5" rx="0.5" fill="${C.fox}"/>
-  <rect x="35" y="64" width="4.5" height="3.5" rx="0.5" fill="${C.fox}"/>`;
-
-// Favicon: the fox on a motorway-blue tile with a white inset rule, like a small road sign.
+// Favicon: the white fox pictogram on a motorway-blue tile with a white inset rule, the same tile as the site logo.
 const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <rect width="64" height="64" rx="12" fill="${C.sign}"/>
-  <rect x="3" y="3" width="58" height="58" rx="9" fill="none" stroke="${C.paper}" stroke-width="2.5"/>
-  <g transform="translate(13.5 9) scale(0.58)">${mark(C.sign)}</g>
+  <rect x="3.5" y="3.5" width="57" height="57" rx="8.5" fill="none" stroke="${C.paper}" stroke-width="3"/>
+  <g transform="translate(13 11) scale(0.594)"><path fill="${C.paper}" fill-rule="evenodd" d="${FOX_HEAD}"/><path fill="${C.paper}" d="${FOX_BLADE}"/></g>
 </svg>`;
 writeFileSync('public/favicon.svg', favicon);
 await sharp(Buffer.from(favicon), { density: 600 }).resize(180, 180).png().toFile('public/apple-touch-icon.png');
@@ -41,7 +30,8 @@ for (const f of ['public/logo-dark.svg', 'public/logo-light.svg', 'public/logo.s
 const fontData = readFileSync('node_modules/@fontsource-variable/overpass/files/overpass-latin-wght-normal.woff2').toString('base64');
 const fontCss = `@font-face{font-family:Overpass;src:url(data:font/woff2;base64,${fontData}) format('woff2');font-weight:100 900}
 *{box-sizing:border-box;margin:0}body{font-family:Overpass,Arial,sans-serif;color:${C.ink}}`;
-const foxSvg = (size, hole) => `<svg width="${size}" height="${Math.round(size * 74 / 64)}" viewBox="0 0 64 74" xmlns="http://www.w3.org/2000/svg">${mark(hole)}</svg>`;
+const fox = (size, fill) => foxSvg(fill, `width="${size}" height="${Math.round((size * 75) / 64)}"`);
+const tile = (size) => `<span style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;background:${C.sign};border-radius:${size * 0.18}px;box-shadow:inset 0 0 0 ${size * 0.045}px ${C.sign},inset 0 0 0 ${size * 0.09}px ${C.paper}">${fox(Math.round(size * 0.58), C.paper)}</span>`;
 
 const og = `<!doctype html><html><head><style>${fontCss}
 .og{width:1200px;height:630px;background:${C.paper};padding:40px;display:flex;flex-direction:column;gap:28px}
@@ -60,7 +50,7 @@ h1{margin-top:auto;font-size:78px;line-height:1;font-weight:900;letter-spacing:-
 .foot p{font-size:25px;font-weight:700;line-height:1.35}
 </style></head><body><div class="og">
 <div class="sign">
-  <div class="brand">${foxSvg(58, C.sign)}<div class="word"><b>FOXKEY</b><span>AUTO &amp; HGV</span></div>
+  <div class="brand">${fox(50, C.paper)}<div class="word"><b>FOXKEY</b><span>AUTO &amp; HGV</span></div>
     <div class="shields"><span class="shield">M62</span><span class="shield">M18</span></div></div>
   <h1>Lost your keys?<br>We come to you – 24/7.</h1>
 </div>
@@ -72,7 +62,7 @@ const logo = `<!doctype html><html><head><style>${fontCss}
 .l{width:512px;height:512px;background:${C.paper};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
 .l b{font-size:78px;font-weight:900;line-height:.9;letter-spacing:-.01em}
 .l span{font-size:26px;font-weight:800;letter-spacing:.24em;color:${C.sign}}
-</style></head><body><div class="l">${foxSvg(180, C.paper)}<b>FOXKEY</b><span>AUTO &amp; HGV</span></div></body></html>`;
+</style></head><body><div class="l">${tile(200)}<b>FOXKEY</b><span>AUTO &amp; HGV</span></div></body></html>`;
 
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium', args: ['--no-sandbox'] });
 const page = await browser.newPage({ deviceScaleFactor: 1 });
