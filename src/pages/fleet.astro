@@ -3,45 +3,62 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import FormShell from '../components/FormShell.astro';
 import Icon from '../components/Icon.astro';
-import { SEO, SITE, FLEET, enabledTruckMakes, enabledVanMakes } from '../config/site';
+import { SEO, SITE, FLEET, OWNERSHIP_PROOF } from '../config/site';
 ---
 <BaseLayout title={SEO.fleet.title} description={SEO.fleet.description}>
-  <PageHead title="Fleet and operator accounts" lead={FLEET.intro} crumbs={[{ label: 'HGV & Lorries', href: '/hgv' }, { label: 'Fleet enquiry' }]} />
-  <section class="band-sm">
-    <div class="wrap grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-      <FormShell id="fleet-form" subject="New fleet enquiry from the FoxKey website" submitLabel="Send fleet enquiry">
-        <div class="grid gap-5 sm:grid-cols-2">
-          <div class="sm:col-span-2"><label for="company" class="label">Company name</label><input id="company" name="company" class="field" required autocomplete="organization" /></div>
-          <div>
-            <label for="fleet_size" class="label">Fleet size</label>
-            <select id="fleet_size" name="fleet_size" class="field" required>
-              <option value="">Choose</option>
-              {['1 to 5 vehicles', '6 to 20 vehicles', '21 to 50 vehicles', '51 to 100 vehicles', 'More than 100'].map((o) => <option value={o}>{o}</option>)}
-            </select>
+  <PageHead title={FLEET.title} lead={FLEET.intro} crumbs={[{ label: 'Fleet enquiry' }]} />
+
+  <section class="band">
+    <div class="wrap">
+      <h2 class="t-h2">What an account gives you</h2>
+      <ul class="mt-8 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
+        {FLEET.benefits.map((b) => (
+          <li class="border-t-[3px] border-ink py-5">
+            <h3 class="font-extrabold">{b.title}</h3>
+            <p class="mt-1 t-ui text-muted">{b.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band bg-surface">
+    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div class="rounded-md bg-paper p-5 sm:p-8">
+        <h2 class="t-h2 mb-2">Fleet enquiry</h2>
+        <p class="t-body mb-8">We call you back to set up the account. For a vehicle off the road right now, ring instead.</p>
+        <FormShell id="fleet-form" subject="New fleet enquiry from foxkeyauto.co.uk" submitLabel="Send fleet enquiry">
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div><label for="f-company" class="label">Company or operator name</label><input id="f-company" name="company" class="field" required autocomplete="organization" /></div>
+            <div><label for="f-name" class="label">Your name</label><input id="f-name" name="name" class="field" required autocomplete="name" /></div>
+            <div><label for="f-phone" class="label">Phone number</label><input id="f-phone" name="phone" type="tel" class="field num" required autocomplete="tel" /></div>
+            <div><label for="f-email" class="label">Email <span class="opt">(optional)</span></label><input id="f-email" name="email" type="email" class="field" autocomplete="email" /></div>
           </div>
-          <div>
-            <label for="fleet_type" class="label">Vehicle types</label>
-            <select id="fleet_type" name="fleet_type" class="field" required>
-              <option value="">Choose</option>
-              {['Lorries and HGVs', 'Vans and light commercials', 'Mixed fleet', 'Cars', 'Other'].map((o) => <option value={o}>{o}</option>)}
-            </select>
+          <fieldset>
+            <legend class="label">Vehicles in the fleet</legend>
+            <div class="flex flex-wrap gap-x-6 gap-y-3">
+              {['Lorries & HGVs', 'Vans', 'Cars'].map((v) => (
+                <label class="flex min-h-11 items-center gap-3 font-bold"><input type="checkbox" name="vehicles" value={v} class="h-6 w-6 accent-sign" />{v}</label>
+              ))}
+            </div>
+          </fieldset>
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div><label for="f-size" class="label">Number of vehicles</label><input id="f-size" name="fleet_size" class="field num" inputmode="numeric" required placeholder="12" /></div>
+            <div><label for="f-depot" class="label">Depot location</label><input id="f-depot" name="depot" class="field" required placeholder="Town or postcode" /></div>
           </div>
-          <div class="sm:col-span-2"><label for="makes" class="label">Makes in the fleet</label><input id="makes" name="makes" class="field" placeholder="Mercedes Actros, Ford Transit, VW Crafter" required /></div>
-          <div><label for="contact_name" class="label">Contact name</label><input id="contact_name" name="contact_name" class="field" required autocomplete="name" /></div>
-          <div><label for="fleet_phone" class="label">Phone</label><input id="fleet_phone" name="phone" type="tel" class="field num" required autocomplete="tel" /></div>
-          <div class="sm:col-span-2"><label for="depot" class="label">Depot or yard <span class="opt">(optional)</span></label><input id="depot" name="depot_location" class="field" placeholder="Town or postcode" /></div>
-          <div class="sm:col-span-2"><label for="fleet_message" class="label">Anything else? <span class="opt">(optional)</span></label><textarea id="fleet_message" name="message" rows="4" class="field" placeholder="Typical jobs, hours, how you want to be invoiced"></textarea></div>
-        </div>
-      </FormShell>
-      <aside class="space-y-8">
-        <dl>
-          {FLEET.benefits.map((b) => <div class="border-t border-line py-4"><dt class="font-bold text-ink">{b.title}</dt><dd class="mt-1 t-small">{b.text}</dd></div>)}
-        </dl>
+          <div><label for="f-message" class="label">Makes, current problems or anything else <span class="opt">(optional)</span></label><textarea id="f-message" name="message" rows="4" class="field"></textarea></div>
+        </FormShell>
+      </div>
+      <aside class="space-y-6 lg:sticky lg:top-28 lg:self-start">
         <div>
-          <h2 class="t-label mb-2">Makes we cover today</h2>
-          <p class="t-small">{[...enabledTruckMakes(), ...enabledVanMakes()].map((m) => m.name).join(', ')}.</p>
+          <h2 class="font-extrabold">Vehicle off the road?</h2>
+          <p class="mt-1 t-ui text-muted">Ring at any hour. Account or not, we can come out.</p>
+          <a href={`tel:${SITE.phoneTel}`} class="btn btn-call num mt-4 w-full"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
         </div>
-        <a href={`tel:${SITE.phoneTel}`} class="btn btn-quiet num w-full"><Icon name="phone" class="h-5 w-5" />{SITE.phoneDisplay}</a>
+        <div class="border-t-[3px] border-ink pt-5">
+          <h2 class="font-extrabold">Authorisation for fleet vehicles</h2>
+          <p class="mt-1 t-ui text-muted">{OWNERSHIP_PROOF.text}</p>
+        </div>
       </aside>
     </div>
   </section>

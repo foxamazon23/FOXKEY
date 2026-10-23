@@ -1,64 +1,61 @@
 ---
 /**
- * Wraps a Formspree form. Set FORMSPREE_ID in src/config/site.ts.
- * Until it is set, the form shows a notice and the submit button is disabled.
+ * Formspree form wrapper. Owner: set FORMSPREE_ID in src/config/site.ts to switch forms on.
+ * Validation runs on submit: message under each field, aria-invalid, a summary, focus on the first problem.
  */
 import Icon from './Icon.astro';
 import { FORMSPREE_ID, SITE } from '../config/site';
 interface Props { id: string; subject: string; submitLabel?: string }
-const { id, subject, submitLabel = 'Send enquiry' } = Astro.props;
+const { id, subject, submitLabel = 'Send' } = Astro.props;
 const configured = FORMSPREE_ID && FORMSPREE_ID !== 'FORMSPREE_ID';
-const action = `https://formspree.io/f/${FORMSPREE_ID}`;
 ---
-<form id={id} action={action} method="POST" class="panel space-y-6 rounded-[28px] p-5 sm:rounded-lg sm:p-8" novalidate>
+<form id={id} action={`https://formspree.io/f/${FORMSPREE_ID}`} method="POST" class="space-y-6" novalidate data-fk-form>
   <input type="hidden" name="_subject" value={subject} />
   <input type="hidden" name="_next" value={new URL('/thanks', Astro.site).href} />
   <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <div class="form-summary hidden border-[3px] border-stop p-4" role="alert" tabindex="-1">
+    <p class="font-extrabold">There is a problem</p>
+    <p class="summary-text mt-1 t-ui"></p>
+  </div>
   <slot />
-  <div class="flex items-start gap-2">
-    <input id={`${id}-consent`} name="consent" type="checkbox" required class="mt-1 h-5 w-5 shrink-0 accent-fox" />
-    <label for={`${id}-consent`} class="t-small">FoxKey can use these details to reply to this enquiry, as set out in the <a href="/privacy" class="link">privacy policy</a>.</label>
+  <div class="flex items-start gap-3">
+    <input id={`${id}-consent`} name="consent" type="checkbox" required class="mt-0.5 h-6 w-6 shrink-0 accent-sign" />
+    <label for={`${id}-consent`} class="t-ui">FoxKey can use these details to reply to this enquiry, as set out in the <a href="/privacy" class="link">privacy policy</a>.</label>
   </div>
   {!configured && (
-    <p class="rounded-md border border-plate/40 bg-plate/10 p-4 text-sm text-ink">
-      {/* Owner: set FORMSPREE_ID in src/config/site.ts to switch the form on. */}
-      <strong>Online enquiries are not switched on yet.</strong> Ring <a href={`tel:${SITE.phoneTel}`} class="link num">{SITE.phoneDisplay}</a> or message on WhatsApp.
-    </p>
+    <p class="border-2 border-ink bg-plate-soft p-4 t-ui"><strong>Online enquiries are not switched on yet.</strong> Ring <a href={`tel:${SITE.phoneTel}`} class="link num">{SITE.phoneDisplay}</a> or message on WhatsApp.</p>
   )}
-  <p class="form-summary hidden rounded-md border border-stop/40 bg-stop/10 p-4 text-sm font-semibold text-ink" role="alert" tabindex="-1"></p>
-  <button type="submit" class="btn btn-call btn-lg w-full sm:w-auto" disabled={!configured}>{submitLabel} <Icon name="arrow-right" class="h-5 w-5" /></button>
+  <button type="submit" class="btn btn-call btn-lg w-full sm:w-auto" disabled={!configured}>{submitLabel}<Icon name="arrow-right" class="h-5 w-5" /></button>
 </form>
-
 <script>
-  // Validate on submit (the form uses novalidate so we control the messages).
-  // Errors sit under each field, the field gets aria-invalid, and focus moves to the first problem.
   const messages: Record<string, string> = {
     valueMissing: 'Fill this in so we can give you an accurate price.',
     patternMismatch: 'Enter the year as four digits, for example 2018.',
     typeMismatch: 'Check the format of this field.',
   };
-  document.querySelectorAll<HTMLFormElement>('form[action*="formspree"]').forEach((form) => {
+  document.querySelectorAll<HTMLFormElement>('form[data-fk-form]').forEach((form) => {
     const fields = () => Array.from(form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input:not([type=hidden]):not([name=_gotcha]), select, textarea'));
     const clear = (el: Element) => {
       el.removeAttribute('aria-invalid');
       const id = el.getAttribute('data-error-id');
       if (id) document.getElementById(id)?.remove();
       el.removeAttribute('data-error-id');
-      el.setAttribute('aria-describedby', (el.getAttribute('aria-describedby') || '').split(' ').filter((x) => !x.startsWith('err-')).join(' ') || '');
-      if (!el.getAttribute('aria-describedby')) el.removeAttribute('aria-describedby');
+      const rest = (el.getAttribute('aria-describedby') || '').split(' ').filter((x) => x && !x.startsWith('err-')).join(' ');
+      if (rest) el.setAttribute('aria-describedby', rest); else el.removeAttribute('aria-describedby');
     };
     const show = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
       const v = el.validity;
       const key = (Object.keys(messages) as (keyof ValidityState)[]).find((k) => v[k]);
       let text = key ? messages[key as string] : 'Check this field.';
       if (el.type === 'checkbox') text = 'Tick this box so we can use your details to reply.';
+      if (el.type === 'radio') text = 'Choose one of the options.';
       if (el.type === 'tel' && v.valueMissing) text = 'Add a phone number so we can call you back.';
       const id = `err-${el.name}-${Math.random().toString(36).slice(2, 7)}`;
       const p = document.createElement('p');
       p.id = id;
-      p.className = 'mt-2 text-sm font-semibold text-stop';
+      p.className = 'mt-2 font-bold text-stop';
       p.textContent = text;
-      const anchor = el.type === 'radio' ? el.closest('fieldset') : el.type === 'checkbox' ? el.parentElement : el;
+      const anchor = el.type === 'radio' ? el.closest('fieldset') : el.type === 'checkbox' ? el.parentElement : el.closest('.plate') ?? el;
       anchor?.insertAdjacentElement('afterend', p);
       el.setAttribute('aria-invalid', 'true');
       el.setAttribute('data-error-id', id);
@@ -67,18 +64,17 @@ const action = `https://formspree.io/f/${FORMSPREE_ID}`;
     form.addEventListener('submit', (e) => {
       const all = fields();
       all.forEach(clear);
-      const bad = all.filter((el) => !el.checkValidity());
       const seen = new Set<string>();
-      const unique = bad.filter((el) => (el.type === 'radio' ? (seen.has(el.name) ? false : (seen.add(el.name), true)) : true));
+      const bad = all.filter((el) => !el.checkValidity()).filter((el) => (el.type === 'radio' ? (seen.has(el.name) ? false : (seen.add(el.name), true)) : true));
       const summary = form.querySelector<HTMLElement>('.form-summary');
-      if (unique.length) {
+      if (bad.length) {
         e.preventDefault();
-        unique.forEach(show);
+        bad.forEach(show);
         if (summary) {
-          summary.textContent = unique.length === 1 ? 'One field needs attention.' : `${unique.length} fields need attention.`;
+          summary.querySelector('.summary-text')!.textContent = bad.length === 1 ? 'One field needs attention.' : `${bad.length} fields need attention.`;
           summary.classList.remove('hidden');
         }
-        unique[0].focus();
+        bad[0].focus();
       } else summary?.classList.add('hidden');
     });
     form.addEventListener('input', (e) => {

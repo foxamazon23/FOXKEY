@@ -1,18 +1,18 @@
 ---
 import Icon from './Icon.astro';
-import { SITE } from '../config/site';
+import { SITE, HOME } from '../config/site';
 interface Props { title?: string; text?: string }
-const { title = 'Stuck right now?', text = `Ring and tell us the make, model and where it is. We agree the price before we set off.` } = Astro.props;
+const { title = HOME.close.title, text = HOME.close.text } = Astro.props;
 ---
-<section class="band rule">
-  <div class="wrap grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+<section class="bg-plate text-plate-ink">
+  <div class="wrap band-sm grid items-center gap-6 lg:grid-cols-[1fr_auto]">
     <div>
       <h2 class="t-h2">{title}</h2>
-      <p class="t-lead mt-4 max-w-xl">{text}</p>
+      <p class="mt-3 max-w-xl text-[1.125rem] leading-relaxed">{text}</p>
     </div>
     <div class="flex flex-wrap gap-3">
-      <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
-      <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-wa btn-lg w-full sm:w-auto"><Icon name="message-circle" class="h-5 w-5" />WhatsApp</a>
+      <a href={`tel:${SITE.phoneTel}`} class="btn btn-ink btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
+      <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-outline btn-lg w-full sm:w-auto">WhatsApp</a>
     </div>
   </div>
 </section>

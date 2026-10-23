@@ -1,59 +1,102 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
-import PriceLedger from '../components/PriceLedger.astro';
+import PriceBoard from '../components/PriceBoard.astro';
 import ProofNotice from '../components/ProofNotice.astro';
 import CallBand from '../components/CallBand.astro';
 import Icon from '../components/Icon.astro';
-import { SEO, SITE, CAR_SERVICES, CAR_CALLOUT, HGV_SERVICES, HGV_CALLOUT, HGV_PRICE_NOTE, GENERAL_PRICE_NOTE, VAT_LABEL, WARRANTY_TEXT } from '../config/site';
+import {
+  SEO, SITE, CAR_SERVICES, HGV_SERVICES, CAR_CALLOUT, HGV_CALLOUT, GENERAL_PRICE_NOTE, HGV_PRICE_NOTE,
+  WARRANTY_TEXT, PRICES_INCLUDE_VAT, FLEET,
+} from '../config/site';
+
+const tabs = [
+  { id: 'cars', label: 'Cars & Vans', icon: 'car', services: CAR_SERVICES, base: '/services', callout: { title: `${CAR_CALLOUT.title} within ${SITE.freeCalloutMiles} miles of Goole`, text: 'Free' }, note: GENERAL_PRICE_NOTE },
+  { id: 'hgv', label: 'HGV & Lorries', icon: 'truck', services: HGV_SERVICES, base: '/hgv', callout: { title: `${HGV_CALLOUT.title}, within ${SITE.freeCalloutMiles} miles`, text: 'Free' }, note: HGV_PRICE_NOTE },
+];
 ---
 <BaseLayout title={SEO.prices.title} description={SEO.prices.description}>
-  <PageHead title="Prices, agreed on the phone before we travel" lead={`Every figure is a starting price, ${VAT_LABEL}. Your make, model and year set the final price, and we tell you what it is before we set off.`} crumbs={[{ label: 'Prices' }]} />
+  <PageHead
+    title="Prices"
+    lead="Starting prices for every job. The exact figure depends on make, model and year, and we confirm it by phone before we travel."
+    crumbs={[{ label: 'Prices' }]}
+  />
 
-  <section class="band-sm">
-    <div class="wrap max-w-4xl">
-      <div role="tablist" aria-label="Price lists" class="inline-flex gap-1 rounded-md border border-line bg-surface p-1">
-        <button role="tab" id="tab-cars" aria-selected="true" aria-controls="panel-cars" class="price-tab inline-flex min-h-11 items-center gap-2 rounded-[10px] px-4 t-ui font-bold text-muted aria-selected:bg-raised aria-selected:text-ink"><Icon name="car" class="h-4 w-4" />Cars &amp; Vans</button>
-        <button role="tab" id="tab-hgv" aria-selected="false" aria-controls="panel-hgv" tabindex="-1" class="price-tab inline-flex min-h-11 items-center gap-2 rounded-[10px] px-4 t-ui font-bold text-muted aria-selected:bg-raised aria-selected:text-ink"><Icon name="truck" class="h-4 w-4" />HGV &amp; Lorries</button>
+  <section class="band">
+    <div class="wrap grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
+      <div>
+        <!-- Tabs switch on with JavaScript; without it both lists show one after the other. -->
+        <div role="tablist" aria-label="Price lists" class="mb-6 hidden gap-2 border-b-[3px] border-ink" data-tabs>
+          {tabs.map((t, i) => (
+            <button type="button" role="tab" id={`tab-${t.id}`} aria-controls={`panel-${t.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}
+              class="-mb-[3px] inline-flex min-h-12 items-center gap-2 border-[3px] border-b-0 border-transparent px-4 font-extrabold text-muted aria-selected:border-ink aria-selected:bg-paper aria-selected:text-ink">
+              <Icon name={t.icon} class="h-5 w-5" />{t.label}
+            </button>
+          ))}
+        </div>
+        {tabs.map((t) => (
+          <div id={`panel-${t.id}`} role="tabpanel" aria-labelledby={`tab-${t.id}`} class="mb-12 last:mb-0" data-panel>
+            <h2 class="t-h2 mb-5" data-panel-title>{t.label}</h2>
+            <PriceBoard services={t.services} base={t.base} caption={`${t.label} starting prices`} callout={t.callout} />
+            <p class="mt-5 measure t-ui">{t.note}</p>
+          </div>
+        ))}
+        <script is:inline>
+          // Inline so the tabs are set up before first paint (no layout shift).
+          (() => {
+          const list = document.querySelector('[data-tabs]');
+          if (list) {
+            const tabs = Array.from(list.querySelectorAll('[role=tab]'));
+            const panels = Array.from(document.querySelectorAll('[data-panel]'));
+            const select = (tab, focus = false) => {
+              tabs.forEach((t) => {
+                const on = t === tab;
+                t.setAttribute('aria-selected', String(on));
+                t.tabIndex = on ? 0 : -1;
+                document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+              });
+              if (focus) tab.focus();
+            };
+            list.classList.remove('hidden');
+            list.classList.add('flex');
+            panels.forEach((p) => {
+              p.classList.remove('mb-12');
+              p.querySelector('[data-panel-title]')?.classList.add('sr-only');
+              p.tabIndex = 0;
+            });
+            const start = tabs.find((t) => location.hash === `#${t.id.replace('tab-', '')}`) ?? tabs[0];
+            select(start);
+            tabs.forEach((t, i) => {
+              t.addEventListener('click', () => select(t));
+              t.addEventListener('keydown', (e) => {
+                const k = e.key;
+                let next = -1;
+                if (k === 'ArrowRight') next = (i + 1) % tabs.length;
+                else if (k === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length;
+                else if (k === 'Home') next = 0;
+                else if (k === 'End') next = tabs.length - 1;
+                if (next >= 0) { e.preventDefault(); select(tabs[next], true); }
+              });
+            });
+          }
+          })();
+        </script>
       </div>
-      <div id="panel-cars" role="tabpanel" aria-labelledby="tab-cars" tabindex="0" class="price-panel mt-8">
-        <h2 class="sr-only">Cars and vans</h2>
-        <PriceLedger services={CAR_SERVICES} base="/services" callout={CAR_CALLOUT} caption="Car and van prices" />
-        <p class="mt-5 t-small">{GENERAL_PRICE_NOTE}</p>
-      </div>
-      <div id="panel-hgv" role="tabpanel" aria-labelledby="tab-hgv" tabindex="0" class="price-panel mt-8" hidden>
-        <h2 id="hgv" class="sr-only">HGV and lorries</h2>
-        <PriceLedger services={HGV_SERVICES} base="/hgv" callout={HGV_CALLOUT} caption="HGV and lorry prices" />
-        <p class="mt-5 t-small">{HGV_PRICE_NOTE}</p>
-      </div>
-
-      <dl class="mt-14 grid gap-x-10 sm:grid-cols-2">
-        <div class="border-t border-line py-5"><dt class="font-bold text-ink">Call-out</dt><dd class="mt-1 t-small">Free within {SITE.freeCalloutMiles} miles of Goole. Further out, the trip is quoted upfront.</dd></div>
-        <div class="border-t border-line py-5"><dt class="font-bold text-ink">Paying</dt><dd class="mt-1 t-small">{SITE.payment.join(', ')}. For key work you pay once the vehicle starts.</dd></div>
-        <div class="border-t border-line py-5"><dt class="font-bold text-ink">VAT</dt><dd class="mt-1 t-small">Prices are shown {VAT_LABEL}.</dd></div>
-        <div class="border-t border-line py-5"><dt class="font-bold text-ink">Warranty</dt><dd class="mt-1 t-small">{WARRANTY_TEXT}</dd></div>
-      </dl>
-      <ProofNotice class="mt-8" />
+      <aside class="space-y-6 lg:sticky lg:top-28 lg:self-start">
+        <div class="panel p-5">
+          <h2 class="font-extrabold">VAT</h2>
+          <p class="mt-1 t-ui text-muted">{PRICES_INCLUDE_VAT ? 'Prices include VAT.' : 'Prices are shown before VAT. VAT is added at the current rate.'}</p>
+          <h2 class="mt-5 font-extrabold">Paying</h2>
+          <p class="mt-1 t-ui text-muted">{SITE.payment.join(', ')}. For key work you pay once the vehicle starts.</p>
+          <h2 class="mt-5 font-extrabold">Warranty</h2>
+          <p class="mt-1 t-ui text-muted">{WARRANTY_TEXT}</p>
+          <h2 class="mt-5 font-extrabold">Running a fleet?</h2>
+          <p class="mt-1 t-ui text-muted">Account rates and monthly invoicing. <a href={FLEET.cta.href} class="link">Fleet enquiry</a></p>
+        </div>
+        <ProofNotice headingLevel="h2" />
+      </aside>
     </div>
   </section>
 
-  <CallBand title="Want the exact figure?" text="Give us the make, model and year and we will tell you on the call." />
-
-  <script>
-    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.price-tab'));
-    const panels = Array.from(document.querySelectorAll<HTMLElement>('.price-panel'));
-    const show = (tab: HTMLButtonElement, focus = false) => {
-      tabs.forEach((t) => { const on = t === tab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
-      panels.forEach((p) => { p.hidden = p.id !== tab.getAttribute('aria-controls'); });
-      if (focus) tab.focus();
-    };
-    tabs.forEach((tab, i) => {
-      tab.addEventListener('click', () => show(tab));
-      tab.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') show(tabs[(i + 1) % tabs.length], true);
-        if (e.key === 'ArrowLeft') show(tabs[(i - 1 + tabs.length) % tabs.length], true);
-      });
-    });
-    if (['#hgv', '#panel-hgv'].includes(location.hash)) show(tabs[1]);
-  </script>
+  <CallBand title="Want the exact price?" text="Ring or WhatsApp with the make, model, year and where the vehicle is. You get the figure before we set off." />
 </BaseLayout>

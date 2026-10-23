@@ -3,28 +3,40 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHead from '../../components/PageHead.astro';
 import CoverageMap from '../../components/CoverageMap.astro';
 import CallBand from '../../components/CallBand.astro';
-import Icon from '../../components/Icon.astro';
 import { SEO, SITE, AREAS } from '../../config/site';
-const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles);
+const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles || a.name.localeCompare(b.name));
 ---
 <BaseLayout title={SEO.areas.title} description={SEO.areas.description}>
-  <PageHead title="Where we cover" lead={`Based in ${SITE.baseTown}. ${SITE.coverage.primary} first, with free call-out within ${SITE.freeCalloutMiles} miles. The rest of the UK on request, with travel quoted upfront.`} crumbs={[{ label: 'Areas' }]} />
-  <section class="band-sm">
-    <div class="wrap grid items-start gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-      <div class="panel p-4 sm:p-6"><CoverageMap id="areas-map" animate /></div>
-      <ul class="border-t border-line">
-        {sorted.map((a) => (
-          <li class="border-b border-line">
-            <a href={`/areas/${a.slug}`} class="group grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 py-5">
-              <span class="text-xl font-extrabold tracking-[-0.015em] text-ink group-hover:text-fox-ink">Auto locksmith {a.name}</span>
-              <span class:list={['text-sm font-bold', a.free ? 'text-fox-ink' : 'text-muted']}>{a.free ? 'Free call-out' : 'Travel quoted'}</span>
-              <span class="col-span-2 t-small">{a.distanceNote}</span>
-            </a>
-          </li>
-        ))}
-        <li class="flex items-start gap-3 py-5"><Icon name="route" class="mt-1 h-5 w-5 text-fox" /><p class="t-small"><strong class="text-ink">Somewhere else?</strong> {SITE.coverage.secondary}. Ring with the postcode and we will quote the trip on the call.</p></li>
-      </ul>
+  <PageHead
+    title="Areas we cover"
+    lead={`${SITE.baseDescription} Free call-out within ${SITE.freeCalloutMiles} road miles of Goole. Further out, the travel is quoted before we set off.`}
+    crumbs={[{ label: 'Areas' }]}
+  />
+
+  <section class="band">
+    <div class="wrap grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+      <div>
+        <h2 class="t-h3 mb-3">Towns with their own page</h2>
+        <table class="w-full border-collapse text-left">
+          <caption class="sr-only">Road miles from Goole and call-out terms</caption>
+          <thead>
+            <tr class="border-b-[3px] border-ink"><th scope="col" class="t-label py-2.5">Town</th><th scope="col" class="t-label py-2.5 text-right">Miles</th><th scope="col" class="t-label py-2.5 text-right">Call-out</th></tr>
+          </thead>
+          <tbody>
+            {sorted.map((a) => (
+              <tr class="border-b border-line">
+                <th scope="row" class="py-3.5 pr-3"><a href={`/areas/${a.slug}`} class="link text-[1.125rem]">{a.name}</a></th>
+                <td class="num py-3.5 text-right font-bold">{a.roadMiles === 0 ? 'Base' : a.roadMiles}</td>
+                <td class="py-3.5 pl-3 text-right">{a.free ? <span class="tag-free">FREE</span> : <span class="tag-quoted">QUOTED</span>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="mt-5 t-ui">{SITE.coverage.secondary}.</p>
+      </div>
+      <CoverageMap />
     </div>
   </section>
+
   <CallBand />
 </BaseLayout>

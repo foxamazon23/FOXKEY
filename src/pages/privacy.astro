@@ -2,54 +2,54 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import { SEO, SITE } from '../config/site';
-const updated = '23 October 2026';
+const updated = '2026';
 ---
 <BaseLayout title={SEO.privacy.title} description={SEO.privacy.description}>
-  <PageHead title="Privacy policy" lead={`How ${SITE.name} handles your personal information. Last updated ${updated}.`} crumbs={[{ label: 'Privacy policy' }]} />
-  <section class="band-sm">
-    <div class="wrap"><div class="prose-fk">
-      <h2 style="margin-top:0">Who we are</h2>
-      <p>{SITE.name} (“FoxKey”, “we”, “us”) is a mobile auto locksmith and vehicle diagnostics business based in {SITE.baseTown}, {SITE.baseRegion}, United Kingdom. We are the data controller for the personal information described in this policy. You can contact us by phone or WhatsApp on {SITE.phoneDisplay}.</p>
+  <PageHead title="Privacy policy" lead="How we handle the details you give us, under UK GDPR and the Data Protection Act 2018." crumbs={[{ label: 'Privacy policy' }]} />
 
-      <h2>What information we collect</h2>
-      <ul>
-        <li><strong>Enquiry forms</strong>: name, phone number, company name (fleet enquiries), vehicle details (type, make, model, year, registration where given), vehicle location or postcode and the content of your message.</li>
-        <li><strong>Phone and WhatsApp</strong>: your number and the content of calls or messages you send us.</li>
-        <li><strong>Proof of ownership</strong>: before key, immobiliser or module work we inspect your V5C logbook and photo ID (or operator authorisation). We check these in person; we may record that the check was carried out and the registration worked on, but we do not keep copies of your ID unless you agree.</li>
-        <li><strong>Payment information</strong>: card payments are processed by our card-terminal provider; we do not store card numbers.</li>
-        <li><strong>Technical data</strong>: our hosting provider may log basic request data (IP address, browser type, pages requested) for security and performance.</li>
-      </ul>
+  <section class="band">
+    <div class="wrap">
+      <div class="prose-fk">
+        <p class="t-small">Last updated {updated}.</p>
 
-      <h2>Why we use it and our lawful basis</h2>
-      <ul>
-        <li>To respond to your enquiry, quote and carry out the work you ask for (<em>performance of a contract / steps before a contract</em>).</li>
-        <li>To verify you are entitled to have keys or modules programmed to a vehicle, and to keep a record of that verification (<em>legal obligation and legitimate interests</em>, preventing vehicle theft and fraud).</li>
-        <li>To issue invoices and keep accounting records (<em>legal obligation</em>).</li>
-        <li>To keep the website secure (<em>legitimate interests</em>).</li>
-      </ul>
-      <p>We do not use your information for marketing unless you ask us to, and we do not sell it.</p>
+        <h2>Who we are</h2>
+        <p>{SITE.name} is a mobile auto locksmith and diagnostics business based in {SITE.baseTown}, {SITE.baseRegion}. We are the controller of the personal data described here. You can reach us on <a href={`tel:${SITE.phoneTel}`}>{SITE.phoneDisplay}</a> by phone or WhatsApp.</p>
 
-      <h2>Who we share it with</h2>
-      <ul>
-        <li><strong>Formspree</strong>: processes website form submissions and forwards them to us. See <a href="https://formspree.io/legal/privacy-policy/" rel="noopener" target="_blank">Formspree’s privacy policy</a>.</li>
-        <li><strong>Meta Platforms (WhatsApp)</strong>: if you contact us via WhatsApp, your messages are handled under WhatsApp’s terms.</li>
-        <li><strong>Google</strong>: the Contact page embeds a Google Map, which may set cookies and collect usage data when loaded. See <a href="https://policies.google.com/privacy" rel="noopener" target="_blank">Google’s privacy policy</a>.</li>
-        <li><strong>Our website host</strong> (e.g. Cloudflare or Netlify), serves the site and may log technical data.</li>
-        <li>Our accountant and payment provider, where needed to process payments and keep records.</li>
-        <li>The police or other authorities where required by law, for example in connection with suspected vehicle theft.</li>
-      </ul>
+        <h2>What we collect</h2>
+        <ul>
+          <li>Details you send through our forms, by phone or on WhatsApp: your name, phone number, email if you give it, the vehicle (make, model, year, registration), where it is and what you need.</li>
+          <li>Proof of ownership we check before key or module work: we look at your V5C and photo ID, or an operator’s letter of authorisation. We may note the document type and the details needed to show the check was done.</li>
+          <li>Payment and invoice records for work we carry out.</li>
+        </ul>
 
-      <h2>How long we keep it</h2>
-      <p>Enquiry details are kept for up to 12 months after our last contact unless they become part of a job record. Job and invoicing records are kept for 6 years as required for tax purposes. Ownership-verification records are kept with the job record.</p>
+        <h2>Why we use it and our lawful basis</h2>
+        <ul>
+          <li>To reply to your enquiry, quote and carry out the job: steps taken at your request before and under a contract.</li>
+          <li>To check that a vehicle belongs to the person asking for keys: our legitimate interest in preventing vehicle crime, and protecting you.</li>
+          <li>To keep invoices and accounts: our legal obligations.</li>
+        </ul>
+        <p>We do not use your details for marketing and we do not sell them.</p>
 
-      <h2>Cookies</h2>
-      <p>This site uses a single essential item of local storage to remember that you have dismissed the cookie notice. We do not use analytics or advertising cookies. The Google Maps embed on the Contact page may set third-party cookies when it loads. You can block or delete cookies in your browser settings.</p>
+        <h2>Who we share it with</h2>
+        <ul>
+          <li><strong>Formspree</strong>, which delivers website form submissions to us by email.</li>
+          <li><strong>WhatsApp</strong> (Meta), if you choose to message us there.</li>
+          <li><strong>Google</strong>, if you view the map on our contact page. The map loads from Google and Google may set cookies when you use it.</li>
+          <li>Our website host, which keeps short-term server logs (such as IP addresses) to run and protect the site.</li>
+          <li>Our accountant, HMRC or the police where the law requires it.</li>
+        </ul>
+        <p>Some of these providers may process data outside the UK. Where they do, they rely on safeguards recognised under UK law.</p>
 
-      <h2>Your rights</h2>
-      <p>Under UK GDPR you have the right to access the personal information we hold about you, to have it corrected or erased, to restrict or object to its processing, and to data portability. To exercise any of these rights, contact us on {SITE.phoneDisplay}. You also have the right to complain to the Information Commissioner’s Office (ICO) at <a href="https://ico.org.uk" rel="noopener" target="_blank">ico.org.uk</a>.</p>
+        <h2>How long we keep it</h2>
+        <p>Enquiries that do not lead to a job are deleted within 12 months. Job and invoice records are kept for six years for tax purposes, then deleted.</p>
 
-      <h2>Changes</h2>
-      <p>We may update this policy from time to time. The date at the top shows when it was last changed.</p>
-    </div></div>
+        <h2>Cookies</h2>
+        <p>This website does not use analytics or advertising cookies. We store one setting in your browser to remember that you have hidden the cookie notice. The Google map on the contact page may set its own cookies when it loads.</p>
+
+        <h2>Your rights</h2>
+        <p>You can ask for a copy of your data, ask us to correct or delete it, object to how we use it or ask us to restrict it. Call or message us on {SITE.phoneDisplay}. We reply within one month.</p>
+        <p>If you are unhappy with how we have handled your data you can complain to the Information Commissioner’s Office at <a href="https://ico.org.uk/make-a-complaint/" rel="noopener" target="_blank">ico.org.uk</a> or on 0303 123 1113.</p>
+      </div>
+    </div>
   </section>
 </BaseLayout>

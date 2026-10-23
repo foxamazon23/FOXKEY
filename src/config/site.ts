@@ -389,12 +389,15 @@ export const WHY_FOXKEY = [
 // ---------------------------------------------------------------------------
 
 export const HOME = {
+  /** Owner's exact headline. */
   heroTitle: 'Lost your keys? We come to you – 24/7.',
-  heroSubtitle: 'Keys cut and programmed, remotes repaired and faults diagnosed on cars, vans, lorries and HGVs, wherever they stopped in Goole and Yorkshire',
-  heroNote: 'Free call-out within 25 miles of Goole. We agree the price before we set off, and for key work you pay once the vehicle starts.',
+  heroSubtitle:
+    'Keys cut and programmed, remotes repaired and faults diagnosed on cars, vans, lorries and HGVs, wherever they stopped in Goole and Yorkshire.',
+  heroNote: 'Price agreed before we set off. For key work you pay once the vehicle starts.',
+  signLabel: 'Road miles from Goole',
   lanes: {
-    title: 'Is it a car, a van or a lorry?',
-    text: 'Same van, same equipment, two kinds of job. Pick yours for the full list of services and prices.',
+    title: 'Car, van or lorry?',
+    text: 'One van carries the kit for both. Pick yours for every service and price.',
   },
   cars: {
     title: 'Cars & Vans',
@@ -408,25 +411,33 @@ export const HOME = {
   },
   prices: {
     title: 'What will it cost?',
-    text: 'Prices start here. We confirm the exact figure for your make, model and year on the phone, before we travel.',
+    text: 'Starting prices. We confirm the exact figure for your make, model and year on the phone, before we travel.',
   },
-  makes: {
-    title: 'Do you work on my vehicle?',
-    text: 'These are the makes we programme and diagnose today. Not listed? Send the registration and we will tell you straight away.',
-    plateLabel: 'Start a quote with your registration',
-    plateHint: 'We check it when you send the form. Nothing is looked up automatically.',
+  steps: {
+    title: 'From the phone call to a running engine',
+    items: [
+      { title: 'Ring or WhatsApp', text: 'Make, model, year and where the vehicle is. You get the price before we set off.' },
+      { title: 'We drive to you', text: 'Keys are cut and programmed at the vehicle. Nothing is posted away and nothing is towed.' },
+      { title: 'Check, test, pay', text: 'We check the V5C and photo ID, test every key, and you pay once the vehicle starts.' },
+    ],
   },
   compare: {
     title: 'Why not just ring the dealer?',
     text: 'You can. This is what usually changes when you ring us instead.',
   },
-  coverage: {
-    title: 'Can you get to me?',
-    text: 'Goole is home, so the towns around it are free to reach. Further out we quote the travel before we leave.',
+  makes: {
+    title: 'Do you work on my vehicle?',
+    text: 'The makes we programme and diagnose today. Not listed? Send the registration and we will tell you straight away.',
+    plateLabel: 'Start a quote with your registration',
+    plateHint: 'We check it when you send the form. Nothing is looked up automatically.',
   },
   ready: {
     title: 'What should I have ready?',
     text: 'We never programme a key without proof the vehicle is yours. Having these to hand keeps the job quick.',
+  },
+  close: {
+    title: 'Stuck right now?',
+    text: 'Ring with the make, model and where it is. We agree the price before we set off.',
   },
 };
 
@@ -753,7 +764,7 @@ export const SEO = {
   fleet: {
     title: 'Fleet & Operator Accounts for HGV, Lorry & Van Fleets | FoxKey Auto & HGV',
     description:
-      'Set up a fleet account with FoxKey: monthly invoicing, priority response and fleet discounts on key programming and diagnostics for lorries, HGVs and vans across Yorkshire.',
+      'Set up a fleet account with FoxKey: monthly invoicing, priority response and account rates on key programming and diagnostics for lorries, HGVs and vans across Yorkshire.',
   },
   about: {
     title: 'About | Mobile Auto Locksmith in Goole | FoxKey Auto & HGV',

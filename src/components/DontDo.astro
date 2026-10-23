@@ -1,14 +1,14 @@
 ---
-import Icon from './Icon.astro';
+import NoSign from './NoSign.astro';
 import { WHAT_WE_DONT_DO } from '../config/site';
 interface Props { headingLevel?: 'h2' | 'h3'; class?: string }
 const { headingLevel: H = 'h2', class: className = '' } = Astro.props;
 ---
-<aside class={`rounded-lg border border-stop/35 bg-stop/[0.06] p-6 sm:p-8 ${className}`} aria-labelledby="dont-do-title">
-  <H id="dont-do-title" class="flex items-center gap-3 text-xl font-extrabold text-ink"><Icon name="ban" class="h-6 w-6 text-stop" />{WHAT_WE_DONT_DO.title}</H>
-  <p class="mt-3 t-small">{WHAT_WE_DONT_DO.intro}</p>
-  <ul class="mt-4 divide-y divide-line border-y border-line">
-    {WHAT_WE_DONT_DO.items.map((i) => <li class="flex gap-3 py-3 t-ui text-ink"><Icon name="x" class="mt-1 h-4 w-4 shrink-0 text-stop" />{i}</li>)}
+<aside class={`rounded-md border-2 border-stop bg-stop-soft p-6 sm:p-8 ${className}`} aria-labelledby="dont-do-title">
+  <H id="dont-do-title" class="text-[1.375rem] font-black">{WHAT_WE_DONT_DO.title}</H>
+  <p class="mt-2 t-ui">{WHAT_WE_DONT_DO.intro}</p>
+  <ul class="mt-4 space-y-3">
+    {WHAT_WE_DONT_DO.items.map((i) => <li class="flex gap-3 font-bold"><NoSign class="mt-0.5 h-6 w-6 shrink-0" />{i}</li>)}
   </ul>
-  <p class="mt-4 t-small">{WHAT_WE_DONT_DO.outro}</p>
+  <p class="mt-5 t-ui">{WHAT_WE_DONT_DO.outro}</p>
 </aside>

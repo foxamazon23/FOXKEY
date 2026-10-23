@@ -3,109 +3,123 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ServiceEntry from '../components/ServiceEntry.astro';
 import ProofNotice from '../components/ProofNotice.astro';
 import DontDo from '../components/DontDo.astro';
-import PhotoSlot from '../components/PhotoSlot.astro';
+import Faq from '../components/Faq.astro';
 import CoverageMap from '../components/CoverageMap.astro';
 import CallBand from '../components/CallBand.astro';
-import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
-import { SEO, SITE, HGV_SERVICES, HGV_CALLOUT, HGV_PRICE_NOTE, WARRANTY_TEXT, FLEET, FAQ_HGV, HGV_PAGE, enabledTruckMakes, enabledVanMakes } from '../config/site';
-const short = (t: string) => t.split(' – ')[0].split(' (')[0].split(' with ')[0];
+import {
+  SEO, SITE, HGV_PAGE, HGV_SERVICES, HGV_CALLOUT, HGV_PRICE_NOTE, FLEET, FAQ_HGV, VAT_LABEL,
+  enabledTruckMakes, enabledVanMakes,
+} from '../config/site';
+
+const from = '£' + Math.min(...HGV_SERVICES.map((s) => Number(s.priceFrom.replace('£', ''))));
+const crumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'HGV & Lorries', item: new URL('/hgv', Astro.site).href },
+  ],
+};
 ---
-<BaseLayout title={SEO.hgv.title} description={SEO.hgv.description}>
-  <section class="border-b border-line">
-    <div class="wrap pt-10 pb-12 md:pt-14 md:pb-16">
-      <nav aria-label="Breadcrumb" class="mb-6 text-sm text-muted"><a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true" class="mx-1.5 text-faint">/</span> <span aria-current="page" class="text-ink">HGV &amp; Lorries</span></nav>
-      <h1 class="t-display-long max-w-4xl">{HGV_PAGE.heroTitle.replace(' – ', '\u00a0– ')}</h1>
-      <p class="t-lead mt-6 max-w-2xl">{HGV_PAGE.heroSubtitle()}</p>
-      <div id="hero-cta" class="mt-8 flex flex-wrap gap-3">
-        <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
-        <a href="#fleet" class="btn btn-quiet btn-lg w-full sm:w-auto">Fleet accounts</a>
+<BaseLayout title={SEO.hgv.title} description={SEO.hgv.description} schema={[crumbs]}>
+  <section class="on-sign bg-sign text-on-sign">
+    <div class="wrap grid items-center gap-x-14 gap-y-10 pt-8 pb-14 md:pt-10 md:pb-20 lg:grid-cols-[1.15fr_0.85fr]">
+      <div>
+        <nav aria-label="Breadcrumb" class="mb-6 t-ui">
+          <ol class="flex flex-wrap items-center gap-2"><li><a href="/" class="text-on-sign underline">Home</a></li><li aria-hidden="true">›</li><li><span aria-current="page" class="font-bold">HGV &amp; Lorries</span></li></ol>
+        </nav>
+        <h1 class="t-display-long">{HGV_PAGE.heroTitle}</h1>
+        <p class="mt-6 max-w-xl text-[1.1875rem] leading-relaxed text-on-sign-muted">{HGV_PAGE.heroSubtitle()}</p>
+        <div id="hero-cta" class="mt-9 flex flex-wrap gap-3">
+          <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
+          <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-outline-light btn-lg w-full sm:w-auto">WhatsApp</a>
+        </div>
+        <p class="mt-5 max-w-lg t-ui text-on-sign-muted">{HGV_PAGE.heroNote}</p>
       </div>
-      <p class="mt-5 max-w-xl t-small">{HGV_PAGE.heroNote}</p>
+      <div class="sign p-6 sm:p-8">
+        <p class="flex gap-2"><span class="shield">M62</span><span class="shield">M18</span></p>
+        <p class="mt-5 text-[1.5rem] leading-tight font-black">{HGV_CALLOUT.title}</p>
+        <p class="mt-2 t-ui text-on-sign-muted">{HGV_CALLOUT.text}</p>
+        <dl class="mt-6 grid grid-cols-2 gap-4 border-t-2 border-on-sign pt-5">
+          <div><dt class="t-label text-on-sign-muted">HGV work from</dt><dd class="num mt-1 text-[2rem] leading-none font-black">{from}<span class="ml-1 text-base font-bold">{VAT_LABEL}</span></dd></div>
+          <div><dt class="t-label text-on-sign-muted">Hours</dt><dd class="mt-1 text-[2rem] leading-none font-black">{SITE.hoursShort}</dd></div>
+        </dl>
+      </div>
     </div>
   </section>
 
-  <section class="band-sm">
-    <div class="wrap grid gap-x-16 lg:grid-cols-[15rem_minmax(0,1fr)]">
-      <nav aria-label="HGV services on this page" class="hidden lg:block">
-        <ul class="sticky top-28 space-y-1 border-l border-line">
-          {HGV_SERVICES.map((s) => (
-            <li><a href={`#${s.id}`} class="-ml-px block border-l border-transparent py-1.5 pl-4 text-sm text-muted hover:border-fox hover:text-ink">{short(s.title)}</a></li>
-          ))}
-        </ul>
-      </nav>
-      <div>
-        <h2 class="sr-only">HGV and lorry services</h2>
+  <section class="band" aria-labelledby="hgv-services">
+    <div class="wrap">
+      <div class="max-w-2xl">
+        <h2 id="hgv-services" class="t-h2">HGV and lorry services</h2>
+        <p class="t-lead mt-3">{HGV_PRICE_NOTE}</p>
+      </div>
+      <div class="mt-8">
         {HGV_SERVICES.map((s) => <ServiceEntry service={s} level="h3" />)}
-        <div class="mt-10 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <div><h3 class="font-bold text-ink">{HGV_CALLOUT.title}</h3><p class="mt-1 t-small">{HGV_CALLOUT.text}</p></div>
-          <a href="/prices#hgv" class="link shrink-0">HGV price list</a>
-        </div>
-        <div class="mt-8 space-y-3 t-small max-w-2xl">
-          <p>{HGV_PRICE_NOTE}</p>
-          <p><strong class="text-ink">Warranty:</strong> {WARRANTY_TEXT}</p>
-        </div>
       </div>
+      <div class="mt-9 flex flex-wrap items-baseline justify-between gap-3 bg-plate-soft p-5">
+        <h3 class="text-[1.25rem] font-black">{HGV_CALLOUT.title}</h3>
+        <p class="t-ui font-bold">{HGV_CALLOUT.text}</p>
+      </div>
+      <ProofNotice class="mt-6" />
     </div>
   </section>
 
-  <section class="band rule">
-    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-2">
+  <section class="band bg-surface">
+    <div class="wrap grid gap-x-14 gap-y-10 lg:grid-cols-[0.9fr_1.1fr]">
       <div>
-        <h2 class="t-h2">Lorry and HGV makes we cover today</h2>
-        <p class="t-lead mt-4">We only list makes we can programme and diagnose now. More are added as our coverage grows, so ring if yours is missing.</p>
-        <ul class="mt-8 border-t border-line">
-          {enabledTruckMakes().map((m) => <li class="flex items-center gap-3 border-b border-line py-3.5 text-lg font-bold text-ink"><Icon name="truck" class="h-5 w-5 text-fox" />{m.name}</li>)}
+        <h2 class="t-h2">Lorries and vans we work on</h2>
+        <p class="t-lead mt-3">We list a truck make only once our equipment covers it. Not listed? Ring with the registration and we will tell you.</p>
+        <h3 class="t-label mt-8 mb-2">Lorries &amp; HGV</h3>
+        <ul class="border-t-[3px] border-ink">
+          {enabledTruckMakes().map((m) => <li class="border-b border-line bg-paper px-3 py-3 font-bold">{m.name}</li>)}
         </ul>
-        <h3 class="t-label mt-10 mb-3">Light commercials</h3>
-        <p class="t-body">{enabledVanMakes().map((m) => m.name).join(', ')}.</p>
-        <ProofNotice class="mt-10" />
+        <h3 class="t-label mt-8 mb-2">Light commercials</h3>
+        <ul class="grid grid-cols-1 border-t-[3px] border-ink sm:grid-cols-2 sm:gap-x-5">
+          {enabledVanMakes().map((m) => <li class="border-b border-line py-2.5 t-ui font-bold">{m.name}</li>)}
+        </ul>
       </div>
-      <DontDo />
+      <DontDo class="self-start" />
     </div>
   </section>
 
-  <section id="fleet" class="band rule">
-    <div class="wrap grid gap-x-16 gap-y-10 lg:grid-cols-[0.9fr_1.1fr]">
+  <section class="band">
+    <div class="wrap grid gap-x-14 gap-y-8 lg:grid-cols-[0.9fr_1.1fr]">
       <div>
         <h2 class="t-h2">{FLEET.title}</h2>
-        <p class="t-lead mt-4">{FLEET.intro}</p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href={FLEET.cta.href} class="btn btn-call btn-lg w-full sm:w-auto">{FLEET.cta.label}<Icon name="arrow-right" class="h-5 w-5" /></a>
-        </div>
-        <PhotoSlot label="a lorry job at a yard, with the FoxKey van" ratio="aspect-[16/10]" class="mt-10" />
+        <p class="t-lead mt-3">{FLEET.intro}</p>
+        <a href={FLEET.cta.href} class="btn btn-ink btn-lg mt-7 w-full sm:w-auto">{FLEET.cta.label}<Icon name="arrow-right" class="h-5 w-5" /></a>
       </div>
-      <dl class="grid gap-x-10 sm:grid-cols-2">
+      <ul class="grid gap-x-8 sm:grid-cols-2">
         {FLEET.benefits.map((b) => (
-          <div class="border-t border-line py-5">
-            <dt class="font-bold text-ink">{b.title}</dt>
-            <dd class="mt-1.5 t-small">{b.text}</dd>
-          </div>
+          <li class="border-t-[3px] border-ink py-5">
+            <h3 class="font-extrabold">{b.title}</h3>
+            <p class="mt-1 t-ui text-muted">{b.text}</p>
+          </li>
         ))}
-      </dl>
+      </ul>
     </div>
   </section>
 
-  <section class="band rule">
-    <div class="wrap grid gap-x-16 gap-y-8 lg:grid-cols-[0.8fr_1.2fr]">
+  <section class="band bg-surface">
+    <div class="wrap grid gap-x-14 gap-y-8 lg:grid-cols-[0.8fr_1.2fr]">
       <div>
-        <h2 class="t-h2">Questions operators ask</h2>
-        <p class="t-lead mt-4">More answers, including cars and vans, are on the <a href="/faq#hgv" class="link">FAQ page</a>.</p>
+        <h2 class="t-h2">Where we cover</h2>
+        <p class="t-lead mt-3">Free call-out within {SITE.freeCalloutMiles} road miles of Goole, which takes in Selby, Doncaster, Scunthorpe and the M62 and M18 junctions between them. Further out, the travel is quoted before we set off.</p>
+        <a href="/areas" class="link mt-5 inline-block">Every area we cover</a>
       </div>
-      <Faq items={FAQ_HGV} />
+      <CoverageMap id="hgv-map" />
     </div>
   </section>
 
-  <section class="band rule">
-    <div class="wrap grid items-center gap-x-16 gap-y-10 lg:grid-cols-[0.8fr_1.2fr]">
-      <div>
-        <h2 class="t-h2">Depots, lorry parks and the hard shoulder</h2>
-        <p class="t-lead mt-4">We work the haulage yards around Goole docks, the lorry parks and services along the M62 and M18, and the distribution parks around Doncaster, Hull, Leeds and Scunthorpe.</p>
-        <p class="mt-4 t-body">Anywhere else in the UK on request, with travel quoted before we leave.</p>
-      </div>
-      <div class="panel p-4 sm:p-6"><CoverageMap id="hgv-map" /></div>
+  <section class="band">
+    <div class="wrap">
+      <h2 class="t-h2">HGV questions</h2>
+      <div class="mt-8 max-w-4xl"><Faq items={FAQ_HGV} /></div>
+      <a href="/faq" class="link mt-6 inline-block">All questions</a>
     </div>
   </section>
 
-  <CallBand title="Lorry stuck with no key?" text="Ring with the registration and where it is parked. We agree the price first, and fleet rates apply to account holders." />
+  <CallBand title="Lorry off the road?" text="Ring with the registration and where it is parked. We confirm the price before we travel, day or night." />
 </BaseLayout>

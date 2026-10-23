@@ -1,0 +1,28 @@
+---
+/** Motorway-style direction sign listing road miles from Goole. A real table underneath, so it reads correctly aloud. */
+import { AREAS, HOME, SITE } from '../config/site';
+interface Props { class?: string }
+const { class: className = '' } = Astro.props;
+const towns = AREAS.filter((a) => a.slug !== 'goole').sort((a, b) => a.roadMiles - b.roadMiles || a.name.localeCompare(b.name));
+---
+<figure class={`sign p-5 sm:p-7 ${className}`}>
+  <div class="mb-4 flex flex-wrap items-center gap-2">
+    <span class="shield">M62</span>
+    <span class="shield">M18</span>
+    <span class="t-label ml-auto text-on-sign">From {SITE.baseTown}</span>
+  </div>
+  <table class="w-full border-collapse text-left">
+    <caption class="sr-only">{HOME.signLabel}, and whether the call-out is free</caption>
+    <thead class="sr-only"><tr><th scope="col">Town</th><th scope="col">Road miles</th><th scope="col">Call-out</th></tr></thead>
+    <tbody>
+      {towns.map((t) => (
+        <tr>
+          <th scope="row" class="py-1.5 pr-3 text-[1.5rem] leading-tight font-extrabold sm:text-[1.75rem]"><a href={`/areas/${t.slug}`} class="text-on-sign no-underline hover:underline">{t.name}</a></th>
+          <td class="num py-1.5 pr-4 text-right text-[1.5rem] font-extrabold sm:text-[1.75rem]">{t.roadMiles}</td>
+          <td class="py-1.5 text-right">{t.free ? <span class="tag-free">FREE</span> : <span class="tag-quoted">QUOTED</span>}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <figcaption class="mt-4 t-small text-on-sign-muted">Approximate road miles. Free call-out within {SITE.freeCalloutMiles} miles, day or night. Further out, the trip is quoted before we set off.</figcaption>
+</figure>

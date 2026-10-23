@@ -5,65 +5,94 @@ import FormShell from '../components/FormShell.astro';
 import ProofNotice from '../components/ProofNotice.astro';
 import Icon from '../components/Icon.astro';
 import { SEO, SITE, CAR_SERVICES, HGV_SERVICES } from '../config/site';
+const types = ['Car', 'Van', 'Lorry or HGV'];
 ---
 <BaseLayout title={SEO.quote.title} description={SEO.quote.description}>
-  <PageHead title="Tell us about the vehicle and we will price it" lead="The more detail you give, the closer the quote. If the vehicle is stuck right now, ring instead. It is quicker." crumbs={[{ label: 'Get a quote' }]} />
-  <section class="band-sm">
-    <div class="wrap grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-      <FormShell id="quote-form" subject="New quote request from the FoxKey website" submitLabel="Send for a quote">
+  <PageHead
+    title="Get a quote"
+    lead="Tell us about the vehicle and where it is. We reply by phone or WhatsApp with a price before anyone sets off."
+    crumbs={[{ label: 'Get a quote' }]}
+  />
+
+  <section class="band">
+    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <FormShell id="quote-form" subject="New quote request from foxkeyauto.co.uk" submitLabel="Send quote request">
         <fieldset>
           <legend class="label">Vehicle type</legend>
-          <div class="grid grid-cols-3 gap-2">
-            {[['car', 'Car', 'car'], ['van', 'Van', 'package'], ['lorry-hgv', 'Lorry / HGV', 'truck']].map(([v, l, ic], i) => (
-              <label class="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-sm border border-line-input bg-bg px-2 py-2 text-center text-sm font-bold text-muted has-[:checked]:border-fox has-[:checked]:text-ink">
-                <input type="radio" name="vehicle_type" value={v} required checked={i === 0} class="h-4 w-4 shrink-0 accent-fox" /><Icon name={ic} class="hidden h-5 w-5 sm:block" />{l}
+          <div class="flex flex-wrap gap-x-6 gap-y-3">
+            {types.map((t) => (
+              <label class="flex min-h-11 items-center gap-3 font-bold">
+                <input type="radio" name="vehicle_type" value={t} required class="h-6 w-6 accent-sign" />{t}
               </label>
             ))}
           </div>
         </fieldset>
+
         <div>
-          <label for="reg" class="label">Registration <span class="opt">(optional)</span></label>
-          <div class="plate max-w-xs"><span class="plate-band" aria-hidden="true">UK</span><input id="reg" name="registration" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" size="8" placeholder="AB12 CDE" /></div>
-        </div>
-        <div class="grid gap-5 sm:grid-cols-3">
-          <div><label for="make" class="label">Make</label><input id="make" name="make" class="field" placeholder="Ford" required /></div>
-          <div><label for="model" class="label">Model</label><input id="model" name="model" class="field" placeholder="Transit Custom" required /></div>
-          <div><label for="year" class="label">Year</label><input id="year" name="year" class="field num" inputmode="numeric" placeholder="2018" required pattern="[0-9]{4}" maxlength="4" /></div>
-        </div>
-        <div>
-          <label for="service" class="label">What do you need?</label>
-          <select id="service" name="service" class="field" required>
-            <option value="">Choose a service</option>
-            <optgroup label="Cars & Vans">{CAR_SERVICES.map((s) => <option value={s.title}>{s.title}</option>)}</optgroup>
-            <optgroup label="HGV & Lorries">{HGV_SERVICES.map((s) => <option value={s.title}>{s.title}</option>)}</optgroup>
-            <option value="Not sure">Not sure yet</option>
-          </select>
-        </div>
-        <div class="grid gap-5 sm:grid-cols-2">
-          <div><label for="location" class="label">Where is the vehicle?</label><input id="location" name="location" class="field" placeholder="DN14 or M62 J36" required autocomplete="postal-code" /></div>
-          <div><label for="phone" class="label">Your phone number</label><input id="phone" name="phone" type="tel" class="field num" placeholder="07…" required autocomplete="tel" /></div>
-        </div>
-        <div><label for="name" class="label">Your name</label><input id="name" name="name" class="field" required autocomplete="name" /></div>
-        <div><label for="message" class="label">Anything else? <span class="opt">(optional)</span></label><textarea id="message" name="message" rows="4" class="field" placeholder="All keys lost, remote stopped working, warning light on…"></textarea></div>
-      </FormShell>
-      <aside class="space-y-6 lg:sticky lg:top-28 lg:self-start">
-        <div class="panel hidden p-6 md:block">
-          <h2 class="font-bold text-ink">Faster on the phone</h2>
-          <p class="mt-2 t-small">We answer {SITE.hoursShort}. Most prices are agreed in a couple of minutes.</p>
-          <div class="mt-5 grid gap-2">
-            <a href={`tel:${SITE.phoneTel}`} class="btn btn-quiet num"><Icon name="phone" class="h-5 w-5" />{SITE.phoneDisplay}</a>
-            <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-wa"><Icon name="message-circle" class="h-5 w-5" />WhatsApp</a>
+          <label for="q-reg" class="label">Registration <span class="opt">(optional)</span></label>
+          <span id="q-reg-hint" class="hint">Helps us check the exact model. We never look it up automatically.</span>
+          <div class="plate max-w-xs">
+            <span class="plate-band" aria-hidden="true">UK</span>
+            <input id="q-reg" name="registration" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" size="8" placeholder="AB12 CDE" aria-describedby="q-reg-hint" />
           </div>
         </div>
+
+        <div class="grid gap-6 sm:grid-cols-[1fr_1fr_8rem]">
+          <div><label for="q-make" class="label">Make</label><input id="q-make" name="make" class="field" required placeholder="Ford" /></div>
+          <div><label for="q-model" class="label">Model</label><input id="q-model" name="model" class="field" required placeholder="Transit Custom" /></div>
+          <div><label for="q-year" class="label">Year</label><input id="q-year" name="year" class="field num" required inputmode="numeric" pattern="(19|20)[0-9]{2}" maxlength="4" placeholder="2018" /></div>
+        </div>
+
+        <div>
+          <label for="q-service" class="label">What do you need?</label>
+          <select id="q-service" name="service" class="field" required>
+            <option value="">Choose a service</option>
+            <optgroup label="Cars & Vans">{CAR_SERVICES.map((s) => <option>{s.title}</option>)}</optgroup>
+            <optgroup label="HGV & Lorries">{HGV_SERVICES.map((s) => <option>{s.title}</option>)}</optgroup>
+            <option>Not sure, please advise</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="q-location" class="label">Where is the vehicle?</label>
+          <span id="q-location-hint" class="hint">Postcode, What3Words or the motorway junction.</span>
+          <input id="q-location" name="location" class="field" required placeholder="DN14 or M62 J36" aria-describedby="q-location-hint" />
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2">
+          <div><label for="q-name" class="label">Your name</label><input id="q-name" name="name" class="field" required autocomplete="name" /></div>
+          <div><label for="q-phone" class="label">Phone number</label><input id="q-phone" name="phone" type="tel" class="field num" required autocomplete="tel" placeholder="07…" /></div>
+        </div>
+
+        <div>
+          <label for="q-message" class="label">Anything else? <span class="opt">(optional)</span></label>
+          <textarea id="q-message" name="message" rows="4" class="field" placeholder="How many keys you have, whether the vehicle is locked, warning lights…"></textarea>
+        </div>
+      </FormShell>
+
+      <aside class="space-y-6 lg:sticky lg:top-28 lg:self-start">
+        <div class="panel p-5">
+          <h2 class="font-extrabold">Need help now?</h2>
+          <p class="mt-1 t-ui text-muted">Ring and you get a price on the call, day or night.</p>
+          <a href={`tel:${SITE.phoneTel}`} class="btn btn-call num mt-4 w-full"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
+          <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-outline btn-wa mt-3 w-full"><Icon name="whatsapp" class="h-5 w-5" />WhatsApp</a>
+        </div>
+        <div>
+          <h2 class="font-extrabold">What happens next</h2>
+          <ol class="mt-3 space-y-2 t-ui">
+            <li class="flex gap-3"><span class="num font-black text-sign">1</span>We read your request and call or message you back.</li>
+            <li class="flex gap-3"><span class="num font-black text-sign">2</span>You get the price for the job, and for travel if you are outside the free zone.</li>
+            <li class="flex gap-3"><span class="num font-black text-sign">3</span>If you are happy, we agree a time and come to you.</li>
+          </ol>
+        </div>
         <ProofNotice headingLevel="h2" />
-        <p class="t-small">Running a fleet? <a href="/fleet" class="link">Use the fleet form</a> for monthly invoicing and fleet rates.</p>
       </aside>
     </div>
   </section>
-  <script>
-    // Prefill the registration when arriving from the plate box on other pages (?reg=AB12CDE).
-    const reg = new URLSearchParams(location.search).get('reg');
-    const input = document.getElementById('reg') as HTMLInputElement | null;
-    if (reg && input) input.value = reg.toUpperCase().replace(/[^A-Z0-9 ]/g, '').slice(0, 8);
-  </script>
 </BaseLayout>
+
+<script>
+  const reg = new URLSearchParams(location.search).get('reg');
+  const input = document.getElementById('q-reg') as HTMLInputElement | null;
+  if (reg && input) input.value = reg.toUpperCase().replace(/[^A-Z0-9 ]/g, '').slice(0, 8);
+</script>

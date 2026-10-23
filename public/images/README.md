@@ -1,9 +1,9 @@
 # Photos
 
-Drop your real photos here and swap the `<ImagePlaceholder />` components in `src/pages/*.astro` for `<img>` tags, e.g.
+Drop your real photos here and swap the `<PhotoSlot />` components in `src/pages/*.astro` for `<img>` tags, e.g.
 
 ```astro
-<img src="/images/van.jpg" alt="FoxKey van parked at a customer's house in Goole" loading="lazy" width="1200" height="900" class="rounded-2xl" />
+<img src="/images/van.jpg" alt="FoxKey van parked at a customer's house in Goole" loading="lazy" width="1200" height="900" class="rounded-md" />
 ```
 
 Suggested shots (landscape, ~1200–1600px wide, JPG or WebP, under 300 KB each):

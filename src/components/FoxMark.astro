@@ -1,27 +1,16 @@
 ---
-/**
- * Geometric fox head integrated with a key (the head is the key bow, the blade drops from the chin).
- * `bg` is the colour used for the key-ring hole so it reads as a cut-out on any background.
- */
-interface Props { class?: string; bg?: string; title?: string }
-const { class: className = 'h-10 w-10', bg = '#111418', title = 'FoxKey fox-and-key mark' } = Astro.props;
+/** The FoxKey mark: a geometric fox head whose chin becomes a key blade. `hole` matches the background behind it. */
+interface Props { class?: string; hole?: string; title?: string }
+const { class: className = 'h-10 w-10', hole = '#FFFFFF', title } = Astro.props;
 ---
-<svg class={className} viewBox="0 0 64 74" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title}>
-  <title>{title}</title>
-  <!-- left facet -->
+<svg class={className} viewBox="0 0 64 74" xmlns="http://www.w3.org/2000/svg" role={title ? 'img' : undefined} aria-label={title} aria-hidden={title ? undefined : 'true'}>
   <polygon points="4,4 22,16 32,16 32,54 4,30" fill="#F26A1B" />
-  <!-- right facet -->
   <polygon points="60,4 42,16 32,16 32,54 60,30" fill="#D55A12" />
-  <!-- muzzle -->
-  <polygon points="19,31 45,31 32,50" fill="#F5F5F5" />
-  <!-- eyes -->
-  <polygon points="18,22 27,24 22,30" fill="#111418" />
-  <polygon points="46,22 37,24 42,30" fill="#111418" />
-  <!-- nose -->
-  <polygon points="29,41 35,41 32,46" fill="#111418" />
-  <!-- key-ring hole in the forehead -->
-  <circle cx="32" cy="11" r="3.2" fill={bg} />
-  <!-- key blade -->
+  <polygon points="19,31 45,31 32,50" fill="#FFFFFF" />
+  <polygon points="18,22 27,24 22,30" fill="#0B0C0C" />
+  <polygon points="46,22 37,24 42,30" fill="#0B0C0C" />
+  <polygon points="29,41 35,41 32,46" fill="#0B0C0C" />
+  <circle cx="32" cy="11" r="3.2" fill={hole} />
   <rect x="29" y="50" width="6" height="22" rx="1" fill="#F26A1B" />
   <rect x="35" y="57" width="6" height="3.5" rx="0.5" fill="#F26A1B" />
   <rect x="35" y="64" width="4.5" height="3.5" rx="0.5" fill="#F26A1B" />

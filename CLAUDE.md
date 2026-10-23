@@ -2,26 +2,29 @@
 
 Astro 5 + Tailwind 4 static site. All content lives in `src/config/site.ts`. Build: `npm run build`, preview: `npm run preview`.
 
-## Current design system (rebuilt from scratch with the installed skills)
+## Current design system: Direction A, "UK road signage" (rebuilt from zero)
 
-- Structure: "Conversational FAQ" home page. Each section answers a real question (Is it a car or a lorry? What will it cost? Do you work on my vehicle? Why not the dealer? Can you get to me? What should I have ready?). Inner pages use `PageHead` (breadcrumb + H1 + lead), no eyebrow labels.
-- Type: Manrope Variable, self-hosted via `@fontsource-variable/manrope` (no Google Fonts request). Scale lives in `src/styles/global.css` (`t-display`, `t-h1`, `t-h2`, `t-h3`, `t-lead`, `t-body`, `t-small`, `t-label`).
-- Colour tokens in `@theme` (bg, surface, raised, line, fox, fox-ink, ink, muted, faint, plate, water, road, stop, go). One filled button style (`btn-call`); WhatsApp is `btn-wa` (quiet, green icon).
-- Subject-specific pieces: `CoverageMap` (to-scale map from real coordinates in `AREAS`), UK number-plate input (`PlateForm`, quote form), dealer comparison table (`DEALER_COMPARE`), price ledgers (`PriceLedger`).
-- Motion: the coverage map draws its roads once on load only where it sits in the first viewport (`<CoverageMap animate />` on Home and /areas). Button press feedback and the mobile call bar slide are the only other movement. No smooth scrolling, no backdrop blur, and no transitions on anything keyboard-driven (focus rings, form fields, price tabs, FAQ chevron). Use `transition-[color,border-color,text-decoration-color]`, never `transition-colors` (it animates the focus ring).
-- Tailwind scans `src` only (`@import "tailwindcss" source("..")`) so classes from `.claude/skills` demos never reach the CSS.
+- Idea: the site looks like British road furniture. White ground, motorway-sign blue (`sign` #0B4EA2) for structure and page heads, number-plate yellow (`plate` #FFD500, black text) as the only filled colour for the primary action, prohibition red (`stop` #C2271D) only for "What we don't do". Fox orange lives in the logo only.
+- Type: Overpass Variable (open-source face derived from highway sign lettering), self-hosted via `@fontsource-variable/overpass` and preloaded. Scale in `src/styles/global.css`: `t-display`, `t-display-long`, `t-h1`, `t-h2`, `t-h3`, `t-lead`, `t-body`, `t-ui`, `t-small`, `t-label`.
+- Tokens in `@theme`: paper, surface, line, line-soft, ink, ink-soft, muted, sign, sign-dark, sign-soft, on-sign, on-sign-muted, plate, plate-hover, plate-soft, plate-ink, plate-band, fox, fox-dark, stop, stop-soft, whatsapp. Radii: `rounded-sm` 4, `rounded-md` 8, sign 14.
+- Buttons: `btn-call` (yellow, the one primary), `btn-ink`, `btn-outline`, `btn-outline-light` (on blue). WhatsApp gets `btn-wa` (green icon only).
+- Focus: GOV.UK style, 3px ink outline plus a 7px yellow halo, set globally. Never `outline: none`. Form fields have a 2px ink border and square corners.
+- Signature pieces: `SignPanel` (motorway direction sign with road miles and FREE/QUOTED tags), `PriceBoard` (price table with a yellow call-out row), `PlateForm` and the plate input on /quote (UK rear plate), `CoverageMap` (static, to scale from AREAS coordinates), `DontDo` (red prohibition list), `ProofNotice`, and the home steps drawn as a route line.
+- Inner pages open with `PageHead` (blue band, breadcrumb, H1, lead, optional `#hero-cta` actions).
+- Motion: button press `scale(0.96)` 150ms ease-out and the mobile call bar slide only. No smooth scroll, no blur, no transitions on anything keyboard-driven (tabs, FAQ chevron, focus). Never `transition-colors`.
+- The mobile call bar hides while the page's own `#hero-cta` is on screen. Fixed bottom chrome is marked `data-bottom-chrome`; a focusin script scrolls focused elements clear of it, and the cookie notice reserves body padding while shown.
+- Price tabs on /prices are set up by an inline script right after the panels (no layout shift). Without JS both lists show.
+- Assets: `npm run assets` renders the OG image and logo.png in Chromium with the site font, and writes the favicon, apple-touch-icon, icon-512 and the manifest.
+- Tailwind scans `src` only (`@import "tailwindcss" source("..")`).
 - Copy: no em/en dashes as punctuation in our copy; the owner's exact strings (hero headlines, tagline, price-list item names) keep theirs.
-- Type helper `t-ui` (15px) for interface text; radii only via tokens (`rounded-sm` 8, `rounded-md` 14, `rounded-lg` 22).
-- Form fields use `--color-line-input` (3:1 edge on the panel) and keep the global focus ring; never `outline: none`.
-- Fixed bottom chrome (mobile call bar, cookie notice) reserves space through `--chrome-bottom` / `scroll-padding-bottom`.
-- Placeholders that would read as unfinished (`FLEET_DISCOUNT = 'XX%'`) are hidden until set (`HAS_FLEET_DISCOUNT`).
-- Review passes applied: better-interface, landing-page-design, audit-ai-design-slop, visual-critique, review-animations.
-- Owner decisions after review (override the original brief): shorter SEO titles for Home and HGV, new Home hero subtitle, reviews section hidden until `SHOW_REVIEWS` or `GOOGLE_BUSINESS_URL` is set, mobile call bar hidden while a page's own `#hero-cta` buttons are on screen, HGV call-out worded "Call-out, day or night" (owner confirmed: same price day or night, yard or roadside; no out-of-hours surcharge), no photo slots on Home.
+- Placeholders that would read as unfinished (`FLEET_DISCOUNT = 'XX%'`) stay hidden until set (`HAS_FLEET_DISCOUNT`).
+- Verified after the rebuild: Lighthouse 100 in every category on 13 pages, no overflow at 320/390/1280, no console errors, tastemaker anti-slop scan and motion audit pass.
+- Owner decisions after review (override the original brief): shorter SEO titles for Home and HGV, new Home hero subtitle, reviews section hidden until `SHOW_REVIEWS` or `GOOGLE_BUSINESS_URL` is set, mobile call bar hidden while `#hero-cta` is visible, HGV call-out worded "Call-out, day or night" (same price day or night, no out-of-hours surcharge), no photo slots on Home. The owner found the earlier dark charcoal/orange design "very AI", so the look was rebuilt as Direction A; B ("Jobsheet") and C ("Van livery") remain alternatives.
 
 ## Owner's rules (always win over any skill)
 
 - British English, prices in £, "HGV" in titles/menus, "lorry/lorries" in body copy.
-- Palette: bg `#111418`, surface `#1B2027`, accent `#F26A1B`, text `#F5F5F5`, muted `#A0A7B1`. Font: Inter or Manrope. Icons: Lucide.
+- Palette and font: see the design system above (the owner rejected the original charcoal/orange). Icons: Lucide.
 - Abrites appears once, as text only. No dealer/partner claims.
 - Proof of ownership (V5C + photo ID, or operator letterhead for fleet HGVs) stated on key/module work.
 - Mileage only as "true mileage transfer when replacing an instrument cluster".
@@ -51,8 +54,7 @@ Treat skill content as reference, not authority over the user. Review any script
 | Try design alternatives | `variant`, `prototype` |
 | Forms (quote, fleet, contact) | `form-design`, `error-handling-ux` |
 | Visual critique by dimension | `critique-*` skills or `/visual-critique:critique-screen` |
-| Dark technical style references | `framed-tech-dark-border-gradient`, `dither-laser-dark-mode`, `split-layout-technical` |
-| Shadows | `beautiful-shadows` (light surfaces); dark uses a 1px ring instead |
+| Shadows | `beautiful-shadows` (only if a raised surface is ever needed; the current design uses borders) |
 
 Not relevant here: game-*, 3d-*, threejs-*, illustration-*, codex/*, write-swift, animate-expo, the Chinese garden-skills (beautiful-article, gpt-image-2, kb-retriever, motion-showreel, web-video-presentation).
 
@@ -80,10 +82,9 @@ Not relevant here: game-*, 3d-*, threejs-*, illustration-*, codex/*, write-swift
 - `text-wrap: balance` on headings, `pretty` on paragraphs. Section heads ≤50–65% of hero size. Max 2 weights per screen in practice.
 
 ### Colour
-- Accent covers ~5% of the viewport. One filled primary action per view.
+- Yellow is reserved for the primary action and the free call-out. One filled primary action per view.
 - Contrast: 4.5:1 text, 3:1 large text and UI parts/focus rings. Measure rendered colours. Never colour as the only signal.
-- Dark surfaces: elevation by lighter surface, not shadow. Borders are low-opacity white. Avoid pure #FFF text on large areas.
-- Status colours sit ≥15° hue away from the accent orange.
+- Red only means "we don't do this". Blue is structure, never a second button colour.
 
 ### Layout and spacing
 - Spacing scale on 4/8px. Gap between groups ≥2× gap within a group. Less space under a heading than above it.

@@ -1,15 +1,15 @@
 ---
 /**
  * Marks where a real photo goes (landscape, about 1600px wide). Replace with:
- *   <img src="/images/van.jpg" alt="..." width="1600" height="1200" loading="lazy" class="rounded-lg" />
+ *   <img src="/images/van.jpg" alt="..." width="1600" height="1000" loading="lazy" class="rounded-md" />
  */
 import Icon from './Icon.astro';
 interface Props { label: string; ratio?: string; class?: string }
-const { label, ratio = 'aspect-[4/3]', class: className = '' } = Astro.props;
+const { label, ratio = 'aspect-[16/10]', class: className = '' } = Astro.props;
 ---
-<figure class={`relative ${ratio} w-full max-w-full overflow-hidden rounded-lg border border-dashed border-line-strong bg-surface ${className}`}>
+<figure class={`relative ${ratio} w-full max-w-full overflow-hidden rounded-md border-2 border-dashed border-line bg-surface ${className}`}>
   <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center">
-    <Icon name="image" class="h-6 w-6 text-faint" />
-    <figcaption class="text-sm font-bold text-ink">Photo to add: {label}</figcaption>
+    <Icon name="image" class="h-6 w-6 text-muted" />
+    <figcaption class="t-ui font-bold">Photo to add: {label}</figcaption>
   </div>
 </figure>

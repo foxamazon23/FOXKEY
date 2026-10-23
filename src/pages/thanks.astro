@@ -6,12 +6,12 @@ import { SEO, SITE } from '../config/site';
 <BaseLayout title={SEO.thanks.title} description={SEO.thanks.description} noindex>
   <section class="band-lg">
     <div class="wrap max-w-2xl">
-      <Icon name="circle-check" class="h-10 w-10 text-fox" />
-      <h1 class="t-h1 mt-6">Message received</h1>
-      <p class="t-lead mt-4">We will ring you back as soon as we can. If the vehicle is stuck right now, do not wait for us. Ring and we will get moving.</p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num"><Icon name="phone" class="h-5 w-5" />{SITE.phoneDisplay}</a>
-        <a href="/" class="btn btn-quiet btn-lg">Back to the home page</a>
+      <Icon name="circle-check" class="h-12 w-12 text-sign" />
+      <h1 class="t-h1 mt-5">Thanks, your message is with us</h1>
+      <p class="t-lead mt-4">We will call or message you back on the number you gave. If the vehicle is stuck right now, ring instead.</p>
+      <div id="hero-cta" class="mt-8 flex flex-wrap gap-3">
+        <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
+        <a href="/" class="btn btn-outline btn-lg w-full sm:w-auto">Back to the home page</a>
       </div>
     </div>
   </section>

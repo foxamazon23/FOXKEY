@@ -9,7 +9,7 @@ npm install
 npm run dev        # http://localhost:4321 (hot reload)
 npm run build      # generează site-ul static în /dist
 npm run preview    # servește /dist local, ca în producție
-npm run assets     # regenerează logo-urile SVG, favicon-ul și imaginea Open Graph din /public
+npm run assets     # regenerează favicon-ul, logo.png, iconițele și imaginea Open Graph din /public (folosește Chromium)
 ```
 
 ## Ce trebuie completat (în `src/config/site.ts`)
@@ -25,7 +25,7 @@ npm run assets     # regenerează logo-urile SVG, favicon-ul și imaginea Open G
 | `TRUCK_MAKES[].enabled` | pune `true` pe DAF / Scania / Volvo / MAN / Renault Trucks / Iveco când ai licențele | HGV, Makes, Home |
 | `SITE.url` + `site` în `astro.config.mjs` + `Sitemap:` în `public/robots.txt` | domeniul real | canonical, sitemap, OG |
 
-**Poze:** înlocuiește componentele `<ImagePlaceholder />` din `src/pages/*.astro` cu `<img>` – vezi `public/images/README.md` pentru lista de poze recomandate.
+**Poze:** înlocuiește componenta `<PhotoSlot />` din `src/pages/about.astro` cu `<img>` – vezi `public/images/README.md` pentru lista de poze recomandate.
 
 ## Deploy pe Cloudflare Pages
 
@@ -57,6 +57,6 @@ src/config/site.ts        ← TOT conținutul editabil
 src/layouts/BaseLayout.astro  ← <head>, meta, Open Graph, schema.org (AutomotiveBusiness + Locksmith + hasOfferCatalog)
 src/components/           ← Header, Footer, MobileBar, CookieBanner, Hero, PriceTable, FaqList, forms, etc.
 src/pages/                ← index, services, hgv, prices, makes, quote, fleet, about, faq, contact, privacy, areas/*, thanks, 404
-public/                   ← logo-dark.svg, logo-light.svg, favicon.svg, og-image.png, robots.txt, _headers
+public/                   ← favicon.svg, apple-touch-icon.png, icon-512.png, logo.png, og-image.png, robots.txt, _headers
 scripts/generate-assets.mjs  ← generează logo/favicon/OG din forma vectorială a vulpii
 ```

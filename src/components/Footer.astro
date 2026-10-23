@@ -4,42 +4,40 @@ import Icon from './Icon.astro';
 import { NAV, FOOTER_LINKS, SITE, AREAS, GOOGLE_BUSINESS_URL } from '../config/site';
 const year = new Date().getFullYear();
 ---
-<footer class="border-t border-line pb-24 md:pb-0">
-  <div>
-    <div class="wrap grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.1fr]">
-      <div class="space-y-4">
-        <Logo size="md" />
-        <p class="t-small max-w-xs">{SITE.tagline}.</p>
-        <p class="t-small max-w-xs">{SITE.baseDescription}</p>
-      </div>
-      <div>
-        <h2 class="t-label mb-3">Site</h2>
-        <ul class="space-y-2 t-ui">
-          {[...NAV, ...FOOTER_LINKS].map((l) => <li><a href={l.href} class="text-muted hover:text-ink">{l.label}</a></li>)}
-        </ul>
-      </div>
-      <div>
-        <h2 class="t-label mb-3">Areas</h2>
-        <ul class="space-y-2 t-ui">
-          {AREAS.map((a) => <li><a href={`/areas/${a.slug}`} class="text-muted hover:text-ink">Auto locksmith {a.name}</a></li>)}
-          <li class="text-muted">Rest of the UK on request</li>
-        </ul>
-      </div>
-      <div class="space-y-3 t-ui text-muted">
-        <h2 class="t-label mb-3">Details</h2>
-        <p class="flex gap-2.5"><Icon name="phone" class="mt-1 h-4 w-4 shrink-0 text-fox" /><a href={`tel:${SITE.phoneTel}`} class="num font-bold text-ink hover:text-fox-ink">{SITE.phoneDisplay}</a></p>
-        <p class="flex gap-2.5"><Icon name="message-circle" class="mt-1 h-4 w-4 shrink-0 text-fox" /><a href={SITE.whatsapp} target="_blank" rel="noopener" class="link">Message on WhatsApp</a></p>
-        <p class="flex gap-2.5"><Icon name="clock" class="mt-1 h-4 w-4 shrink-0 text-fox" />{SITE.hours}</p>
-        <p class="flex gap-2.5"><Icon name="map-pin" class="mt-1 h-4 w-4 shrink-0 text-fox" />{SITE.coverage.primary}. {SITE.coverage.secondary}.</p>
-        <p class="flex gap-2.5"><Icon name="credit-card" class="mt-1 h-4 w-4 shrink-0 text-fox" />{SITE.payment.join(', ')}</p>
-        {GOOGLE_BUSINESS_URL && <p class="flex gap-2.5"><Icon name="star" class="mt-1 h-4 w-4 shrink-0 text-fox" /><a href={GOOGLE_BUSINESS_URL} target="_blank" rel="noopener" class="link">Find us on Google</a></p>}
-      </div>
+<footer class="bg-ink text-paper pb-24 md:pb-0">
+  <div class="wrap grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
+    <div class="space-y-4">
+      <Logo tone="light" hole="#0B0C0C" />
+      <p class="t-ui max-w-xs text-[#C9CDCF]">{SITE.tagline}.</p>
+      <p class="t-ui max-w-xs text-[#C9CDCF]">{SITE.baseDescription}</p>
+    </div>
+    <div>
+      <h2 class="t-label mb-3 text-paper">Site</h2>
+      <ul class="space-y-1.5 t-ui">
+        {[...NAV, ...FOOTER_LINKS].map((l) => <li><a href={l.href} class="text-paper no-underline hover:underline">{l.label}</a></li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 class="t-label mb-3 text-paper">Areas</h2>
+      <ul class="space-y-1.5 t-ui">
+        {AREAS.map((a) => <li><a href={`/areas/${a.slug}`} class="text-paper no-underline hover:underline">Auto locksmith {a.name}</a></li>)}
+        <li class="text-[#C9CDCF]">Rest of the UK on request</li>
+      </ul>
+    </div>
+    <div class="space-y-3 t-ui">
+      <h2 class="t-label mb-3 text-paper">Contact</h2>
+      <p class="flex gap-2.5"><Icon name="phone" class="mt-0.5 h-4 w-4 shrink-0 text-plate" /><a href={`tel:${SITE.phoneTel}`} class="num font-extrabold text-paper no-underline hover:underline">{SITE.phoneDisplay}</a></p>
+      <p class="flex gap-2.5"><Icon name="whatsapp" class="mt-0.5 h-4 w-4 shrink-0 text-plate" /><a href={SITE.whatsapp} target="_blank" rel="noopener" class="font-bold text-paper underline">Message on WhatsApp</a></p>
+      <p class="flex gap-2.5 text-[#C9CDCF]"><Icon name="clock" class="mt-0.5 h-4 w-4 shrink-0 text-plate" />{SITE.hours}</p>
+      <p class="flex gap-2.5 text-[#C9CDCF]"><Icon name="map-pin" class="mt-0.5 h-4 w-4 shrink-0 text-plate" />{SITE.coverage.primary}. {SITE.coverage.secondary}.</p>
+      <p class="flex gap-2.5 text-[#C9CDCF]"><Icon name="credit-card" class="mt-0.5 h-4 w-4 shrink-0 text-plate" />{SITE.payment.join(', ')}</p>
+      {GOOGLE_BUSINESS_URL && <p class="flex gap-2.5"><Icon name="star" class="mt-0.5 h-4 w-4 shrink-0 text-plate" /><a href={GOOGLE_BUSINESS_URL} target="_blank" rel="noopener" class="font-bold text-paper underline">Find us on Google</a></p>}
     </div>
   </div>
-  <div class="rule">
-    <div class="wrap flex flex-col gap-2 py-5 text-[0.8125rem] text-muted sm:flex-row sm:justify-between">
+  <div class="border-t border-ink-soft">
+    <div class="wrap flex flex-col gap-2 py-5 t-small text-[#C9CDCF] sm:flex-row sm:justify-between">
       <p>© {year} {SITE.name}</p>
-      <p>Proof of ownership is required for all key and module work. <a href="/privacy" class="underline underline-offset-2 hover:text-ink">Privacy policy</a></p>
+      <p>Proof of ownership is required for all key and module work. <a href="/privacy" class="text-paper underline">Privacy policy</a></p>
     </div>
   </div>
 </footer>

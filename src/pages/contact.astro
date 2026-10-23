@@ -6,38 +6,47 @@ import Icon from '../components/Icon.astro';
 import { SEO, SITE, GOOGLE_BUSINESS_URL } from '../config/site';
 ---
 <BaseLayout title={SEO.contact.title} description={SEO.contact.description}>
-  <PageHead title="Ring, message or write" lead="Fully mobile and based in Goole, so there is no shop to visit. We come to you." crumbs={[{ label: 'Contact' }]} />
-  <section class="band-sm">
-    <div class="wrap grid gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+  <PageHead
+    title="Call or WhatsApp, any time"
+    lead="The phone is answered 24/7. Tell us the vehicle and where it is, and we give you a price before we set off."
+    crumbs={[{ label: 'Contact' }]}
+  >
+    <div id="hero-cta" class="mt-8 flex flex-wrap gap-3">
+      <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
+      <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-outline-light btn-lg w-full sm:w-auto">WhatsApp</a>
+    </div>
+  </PageHead>
+
+  <section class="band">
+    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[22rem_minmax(0,1fr)]">
       <div>
-        <p class="t-label">Phone and WhatsApp, {SITE.hoursShort}</p>
-        <a href={`tel:${SITE.phoneTel}`} class="num mt-2 block text-[clamp(2.2rem,1.4rem+3vw,3.4rem)] leading-none font-extrabold tracking-[-0.035em] text-ink hover:text-fox-ink">{SITE.phoneDisplay}</a>
-        <div id="hero-cta" class="mt-6 flex flex-wrap gap-3">
-          <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg"><Icon name="phone" class="h-5 w-5" />Call</a>
-          <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-wa btn-lg"><Icon name="message-circle" class="h-5 w-5" />WhatsApp</a>
-        </div>
-        <dl class="mt-10">
-          <div class="border-t border-line py-4"><dt class="t-label">Hours</dt><dd class="mt-1 text-ink">{SITE.hours}</dd></div>
-          <div class="border-t border-line py-4"><dt class="t-label">Base</dt><dd class="mt-1 text-ink">{SITE.baseTown}, {SITE.baseRegion}. Mobile only, no public premises.</dd></div>
-          <div class="border-t border-line py-4"><dt class="t-label">Coverage</dt><dd class="mt-1 text-ink">{SITE.coverage.primary}. {SITE.coverage.secondary}.</dd></div>
-          <div class="border-t border-line py-4"><dt class="t-label">Payment</dt><dd class="mt-1 text-ink">{SITE.payment.join(', ')}</dd></div>
-          {GOOGLE_BUSINESS_URL && <div class="border-t border-line py-4"><dt class="t-label">Google</dt><dd class="mt-1"><a href={GOOGLE_BUSINESS_URL} target="_blank" rel="noopener" class="link">Find and review us</a></dd></div>}
+        <h2 class="sr-only">Contact details</h2>
+        <dl class="border-t-[3px] border-ink">
+          <div class="border-b border-line py-4"><dt class="t-label text-muted">Phone and WhatsApp</dt><dd class="mt-1"><a href={`tel:${SITE.phoneTel}`} class="link num text-[1.375rem]">{SITE.phoneDisplay}</a></dd></div>
+          <div class="border-b border-line py-4"><dt class="t-label text-muted">Hours</dt><dd class="mt-1 font-bold">{SITE.hours}</dd></div>
+          <div class="border-b border-line py-4"><dt class="t-label text-muted">Based in</dt><dd class="mt-1 font-bold">{SITE.baseDescription}</dd></div>
+          <div class="border-b border-line py-4"><dt class="t-label text-muted">Coverage</dt><dd class="mt-1 font-bold">{SITE.coverage.primary}. <span class="font-normal text-muted">{SITE.coverage.secondary}.</span></dd></div>
+          <div class="border-b border-line py-4"><dt class="t-label text-muted">Payment</dt><dd class="mt-1 font-bold">{SITE.payment.join(', ')}</dd></div>
+          {GOOGLE_BUSINESS_URL && <div class="border-b border-line py-4"><dt class="t-label text-muted">Google</dt><dd class="mt-1"><a href={GOOGLE_BUSINESS_URL} target="_blank" rel="noopener" class="link">FoxKey on Google</a></dd></div>}
         </dl>
-        <div class="mt-6 overflow-hidden rounded-lg border border-line">
-          <iframe title="Map of the area around Goole, East Yorkshire" src={SITE.mapEmbedSrc} width="100%" height="300" style="border:0;display:block" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        <p class="mt-2 t-small">The map shows our base area. We travel to you.</p>
+        <figure class="mt-8">
+          <div class="aspect-[4/3] overflow-hidden rounded-md border-2 border-ink bg-sign-soft">
+            <iframe src={SITE.mapEmbedSrc} title="Map of Goole, East Yorkshire, where FoxKey is based" class="h-full w-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <figcaption class="mt-2 t-small">Goole town centre. We are mobile and have no premises to visit.</figcaption>
+        </figure>
       </div>
       <div>
-        <h2 class="t-h3 mb-4">Send a message</h2>
-        <FormShell id="contact-form" subject="New message from the FoxKey website" submitLabel="Send message">
-          <div class="grid gap-5 sm:grid-cols-2">
-            <div><label for="c-name" class="label">Name</label><input id="c-name" name="name" class="field" required autocomplete="name" /></div>
-            <div><label for="c-phone" class="label">Phone</label><input id="c-phone" name="phone" type="tel" class="field num" required autocomplete="tel" /></div>
-            <div class="sm:col-span-2"><label for="c-vehicle" class="label">Vehicle <span class="opt">(optional)</span></label><input id="c-vehicle" name="vehicle" class="field" placeholder="2017 Mercedes Actros" /></div>
-            <div class="sm:col-span-2"><label for="c-message" class="label">Message</label><textarea id="c-message" name="message" rows="5" class="field" required></textarea></div>
+        <h2 class="t-h2 mb-2">Send a message</h2>
+        <p class="t-body mb-8">For anything that is not urgent. If you are stuck now, ring.</p>
+        <FormShell id="contact-form" subject="New message from foxkeyauto.co.uk" submitLabel="Send message">
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div><label for="c-name" class="label">Your name</label><input id="c-name" name="name" class="field" required autocomplete="name" /></div>
+            <div><label for="c-phone" class="label">Phone number</label><input id="c-phone" name="phone" type="tel" class="field num" required autocomplete="tel" /></div>
           </div>
+          <div><label for="c-message" class="label">Message</label><textarea id="c-message" name="message" rows="5" class="field" required placeholder="Vehicle, what has happened and where it is"></textarea></div>
         </FormShell>
+        <p class="mt-6 t-ui">Need a price for a specific job? <a href="/quote" class="link">Use the quote form</a>.</p>
       </div>
     </div>
   </section>

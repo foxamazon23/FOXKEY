@@ -1,21 +1,21 @@
 ---
 ---
-<div id="cookie-banner" data-bottom-chrome hidden class="fixed z-50 rounded-lg border border-line-strong bg-surface p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_24px_48px_-12px_rgba(0,0,0,0.6)] inset-x-3 bottom-[5.5rem] sm:inset-x-auto sm:right-5 sm:max-w-sm md:bottom-5" role="region" aria-label="Cookie notice">
-  <p class="t-small">We only use what the site needs to work. The map on the Contact page is from Google and may set its own cookies when it loads. <a href="/privacy" class="link">Privacy policy</a></p>
-  <button id="cookie-accept" type="button" class="btn btn-quiet btn-sm mt-4">Got it</button>
+<div id="cookie-banner" data-bottom-chrome hidden role="region" aria-label="Cookie notice" class="fixed inset-x-3 bottom-[5.5rem] z-50 border-2 border-ink bg-paper p-5 shadow-[0_8px_0_0_rgb(11_12_12_/_0.12)] sm:inset-x-auto sm:right-5 sm:max-w-sm md:bottom-5">
+  <p class="t-ui">We only use what the site needs to work. The map on the Contact page is from Google and may set its own cookies when it loads. <a href="/privacy" class="link">Privacy policy</a></p>
+  <button id="cookie-accept" type="button" class="btn btn-ink btn-sm mt-4">Hide this notice</button>
 </div>
 <script>
   const KEY = 'foxkey-cookie-notice';
   const el = document.getElementById('cookie-banner');
+  const root = document.documentElement;
   let seen = false;
   try { seen = !!localStorage.getItem(KEY); } catch {}
-  // While the notice shows, reserve its height at the bottom of the scroller so it never covers a focused element (WCAG 2.4.11).
-  const root = document.documentElement;
+  // While the notice shows, reserve its height so it never covers a focused element (WCAG 2.4.11).
   const reserve = () => {
     if (!el || el.hidden) return;
     const h = `${Math.ceil(innerHeight - el.getBoundingClientRect().top + 8)}px`;
     root.style.setProperty('--chrome-bottom', h);
-    document.body.style.paddingBottom = h; // lets the last element on the page scroll clear of the notice
+    document.body.style.paddingBottom = h;
   };
   if (el && !seen) { el.hidden = false; reserve(); addEventListener('resize', reserve); }
   document.getElementById('cookie-accept')?.addEventListener('click', () => {

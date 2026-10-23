@@ -3,28 +3,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import Faq from '../components/Faq.astro';
 import DontDo from '../components/DontDo.astro';
-import ProofNotice from '../components/ProofNotice.astro';
 import CallBand from '../components/CallBand.astro';
 import { SEO, FAQ_GENERAL, FAQ_HGV } from '../config/site';
-const faqSchema = {
+
+const schema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: [...FAQ_GENERAL, ...FAQ_HGV].map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
 ---
-<BaseLayout title={SEO.faq.title} description={SEO.faq.description} schema={[faqSchema]}>
-  <PageHead title="Questions people ask before they ring" lead="Straight answers on prices, proof of ownership, coverage and lorry work. If yours is not here, ring or WhatsApp." crumbs={[{ label: 'FAQ' }]} />
-  <section class="band-sm">
-    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-      <div class="space-y-14">
-        <div><h2 class="t-h3 mb-4">Cars and vans</h2><Faq items={FAQ_GENERAL} /></div>
-        <div id="hgv"><h2 class="t-h3 mb-4">HGVs and lorries</h2><Faq items={FAQ_HGV} /></div>
+<BaseLayout title={SEO.faq.title} description={SEO.faq.description} schema={[schema]}>
+  <PageHead
+    title="Questions and answers"
+    lead="Straight answers on keys, prices, proof of ownership and lorry work. Can’t find yours? Ring or WhatsApp."
+    crumbs={[{ label: 'FAQ' }]}
+  />
+
+  <section class="band">
+    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div>
+        <h2 class="t-h2 mb-6">Cars, vans and keys</h2>
+        <Faq items={FAQ_GENERAL} />
+        <h2 id="hgv" class="t-h2 mt-14 mb-6">Lorries and HGVs</h2>
+        <Faq items={FAQ_HGV} />
       </div>
-      <aside class="space-y-6 lg:sticky lg:top-28 lg:self-start">
-        <DontDo />
-        <ProofNotice />
-      </aside>
+      <DontDo class="lg:sticky lg:top-28 lg:self-start" />
     </div>
   </section>
-  <CallBand title="Still not sure?" text="A real person answers, day or night." />
+
+  <CallBand />
 </BaseLayout>
