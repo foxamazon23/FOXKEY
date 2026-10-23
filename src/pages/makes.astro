@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import PlateForm from '../components/PlateForm.astro';
+import CallBand from '../components/CallBand.astro';
+import { SEO, CAR_MAKES, enabledTruckMakes, enabledVanMakes } from '../config/site';
+const groups = [
+  { title: 'Cars and vans', items: CAR_MAKES },
+  { title: 'Lorries and HGVs', items: enabledTruckMakes().map((m) => m.name) },
+  { title: 'Light commercials', items: enabledVanMakes().map((m) => m.name) },
+];
+---
+<BaseLayout title={SEO.makes.title} description={SEO.makes.description}>
+  <PageHead title="Makes we programme and diagnose" lead="Keys, immobilisers, module coding and full-system diagnostics for the makes below. If yours is missing, send the registration and we will check." crumbs={[{ label: 'Makes' }]}>
+    <div class="mt-8"><PlateForm /></div>
+  </PageHead>
+  <section class="band-sm">
+    <div class="wrap space-y-14">
+      {groups.map((g) => (
+        <div class="grid gap-x-16 gap-y-4 lg:grid-cols-[15rem_minmax(0,1fr)]">
+          <h2 class="t-h3">{g.title} <span class="num ml-1 text-muted">{g.items.length}</span></h2>
+          <ul class="grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
+            {g.items.map((m) => <li class="border-t border-line py-3.5 font-semibold text-ink">{m}</li>)}
+          </ul>
+        </div>
+      ))}
+      <p class="max-w-2xl t-small">Manufacturer names are used only to describe the vehicles we work on. FoxKey Auto &amp; HGV is an independent business and is not affiliated with any vehicle manufacturer.</p>
+    </div>
+  </section>
+  <CallBand title="Not sure about your vehicle?" text="Send the registration on WhatsApp and we will tell you straight away whether we can do it." />
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+import Icon from './Icon.astro';
+import { OWNERSHIP_PROOF } from '../config/site';
+interface Props { class?: string; headingLevel?: 'h2' | 'h3' }
+const { class: className = '', headingLevel: H = 'h3' } = Astro.props;
+---
+<aside class={`flex gap-4 rounded-lg border border-fox/35 bg-fox/[0.07] p-5 sm:p-6 ${className}`} aria-label={OWNERSHIP_PROOF.title}>
+  <Icon name="id-card" class="mt-0.5 h-6 w-6 shrink-0 text-fox" />
+  <div>
+    <H class="font-bold text-ink">{OWNERSHIP_PROOF.title}</H>
+    <p class="mt-1 t-small">{OWNERSHIP_PROOF.text}</p>
+  </div>
+</aside>

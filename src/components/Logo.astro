@@ -1,0 +1,20 @@
+---
+import FoxMark from './FoxMark.astro';
+import { SITE } from '../config/site';
+/** variant "dark" = for dark backgrounds (light text); "light" = for light backgrounds (dark text). */
+interface Props { variant?: 'dark' | 'light'; size?: 'sm' | 'md' | 'lg'; class?: string; link?: boolean }
+const { variant = 'dark', size = 'md', class: className = '', link = true } = Astro.props;
+const text = variant === 'dark' ? 'text-ink' : 'text-bg';
+const bg = variant === 'dark' ? '#111418' : '#FFFFFF';
+const markSize = { sm: 'h-8 w-8', md: 'h-10 w-10', lg: 'h-16 w-16' }[size];
+const bigText = { sm: 'text-lg', md: 'text-xl', lg: 'text-4xl' }[size];
+const smallText = { sm: 'text-[0.55rem]', md: 'text-[0.62rem]', lg: 'text-sm' }[size];
+const Tag = link ? 'a' : 'div';
+---
+<Tag href={link ? '/' : undefined} class={`inline-flex items-center gap-2.5 ${className}`} aria-label={link ? `${SITE.name} – home` : undefined}>
+  <FoxMark class={markSize} bg={bg} />
+  <span class={`flex flex-col leading-none ${text}`}>
+    <span class={`${bigText} font-extrabold tracking-tight`}>FOXKEY</span>
+    <span class={`${smallText} mt-1 whitespace-nowrap font-bold uppercase tracking-[0.26em] text-fox`}>Auto &amp; HGV</span>
+  </span>
+</Tag>

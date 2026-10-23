@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import ServiceEntry from '../components/ServiceEntry.astro';
+import ProofNotice from '../components/ProofNotice.astro';
+import PhotoSlot from '../components/PhotoSlot.astro';
+import CallBand from '../components/CallBand.astro';
+import Icon from '../components/Icon.astro';
+import { SEO, SITE, CAR_SERVICES, CAR_CALLOUT, WARRANTY_TEXT, GENERAL_PRICE_NOTE } from '../config/site';
+const short = (t: string) => t.split(' – ')[0].split(' with ')[0];
+---
+<BaseLayout title={SEO.services.title} description={SEO.services.description}>
+  <PageHead title="Car and van keys, diagnostics and coding, done where the vehicle is" lead="Every job on this page is carried out on site from the van, across Goole, Yorkshire and the Humber, day or night." crumbs={[{ label: 'Cars & Vans' }]}>
+    <div id="hero-cta" class="mt-8 flex flex-wrap gap-3">
+      <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
+      <a href="/quote" class="btn btn-quiet btn-lg w-full sm:w-auto">Get a quote</a>
+    </div>
+  </PageHead>
+
+  <section class="band-sm">
+    <div class="wrap grid gap-x-16 lg:grid-cols-[15rem_minmax(0,1fr)]">
+      <nav aria-label="Services on this page" class="hidden lg:block">
+        <ul class="sticky top-28 space-y-1 border-l border-line">
+          {CAR_SERVICES.map((s) => (
+            <li><a href={`#${s.id}`} class="-ml-px block border-l border-transparent py-1.5 pl-4 text-sm text-muted hover:border-fox hover:text-ink">{short(s.title)}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <div>
+        {CAR_SERVICES.map((s) => <ServiceEntry service={s} tip={s.id === 'all-keys-lost' ? 'if one working key is left, book a spare now. It costs less and takes less time than an all-keys-lost job.' : undefined} />)}
+        <div class="mt-10 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div><h2 class="font-bold text-ink">{CAR_CALLOUT.title}</h2><p class="mt-1 t-small">{CAR_CALLOUT.text}</p></div>
+          <a href="/areas" class="link shrink-0">Areas we cover</a>
+        </div>
+        <div class="mt-8 space-y-3 t-small max-w-2xl">
+          <p>{GENERAL_PRICE_NOTE}</p>
+          <p><strong class="text-ink">Warranty:</strong> {WARRANTY_TEXT}</p>
+        </div>
+        <ProofNotice class="mt-8" />
+      </div>
+    </div>
+  </section>
+
+  <section class="band rule">
+    <div class="wrap grid items-center gap-x-16 gap-y-10 lg:grid-cols-2">
+      <div>
+        <h2 class="t-h2">From the first call to a running engine</h2>
+        <ol class="mt-8 space-y-6">
+          {[
+            ['Ring or WhatsApp', 'Make, model, year and where the vehicle is. We give you the price before we set off.'],
+            ['We drive to you', 'Keys are cut and programmed at the vehicle. Nothing is posted away and nothing is towed.'],
+            ['Check, test, pay', 'We check the V5C and photo ID, test every key, and you pay once the vehicle starts.'],
+          ].map(([t, d], i) => (
+            <li class="grid grid-cols-[2.5rem_1fr] gap-4">
+              <span class="num flex h-10 w-10 items-center justify-center rounded-full border border-line-strong font-extrabold text-fox-ink">{i + 1}</span>
+              <div><h3 class="font-bold text-ink">{t}</h3><p class="mt-1 t-body">{d}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <PhotoSlot label="a key being programmed at a customer’s car" />
+    </div>
+  </section>
+
+  <CallBand />
+</BaseLayout>

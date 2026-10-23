@@ -1,0 +1,16 @@
+---
+/** Starts a quote with the registration filled in. It does not look anything up. */
+import Icon from './Icon.astro';
+import { HOME } from '../config/site';
+---
+<form action="/quote" method="get" class="max-w-md">
+  <label for="plate-start" class="label">{HOME.makes.plateLabel}</label>
+  <div class="flex flex-col gap-3 sm:flex-row">
+    <div class="plate flex-1">
+      <span class="plate-band" aria-hidden="true">UK</span>
+      <input id="plate-start" name="reg" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" size="8" placeholder="AB12 CDE" />
+    </div>
+    <button type="submit" class="btn btn-quiet min-h-[3.6rem]">Continue <Icon name="arrow-right" class="h-4 w-4" /></button>
+  </div>
+  <p class="mt-2 t-small">{HOME.makes.plateHint}</p>
+</form>

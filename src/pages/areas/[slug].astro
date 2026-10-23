@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHead from '../../components/PageHead.astro';
+import PriceLedger from '../../components/PriceLedger.astro';
+import ProofNotice from '../../components/ProofNotice.astro';
+import CallBand from '../../components/CallBand.astro';
+import Icon from '../../components/Icon.astro';
+import { AREAS, SITE, CAR_SERVICES, HGV_SERVICES } from '../../config/site';
+
+export function getStaticPaths() {
+  return AREAS.map((area) => ({ params: { slug: area.slug }, props: { area } }));
+}
+const { area } = Astro.props;
+const others = AREAS.filter((a) => a.slug !== area.slug);
+const carPicks = CAR_SERVICES.filter((s) => ['all-keys-lost', 'spare-key', 'remote-repair', 'diagnostics'].includes(s.id));
+const hgvPicks = HGV_SERVICES.filter((s) => ['hgv-all-keys-lost', 'hgv-spare-key', 'hgv-diagnostics', 'hgv-modules'].includes(s.id));
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: `Mobile auto locksmith and HGV diagnostics in ${area.name}`,
+  serviceType: 'Mobile auto locksmith, key programming and vehicle diagnostics',
+  provider: { '@id': `${Astro.site}#business` },
+  areaServed: { '@type': 'City', name: area.name },
+};
+---
+<BaseLayout title={`${area.title} | ${SITE.name}`} description={area.description} schema={[schema]}>
+  <PageHead title={`Mobile auto locksmith and HGV diagnostics in ${area.name}`} lead={area.intro} crumbs={[{ label: 'Areas', href: '/areas' }, { label: area.name }]}>
+    <p class:list={['mt-6 inline-flex items-center gap-2 t-ui font-bold', area.free ? 'text-fox-ink' : 'text-muted']}><Icon name="map-pin" class="h-4 w-4" />{area.distanceNote}</p>
+    <div id="hero-cta" class="mt-7 flex flex-wrap gap-3">
+      <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
+      <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-wa btn-lg"><Icon name="message-circle" class="h-5 w-5" />WhatsApp</a>
+    </div>
+  </PageHead>
+  <section class="band-sm">
+    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+      <div class="prose-fk">
+        <h2 style="margin-top:0">Car, van and lorry keys in {area.name}</h2>
+        {area.body.map((p) => <p>{p}</p>)}
+        <h3>On site in {area.name}</h3>
+        <ul>
+          <li>Lost car, van and lorry keys replaced, cut and programmed at the vehicle</li>
+          <li>Spare keys and remotes supplied and programmed</li>
+          <li>Remote and fob repair or reprogramming</li>
+          <li>ECU, BCM, immobiliser and module cloning or coding</li>
+          <li>Full-system diagnostics for cars, vans, lorries and HGVs</li>
+          <li>Instrument cluster replacement with true mileage transfer</li>
+        </ul>
+        <p>{SITE.hours}. {SITE.equipmentGeneric}</p>
+      </div>
+      <aside class="space-y-8">
+        <div><h2 class="t-h3 mb-2 flex items-center gap-2"><Icon name="car" class="h-5 w-5 text-fox" />Cars and vans</h2><PriceLedger services={carPicks} base="/services" caption={`Popular car and van jobs in ${area.name}`} compact /></div>
+        <div><h2 class="t-h3 mb-2 flex items-center gap-2"><Icon name="truck" class="h-5 w-5 text-fox" />Lorries and HGVs</h2><PriceLedger services={hgvPicks} base="/hgv" caption={`Popular lorry jobs in ${area.name}`} compact /></div>
+        <ProofNotice />
+        <nav aria-label="Other areas">
+          <h2 class="t-label mb-3">Other areas</h2>
+          <ul class="flex flex-wrap gap-x-5 gap-y-2">{others.map((o) => <li><a href={`/areas/${o.slug}`} class="link">{o.name}</a></li>)}</ul>
+        </nav>
+      </aside>
+    </div>
+  </section>
+  <CallBand title={`Need a locksmith in ${area.name} now?`} />
+</BaseLayout>

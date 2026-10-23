@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FoxMark from '../components/FoxMark.astro';
+import { SITE } from '../config/site';
+---
+<BaseLayout title={`Page not found | ${SITE.name}`} description="That page does not exist. Head back to FoxKey Auto & HGV." noindex>
+  <section class="band-lg">
+    <div class="wrap max-w-2xl">
+      <FoxMark class="h-16 w-16" />
+      <h1 class="t-h1 mt-6">This page is as lost as your keys</h1>
+      <p class="t-lead mt-4">The address may be mistyped or the page may have moved. The key we can help with.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/" class="btn btn-call btn-lg">Home page</a>
+        <a href="/services" class="btn btn-quiet btn-lg">Cars &amp; Vans</a>
+        <a href="/hgv" class="btn btn-quiet btn-lg">HGV &amp; Lorries</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

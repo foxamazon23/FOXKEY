@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import PhotoSlot from '../components/PhotoSlot.astro';
+import ProofNotice from '../components/ProofNotice.astro';
+import CallBand from '../components/CallBand.astro';
+import Icon from '../components/Icon.astro';
+import { SEO, SITE, WHY_FOXKEY } from '../config/site';
+---
+<BaseLayout title={SEO.about.title} description={SEO.about.description}>
+  <PageHead title="An independent mobile locksmith for cars, vans and lorries" lead={`${SITE.name} works out of ${SITE.baseTown}, ${SITE.baseRegion}, and covers Yorkshire and the Humber at any hour.`} crumbs={[{ label: 'About' }]} />
+  <section class="band-sm">
+    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+      <div class="prose-fk">
+        <h2 style="margin-top:0">Why FoxKey exists</h2>
+        <p>A lost key or a vehicle that will not start usually means a recovery truck, a dealer appointment days away and a bill to match. For a haulier it also means a lorry and a driver standing still. FoxKey brings the key programming and diagnostics to the vehicle instead, wherever it is and whenever it happens.</p>
+        <h2>Cars, vans and HGVs from one van</h2>
+        <p>Most mobile locksmiths stop at cars. We also cover light commercials and the lorries that keep Goole docks and the M62 and M18 corridor moving, with truck-level diagnostics and key programming at the yard or the roadside.</p>
+        <h2>Equipment</h2>
+        <p>{SITE.equipmentGeneric} That means reading immobiliser data, programming keys, cloning and coding modules and running full-system diagnostics on site, the same kind of work a main-dealer workshop does.</p>
+        <h2>Above board</h2>
+        <p>We ask for proof of ownership before any key or module work and agree the price before we travel. We do not touch tachographs, speed limiters, emissions systems or recorded mileage. When we replace an instrument cluster, the true mileage goes across to the new unit.</p>
+      </div>
+      <div class="space-y-5">
+        <PhotoSlot label="you with the van" ratio="aspect-[4/5]" />
+        <PhotoSlot label="inside the van" ratio="aspect-[16/10]" />
+      </div>
+    </div>
+  </section>
+  <section class="band rule">
+    <div class="wrap">
+      <h2 class="t-h2">What you can count on</h2>
+      <dl class="mt-10 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
+        {WHY_FOXKEY.map((w) => (
+          <div class="border-t border-line py-6">
+            <dt class="flex items-center gap-2.5 font-bold text-ink"><Icon name={w.icon} class="h-5 w-5 text-fox" />{w.title}</dt>
+            <dd class="mt-2 t-small">{w.text}</dd>
+          </div>
+        ))}
+      </dl>
+      <ProofNotice class="mt-8" />
+    </div>
+  </section>
+  <CallBand />
+</BaseLayout>

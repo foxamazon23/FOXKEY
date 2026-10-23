@@ -1,0 +1,38 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../config/site';
+---
+<div data-bottom-chrome class="mbar fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg md:hidden" style="padding: 0.5rem max(0.75rem, env(safe-area-inset-right, 0px)) calc(0.5rem + env(safe-area-inset-bottom, 0px)) max(0.75rem, env(safe-area-inset-left, 0px));">
+  <div class="grid grid-cols-[1.4fr_1fr] gap-2">
+    <a href={`tel:${SITE.phoneTel}`} class="btn btn-call"><Icon name="phone" class="h-5 w-5" />Call now</a>
+    <a href={SITE.whatsapp} target="_blank" rel="noopener" class="btn btn-wa"><Icon name="message-circle" class="h-5 w-5" />WhatsApp</a>
+  </div>
+</div>
+<script is:inline>
+  // Hide the bar while the page's own call buttons (#hero-cta) are on screen, so the first view has one set of call actions.
+  // Runs during parsing (no slide on load). Without JS or IntersectionObserver the bar simply stays visible.
+  (function () {
+    var bar = document.currentScript && document.currentScript.previousElementSibling;
+    var cta = document.getElementById('hero-cta');
+    if (!bar || !cta || !('IntersectionObserver' in window)) return;
+    // Hide before anything computes the bar's style, so there is no slide on load. The observer shows it
+    // straight away if the page opened scrolled past the buttons (anchor link, back navigation).
+    bar.setAttribute('data-off', '');
+    requestAnimationFrame(function () { requestAnimationFrame(function () { bar.setAttribute('data-ready', ''); }); });
+    new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) bar.setAttribute('data-off', ''); else bar.removeAttribute('data-off');
+    }).observe(cta);
+  })();
+</script>
+<script>
+  // Keep a focused element clear of fixed bottom chrome (this bar, the cookie notice). WCAG 2.4.11.
+  // Browsers skip scrolling when the element is already inside the viewport, so scroll-padding alone is not enough.
+  document.addEventListener('focusin', (e) => {
+    const el = e.target as HTMLElement;
+    const chrome = [...document.querySelectorAll<HTMLElement>('[data-bottom-chrome]')].filter((c) => !c.hidden && !c.contains(el) && c.getClientRects().length && getComputedStyle(c).visibility !== 'hidden');
+    if (!chrome.length) return;
+    const top = Math.min(...chrome.map((c) => c.getBoundingClientRect().top));
+    const r = el.getBoundingClientRect();
+    if (r.bottom > top - 8) window.scrollBy({ top: r.bottom - top + 16, behavior: 'instant' as ScrollBehavior });
+  });
+</script>

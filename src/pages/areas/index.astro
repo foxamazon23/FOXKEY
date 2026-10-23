@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHead from '../../components/PageHead.astro';
+import CoverageMap from '../../components/CoverageMap.astro';
+import CallBand from '../../components/CallBand.astro';
+import Icon from '../../components/Icon.astro';
+import { SEO, SITE, AREAS } from '../../config/site';
+const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles);
+---
+<BaseLayout title={SEO.areas.title} description={SEO.areas.description}>
+  <PageHead title="Where we cover" lead={`Based in ${SITE.baseTown}. ${SITE.coverage.primary} first, with free call-out within ${SITE.freeCalloutMiles} miles. The rest of the UK on request, with travel quoted upfront.`} crumbs={[{ label: 'Areas' }]} />
+  <section class="band-sm">
+    <div class="wrap grid items-start gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+      <div class="panel p-4 sm:p-6"><CoverageMap id="areas-map" animate /></div>
+      <ul class="border-t border-line">
+        {sorted.map((a) => (
+          <li class="border-b border-line">
+            <a href={`/areas/${a.slug}`} class="group grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 py-5">
+              <span class="text-xl font-extrabold tracking-[-0.015em] text-ink group-hover:text-fox-ink">Auto locksmith {a.name}</span>
+              <span class:list={['text-sm font-bold', a.free ? 'text-fox-ink' : 'text-muted']}>{a.free ? 'Free call-out' : 'Travel quoted'}</span>
+              <span class="col-span-2 t-small">{a.distanceNote}</span>
+            </a>
+          </li>
+        ))}
+        <li class="flex items-start gap-3 py-5"><Icon name="route" class="mt-1 h-5 w-5 text-fox" /><p class="t-small"><strong class="text-ink">Somewhere else?</strong> {SITE.coverage.secondary}. Ring with the postcode and we will quote the trip on the call.</p></li>
+      </ul>
+    </div>
+  </section>
+  <CallBand />
+</BaseLayout>

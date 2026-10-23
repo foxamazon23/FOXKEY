@@ -1,0 +1,64 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { NAV, SITE } from '../config/site';
+const current = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? current === '/' : current === href || current.startsWith(href + '/'));
+const links = NAV.filter((n) => n.href !== '/');
+---
+<header class="sticky z-40 border-b border-line bg-bg" style="top: env(safe-area-inset-top, 0px)">
+  <div class="wrap flex h-16 items-center gap-6 lg:h-[4.5rem]">
+    <Logo size="md" />
+    <nav aria-label="Main" class="ml-auto hidden xl:block">
+      <ul class="flex items-center gap-0.5">
+        {links.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'relative block whitespace-nowrap rounded-md px-3 py-2 t-ui font-semibold transition-[color,border-color,text-decoration-color]',
+                isActive(item.href) ? 'text-ink after:absolute after:inset-x-3 after:-bottom-[0.9rem] after:h-0.5 after:rounded-full after:bg-fox' : 'text-muted hover:text-ink',
+              ]}
+            >{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="ml-auto hidden items-center gap-2 md:flex xl:ml-4">
+      <a href={SITE.whatsapp} target="_blank" rel="noopener" class="btn btn-wa btn-sm" aria-label="WhatsApp FoxKey"><Icon name="message-circle" class="h-[1.1rem] w-[1.1rem]" /><span class="hidden lg:inline">WhatsApp</span></a>
+      <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-sm num"><Icon name="phone" class="h-[1.1rem] w-[1.1rem]" />{SITE.phoneDisplay}</a>
+    </div>
+    <button id="nav-toggle" type="button" class="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-md border border-line-strong text-ink md:ml-2 xl:hidden" aria-expanded="false" aria-controls="nav-panel">
+      <span class="sr-only" data-label>Open menu</span>
+      <Icon name="menu" class="h-5 w-5" data-open />
+      <Icon name="x" class="hidden h-5 w-5" data-close />
+    </button>
+  </div>
+  <nav id="nav-panel" aria-label="Main" class="hidden border-t border-line bg-bg xl:hidden">
+    <ul class="wrap grid gap-x-8 py-3 sm:grid-cols-2">
+      {NAV.map((item) => (
+        <li>
+          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined} class:list={['flex min-h-12 items-center justify-between border-b border-line text-[1.0625rem] font-bold', isActive(item.href) ? 'text-ink underline decoration-fox decoration-2 underline-offset-8' : 'text-ink']}>
+            {item.label}<Icon name="arrow-right" class="h-4 w-4 text-faint" />
+          </a>
+        </li>
+      ))}
+      <li class="flex gap-3 pt-4 pb-2 sm:col-span-2">
+        <a href="/quote" class="btn btn-quiet flex-1">Get a quote</a>
+        <a href="/fleet" class="btn btn-quiet flex-1">Fleet enquiry</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+<script>
+  const btn = document.getElementById('nav-toggle');
+  const panel = document.getElementById('nav-panel');
+  btn?.addEventListener('click', () => {
+    const open = panel!.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.querySelector('[data-label]')!.textContent = open ? 'Close menu' : 'Open menu';
+    btn.querySelector('[data-open]')?.classList.toggle('hidden', open);
+    btn.querySelector('[data-close]')?.classList.toggle('hidden', !open);
+  });
+</script>

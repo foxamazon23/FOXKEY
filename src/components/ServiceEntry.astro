@@ -1,0 +1,19 @@
+---
+/** One service in the catalogue: name and description, price set against the right edge. */
+import { VAT_LABEL, type Service } from '../config/site';
+interface Props { service: Service; level?: 'h2' | 'h3'; tip?: string }
+const { service: s, level: H = 'h2', tip } = Astro.props;
+---
+<article id={s.id} class="grid gap-x-10 gap-y-4 border-b border-line py-9 first:pt-2 md:grid-cols-[minmax(0,1fr)_10rem]">
+  <div>
+    <H class="text-[1.375rem] font-extrabold leading-snug tracking-[-0.015em] text-ink">{s.title}</H>
+    <p class="mt-3 t-body measure">{s.description}</p>
+    {tip && <p class="mt-3 t-small measure"><strong class="text-ink">Tip:</strong> {tip}</p>}
+  </div>
+  <div class="flex items-baseline gap-2 md:block md:text-right">
+    <p class="text-sm text-muted">from</p>
+    <p class="num text-[2rem] leading-none font-extrabold tracking-[-0.02em] text-ink md:mt-1">{s.priceFrom}</p>
+    <p class="text-xs text-muted md:mt-1.5">{VAT_LABEL}</p>
+  </div>
+  {s.priceNote && <p class="-mt-2 t-small md:col-start-1 md:mt-0">{s.priceNote}</p>}
+</article>

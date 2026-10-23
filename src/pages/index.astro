@@ -1,0 +1,214 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import CoverageMap from '../components/CoverageMap.astro';
+import PriceLedger from '../components/PriceLedger.astro';
+import PlateForm from '../components/PlateForm.astro';
+import CallBand from '../components/CallBand.astro';
+import FoxMark from '../components/FoxMark.astro';
+import {
+  SEO, SITE, HOME, CAR_SERVICES, HGV_SERVICES, CAR_CALLOUT, HGV_CALLOUT, CAR_MAKES, AREAS,
+  enabledTruckMakes, enabledVanMakes, DEALER_COMPARE, READY_CHECKLIST, SHOW_REVIEWS, GOOGLE_BUSINESS_URL, VAT_LABEL,
+} from '../config/site';
+
+const pick = <T extends { id: string }>(list: T[], ids: string[]) => ids.map((id) => list.find((s) => s.id === id)!).filter(Boolean);
+const carTop = pick(CAR_SERVICES, ['diagnostics', 'spare-key', 'all-keys-lost', 'remote-repair', 'module-cloning', 'service-functions']);
+const hgvTop = pick(HGV_SERVICES, ['hgv-diagnostics', 'hgv-spare-key', 'hgv-all-keys-lost', 'hgv-remote', 'hgv-modules', 'hgv-dpf']);
+const lowest = (list: { priceFrom: string }[]) => '£' + Math.min(...list.map((s) => Number(s.priceFrom.replace('£', ''))));
+const lanes = [
+  { href: '/services', icon: 'car', ...HOME.cars, from: lowest(CAR_SERVICES), cta: 'Car & van services' },
+  { href: '/hgv', icon: 'truck', ...HOME.hgv, from: lowest(HGV_SERVICES), cta: 'HGV & lorry services' },
+];
+const areasByDistance = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles);
+---
+<BaseLayout title={SEO.home.title} description={SEO.home.description}>
+  <!-- Hook: the promise, one action, one visual that proves "we come to you" -->
+  <section class="border-b border-line">
+    <div class="wrap grid items-center gap-x-14 gap-y-12 pt-12 pb-14 md:pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:pb-20">
+      <div>
+        <p class="mb-6 flex items-center gap-2 t-ui font-semibold text-muted"><Icon name="clock" class="h-4 w-4 text-fox" />Mobile auto locksmith, open {SITE.hoursShort} in {SITE.baseTown}</p>
+        <h1 class="t-display">{HOME.heroTitle}</h1>
+        <p class="t-lead mt-6 max-w-lg">{HOME.heroSubtitle}.</p>
+        <div id="hero-cta" class="mt-9 flex flex-wrap gap-3">
+          <a href={`tel:${SITE.phoneTel}`} class="btn btn-call btn-lg num w-full sm:w-auto"><Icon name="phone" class="h-5 w-5" />Call {SITE.phoneDisplay}</a>
+          <a href={SITE.whatsappPrefill} target="_blank" rel="noopener" class="btn btn-wa btn-lg w-full sm:w-auto"><Icon name="message-circle" class="h-5 w-5" />WhatsApp</a>
+        </div>
+        <p class="mt-5 max-w-md t-small">{HOME.heroNote}</p>
+      </div>
+      <div class="panel p-4 sm:p-6">
+        <CoverageMap id="hero-map" animate />
+      </div>
+    </div>
+  </section>
+
+  <!-- Which job is it -->
+  <section class="band">
+    <div class="wrap">
+      <div class="max-w-2xl">
+        <h2 class="t-h2">{HOME.lanes.title}</h2>
+        <p class="t-lead mt-4">{HOME.lanes.text}</p>
+      </div>
+      <div class="mt-10 grid gap-5 md:grid-cols-2">
+        {lanes.map((l) => (
+          <a href={l.href} class="group panel flex flex-col p-7 transition-[color,border-color,text-decoration-color] duration-150 hover:border-line-strong sm:p-9">
+            <div class="flex items-start justify-between gap-6">
+              <Icon name={l.icon} class="h-10 w-10 text-fox" />
+              <p class="text-right"><span class="block text-sm text-muted">from</span><span class="num block text-3xl font-extrabold tracking-[-0.02em]">{l.from}</span><span class="block text-xs text-muted">{VAT_LABEL}</span></p>
+            </div>
+            <h3 class="mt-10 text-[1.625rem] leading-tight font-extrabold tracking-[-0.025em] text-ink sm:text-[2rem]">{l.title}</h3>
+            <p class="mt-3 t-body">{l.where}</p>
+            <ul class="mt-6 grid gap-2 sm:grid-cols-2">
+              {l.jobs.map((j) => <li class="flex gap-2 t-ui text-ink"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-fox" />{j}</li>)}
+            </ul>
+            <span class="mt-auto inline-flex items-center gap-2 pt-8 font-bold text-fox-ink">{l.cta}<Icon name="arrow-right" class="h-4 w-4" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Prices in brief -->
+  <section class="band rule">
+    <div class="wrap">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div class="max-w-2xl">
+          <h2 class="t-h2">{HOME.prices.title}</h2>
+          <p class="t-lead mt-4">{HOME.prices.text}</p>
+        </div>
+        <a href="/prices" class="link">Full price list</a>
+      </div>
+      <div class="mt-10 grid gap-x-14 gap-y-12 lg:grid-cols-2">
+        <div>
+          <h3 class="t-h3 mb-2 flex items-center gap-2.5"><Icon name="car" class="h-5 w-5 text-fox" />Cars &amp; Vans</h3>
+          <PriceLedger services={carTop} base="/services" caption="Car and van prices" callout={{ title: 'Call-out within 25 miles of Goole', text: 'Free' }} compact />
+        </div>
+        <div>
+          <h3 class="t-h3 mb-2 flex items-center gap-2.5"><Icon name="truck" class="h-5 w-5 text-fox" />Lorries &amp; HGV</h3>
+          <PriceLedger services={hgvTop} base="/hgv" caption="HGV and lorry prices" callout={{ title: 'Call-out within 25 miles of Goole, day or night', text: 'Free' }} compact />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Makes -->
+  <section class="band rule">
+    <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[0.9fr_1.1fr]">
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <h2 class="t-h2">{HOME.makes.title}</h2>
+        <p class="t-lead mt-4">{HOME.makes.text}</p>
+        <div class="mt-8"><PlateForm /></div>
+      </div>
+      <div class="grid gap-10 sm:grid-cols-2">
+        <div>
+          <h3 class="t-label mb-3">Cars &amp; Vans</h3>
+          <ul class="grid grid-cols-2 gap-x-5 border-t border-line sm:grid-cols-1">
+            {CAR_MAKES.map((m) => <li class="border-b border-line py-2.5 t-ui font-semibold text-ink">{m}</li>)}
+          </ul>
+        </div>
+        <div>
+          <h3 class="t-label mb-3">Lorries &amp; HGV</h3>
+          <ul class="border-t border-line">
+            {enabledTruckMakes().map((m) => <li class="border-b border-line py-2.5 t-ui font-semibold text-ink">{m.name}</li>)}
+          </ul>
+          <h3 class="t-label mt-8 mb-3">Light commercials</h3>
+          <p class="t-body">{enabledVanMakes().map((m) => m.name).join(', ')}.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why FoxKey: shown as a comparison, not claimed in cards -->
+  <section class="band rule">
+    <div class="wrap">
+      <div class="max-w-2xl">
+        <h2 class="t-h2">{HOME.compare.title}</h2>
+        <p class="t-lead mt-4">{HOME.compare.text}</p>
+      </div>
+      <div class="mt-10 overflow-hidden rounded-lg border border-line">
+        <div class="hidden grid-cols-[0.8fr_1fr_1.15fr] border-b border-line bg-surface md:grid" aria-hidden="true">
+          <p class="t-label px-6 py-4"></p>
+          <p class="t-label px-6 py-4">Main dealer</p>
+          <p class="flex items-center gap-2 px-6 py-4 text-sm font-extrabold tracking-[0.04em] text-ink uppercase"><FoxMark class="h-5 w-5" title="" />FoxKey</p>
+        </div>
+        <dl>
+          {DEALER_COMPARE.map((r) => (
+            <div class="grid gap-1 border-b border-line px-5 py-5 last:border-b-0 md:grid-cols-[0.8fr_1fr_1.15fr] md:gap-0 md:p-0">
+              <dt class="font-bold text-ink md:px-6 md:py-5">{r.topic}</dt>
+              <dd class="t-small md:px-6 md:py-5 md:t-ui"><span class="font-semibold text-muted md:hidden">Dealer: </span>{r.dealer}</dd>
+              <dd class="flex gap-2 t-ui font-semibold text-ink md:bg-fox/[0.06] md:px-6 md:py-5"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-fox" />{r.foxkey}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coverage, as data -->
+  <section class="band rule">
+    <div class="wrap grid gap-x-16 gap-y-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <div>
+        <h2 class="t-h2">{HOME.coverage.title}</h2>
+        <p class="t-lead mt-4">{HOME.coverage.text}</p>
+        <p class="mt-6 t-body">For lorries we attend the haulage yards around Goole docks and the lorry parks and services along the M62 and M18. Anywhere else in the UK, ring and we will quote the trip.</p>
+      </div>
+      <div>
+        <table class="w-full text-left">
+          <caption class="sr-only">Towns we cover, road miles from Goole and call-out terms</caption>
+          <thead><tr class="border-b border-line-strong"><th scope="col" class="t-label py-3">Town</th><th scope="col" class="t-label py-3 text-right">Road miles</th><th scope="col" class="t-label py-3 pl-6 text-right">Call-out</th></tr></thead>
+          <tbody>
+            {areasByDistance.map((a) => (
+              <tr class="border-b border-line">
+                <th scope="row" class="py-3.5"><a href={`/areas/${a.slug}`} class="font-bold text-ink hover:text-fox-ink">{a.name}</a></th>
+                <td class="num py-3.5 text-right text-muted">{a.slug === 'goole' ? 'Base' : `about ${a.roadMiles}`}</td>
+                <td class="py-3.5 pl-6 text-right t-ui font-semibold">{a.free ? <span class="font-bold text-ink">Free</span> : <span class="text-muted">Quoted upfront</span>}</td>
+              </tr>
+            ))}
+            <tr><th scope="row" class="py-3.5 font-bold text-ink">Rest of the UK</th><td class="py-3.5 text-right text-muted">On request</td><td class="py-3.5 pl-6 text-right t-ui font-semibold text-muted">Quoted upfront</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- What to have ready -->
+  <section class="band rule">
+    <div class="wrap grid gap-x-16 gap-y-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <div>
+        <h2 class="t-h2">{HOME.ready.title}</h2>
+        <p class="t-lead mt-4">{HOME.ready.text}</p>
+      </div>
+      <ul class="grid gap-x-10 sm:grid-cols-2">
+        {READY_CHECKLIST.map((c) => (
+          <li class="flex gap-3 border-t border-line py-5">
+            <Icon name={c.icon} class="mt-0.5 h-5 w-5 shrink-0 text-fox" />
+            <div><p class="font-bold text-ink">{c.title}</p><p class="mt-1 t-small">{c.text}</p></div>
+          </li>
+        ))}
+        <li class="flex gap-3 border-t border-line py-5 sm:col-span-2">
+          <Icon name="credit-card" class="mt-0.5 h-5 w-5 shrink-0 text-fox" />
+          <div><p class="font-bold text-ink">Paying</p><p class="mt-1 t-small">{SITE.payment.join(', ')}. For key work you pay once the vehicle starts.</p></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Reviews: shown only once there are genuine reviews or a Google profile to send people to -->
+  {(SHOW_REVIEWS || GOOGLE_BUSINESS_URL) && (
+  <section class="band-sm rule">
+    <div class="wrap grid gap-6 md:grid-cols-[0.9fr_1.1fr] md:items-center">
+      <h2 class="t-h2">What customers say</h2>
+      {SHOW_REVIEWS ? (
+        <div><!-- Add genuine reviews here once you have them. --></div>
+      ) : (
+        <div class="rounded-lg border border-dashed border-line-strong p-6">
+          <p class="font-bold text-ink">No reviews yet</p>
+          <p class="mt-1 t-small">FoxKey is new and only shows genuine reviews. Once customers review us on Google they will appear here.</p>
+          {GOOGLE_BUSINESS_URL && <a href={GOOGLE_BUSINESS_URL} target="_blank" rel="noopener" class="link mt-3 inline-block">Leave a review on Google</a>}
+        </div>
+      )}
+    </div>
+  </section>
+  )}
+
+  <CallBand />
+</BaseLayout>
