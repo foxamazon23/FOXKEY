@@ -1,0 +1,83 @@
+# Render Blueprint: in Render choose New > Blueprint and pick this repository.
+# Static site built with Astro. Pages are files like hgv.html, so each clean URL is rewritten to its file.
+services:
+  - type: web
+    name: foxkey
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: "nosniff"
+      - path: /*
+        name: X-Frame-Options
+        value: "SAMEORIGIN"
+      - path: /*
+        name: Referrer-Policy
+        value: "strict-origin-when-cross-origin"
+      - path: /*
+        name: Permissions-Policy
+        value: "camera=(), microphone=(), geolocation=()"
+      - path: /_astro/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+    routes:
+      - type: rewrite
+        source: /services
+        destination: /services.html
+      - type: rewrite
+        source: /hgv
+        destination: /hgv.html
+      - type: rewrite
+        source: /prices
+        destination: /prices.html
+      - type: rewrite
+        source: /makes
+        destination: /makes.html
+      - type: rewrite
+        source: /quote
+        destination: /quote.html
+      - type: rewrite
+        source: /fleet
+        destination: /fleet.html
+      - type: rewrite
+        source: /about
+        destination: /about.html
+      - type: rewrite
+        source: /faq
+        destination: /faq.html
+      - type: rewrite
+        source: /contact
+        destination: /contact.html
+      - type: rewrite
+        source: /privacy
+        destination: /privacy.html
+      - type: rewrite
+        source: /areas
+        destination: /areas.html
+      - type: rewrite
+        source: /thanks
+        destination: /thanks.html
+      - type: rewrite
+        source: /areas/goole
+        destination: /areas/goole.html
+      - type: rewrite
+        source: /areas/doncaster
+        destination: /areas/doncaster.html
+      - type: rewrite
+        source: /areas/hull
+        destination: /areas/hull.html
+      - type: rewrite
+        source: /areas/selby
+        destination: /areas/selby.html
+      - type: rewrite
+        source: /areas/scunthorpe
+        destination: /areas/scunthorpe.html
+      - type: rewrite
+        source: /areas/york
+        destination: /areas/york.html
+      - type: rewrite
+        source: /areas/leeds
+        destination: /areas/leeds.html
