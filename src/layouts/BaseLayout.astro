@@ -6,7 +6,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
 import CookieBanner from '../components/CookieBanner.astro';
-import { SITE, CAR_SERVICES, HGV_SERVICES, AREAS, PRICES_INCLUDE_VAT, type Service } from '../config/site';
+import { SITE, HGV_SERVICES, AREAS, PRICES_INCLUDE_VAT, type Service } from '../config/site';
 
 interface Props {
   title: string;
@@ -52,11 +52,8 @@ const business = {
   contactPoint: [{ '@type': 'ContactPoint', telephone: SITE.phoneTel, contactType: 'customer service', availableLanguage: 'English', hoursAvailable: '24/7' }],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Mobile locksmith and diagnostics services',
-    itemListElement: [
-      { '@type': 'OfferCatalog', name: 'Cars & Vans', itemListElement: CAR_SERVICES.map((s) => offer(s, 'Cars & Vans')) },
-      { '@type': 'OfferCatalog', name: 'HGV & Lorries', itemListElement: HGV_SERVICES.map((s) => offer(s, 'HGV & Lorries')) },
-    ],
+    name: 'Mobile HGV locksmith and diagnostics services',
+    itemListElement: HGV_SERVICES.map((s) => offer(s, 'HGV & Lorries')),
   },
 };
 ---

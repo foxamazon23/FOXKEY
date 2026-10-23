@@ -24,9 +24,10 @@ services:
         name: Cache-Control
         value: "public, max-age=31536000, immutable"
     routes:
-      - type: rewrite
+      # The site is HGV-only now; the old Cars & Vans page points at HGV services.
+      - type: redirect
         source: /services
-        destination: /services.html
+        destination: /hgv
       - type: rewrite
         source: /hgv
         destination: /hgv.html

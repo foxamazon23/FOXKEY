@@ -1,12 +1,12 @@
 # FoxKey Auto & HGV – project guide
 
-Astro 5 + Tailwind 4 static site. All content lives in `src/config/site.ts`. Build: `npm run build`, preview: `npm run preview`.
+Astro 5 + Tailwind 4 static site for **FoxKey HGV**, a mobile lorry/HGV locksmith (HGV only: cars and vans were dropped by the owner). All content lives in `src/config/site.ts`. Build: `npm run build`, preview: `npm run preview`.
 
 ## Current design system: Direction A, "UK road signage" (rebuilt from zero)
 
 - Idea: the site looks like British road furniture. White ground, motorway-sign blue (`sign` #0B4EA2) for structure and page heads, number-plate yellow (`plate` #FFD500, black text) as the only filled colour for the primary action, prohibition red (`stop` #C2271D) only for "What we don't do". The logo is one colour: a white fox pictogram (chin runs into a key blade) on a small blue sign tile (`.sign-tile`), shape shared from `src/brand/fox.mjs`. No orange anywhere.
 - Type: Overpass Variable (open-source face derived from highway sign lettering), self-hosted via `@fontsource-variable/overpass` and preloaded. Scale in `src/styles/global.css`: `t-display`, `t-display-long`, `t-h1`, `t-h2`, `t-h3`, `t-lead`, `t-body`, `t-ui`, `t-small`, `t-label`.
-- Tokens in `@theme`: paper, surface, line, line-soft, ink, ink-soft, muted, sign, sign-dark, sign-soft, on-sign, on-sign-muted, plate, plate-hover, plate-soft, plate-ink, plate-band, fox, fox-dark, stop, stop-soft, whatsapp. Radii: `rounded-sm` 4, `rounded-md` 8, sign 14.
+- Tokens in `@theme`: paper, surface, line, line-soft, ink, ink-soft, muted, sign, sign-dark, sign-soft, on-sign, on-sign-muted, plate, plate-hover, plate-soft, plate-ink, plate-band, stop, stop-soft, whatsapp. Radii: `rounded-sm` 4, `rounded-md` 8, sign 14.
 - Buttons: `btn-call` (yellow, the one primary), `btn-ink`, `btn-outline`, `btn-outline-light` (on blue). WhatsApp gets `btn-wa` (green icon only).
 - Focus: GOV.UK style, 3px ink outline plus a 7px yellow halo, set globally. Never `outline: none`. Form fields have a 2px ink border and square corners.
 - Signature pieces: `SignPanel` (motorway direction sign with road miles and FREE/QUOTED tags), `PriceBoard` (price table with a yellow call-out row), `PlateForm` and the plate input on /quote (UK rear plate), `CoverageMap` (static, to scale from AREAS coordinates), `DontDo` (red prohibition list), `ProofNotice`, and the home steps drawn as a route line.
@@ -23,9 +23,11 @@ Astro 5 + Tailwind 4 static site. All content lives in `src/config/site.ts`. Bui
 
 ## Owner's rules (always win over any skill)
 
+- HGV and lorries only. No car or van services, makes or copy anywhere. Brand name "FoxKey HGV"; the logo shows FOXKEY with HGV underneath. `/services` (old Cars & Vans page) redirects to `/hgv`.
+- Prices were raised 50% by the owner (rounded to whole pounds).
 - British English, prices in £, "HGV" in titles/menus, "lorry/lorries" in body copy.
 - Palette and font: see the design system above (the owner rejected the original charcoal/orange). Icons: Lucide.
-- Abrites appears once, as text only. No dealer/partner claims.
+- Abrites appears once (dealer comparison on Home), as text only. No dealer/partner claims.
 - Proof of ownership (V5C + photo ID, or operator letterhead for fleet HGVs) stated on key/module work.
 - Mileage only as "true mileage transfer when replacing an instrument cluster".
 - "What we don't do" box on /hgv and /faq (speed limiters, tachographs, AdBlue/SCR/EGR/DPF deletes, emissions delete, mileage alteration).

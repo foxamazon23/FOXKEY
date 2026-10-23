@@ -3,52 +3,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import PlateForm from '../components/PlateForm.astro';
 import CallBand from '../components/CallBand.astro';
-import { SEO, CAR_MAKES, enabledTruckMakes, enabledVanMakes } from '../config/site';
+import { SEO, enabledTruckMakes } from '../config/site';
 ---
 <BaseLayout title={SEO.makes.title} description={SEO.makes.description}>
   <PageHead
-    title="Makes we cover"
-    lead="The cars, vans and lorries we programme keys for and diagnose today. Coverage varies by model and year, so send the registration and we will confirm."
+    title="Truck makes we cover"
+    lead="The lorries we programme keys for and diagnose today. Coverage varies by model and year, so send the registration and we will confirm."
     crumbs={[{ label: 'Makes' }]}
   />
 
   <section class="band">
-    <div class="wrap grid gap-x-14 gap-y-12 lg:grid-cols-3">
-      <div>
-        <h2 class="t-h3 mb-3">Cars</h2>
-        <ul class="border-t-[3px] border-ink">
-          {CAR_MAKES.map((m) => <li class="border-b border-line py-3 font-bold">{m}</li>)}
-        </ul>
-      </div>
-      <div>
-        <h2 class="t-h3 mb-3">Vans and light commercials</h2>
-        <ul class="border-t-[3px] border-ink">
-          {enabledVanMakes().map((m) => <li class="border-b border-line py-3 font-bold">{m.name}</li>)}
-        </ul>
-      </div>
+    <div class="wrap grid gap-x-14 gap-y-10 lg:grid-cols-2">
       <div>
         <h2 class="t-h3 mb-3">Lorries and HGVs</h2>
         <ul class="border-t-[3px] border-ink">
-          {enabledTruckMakes().map((m) => <li class="border-b border-line py-3 font-bold">{m.name}{m.note && <span class="block t-small font-normal">{m.note}</span>}</li>)}
+          {enabledTruckMakes().map((m) => <li class="border-b border-line py-4 text-[1.125rem] font-bold">{m.name}{m.note && <span class="block t-small font-normal">{m.note}</span>}</li>)}
         </ul>
-        <p class="mt-4 t-ui text-muted">We add a truck make here only once our equipment covers it.</p>
+        <p class="mt-4 measure t-ui text-muted">We add a truck make here only once our equipment covers it, so this list grows rather than overpromises.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="band bg-surface">
-    <div class="wrap grid gap-x-14 gap-y-8 lg:grid-cols-2 lg:items-center">
       <div>
-        <h2 class="t-h2">Not sure about yours?</h2>
-        <p class="t-lead mt-3">Start a quote with the registration. We check it by hand and reply with whether we can do the job and the price.</p>
+        <h2 class="t-h3">Not sure about yours?</h2>
+        <p class="t-body mt-2 mb-6 text-ink">Start a quote with the registration. We check it by hand and reply with whether we can do the job and the price.</p>
+        <PlateForm />
       </div>
-      <PlateForm />
     </div>
   </section>
 
   <section class="band-sm">
     <div class="wrap">
-      <p class="measure t-small">Manufacturer names are trademarks of their owners and are used only to describe the vehicles we work on. FoxKey Auto &amp; HGV is an independent business and is not a dealer, agent or partner of any vehicle manufacturer.</p>
+      <p class="measure t-small">Manufacturer names are trademarks of their owners and are used only to describe the vehicles we work on. FoxKey HGV is an independent business and is not a dealer, agent or partner of any vehicle manufacturer.</p>
     </div>
   </section>
 

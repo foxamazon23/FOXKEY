@@ -15,16 +15,16 @@ const schema = {
 <BaseLayout title={SEO.faq.title} description={SEO.faq.description} schema={[schema]}>
   <PageHead
     title="Questions and answers"
-    lead="Straight answers on keys, prices, proof of ownership and lorry work. Can’t find yours? Ring or WhatsApp."
+    lead="Straight answers on lorry keys, prices, proof of ownership and what we will not do. Can’t find yours? Ring or WhatsApp."
     crumbs={[{ label: 'FAQ' }]}
   />
 
   <section class="band">
     <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
       <div>
-        <h2 class="t-h2 mb-6">Cars, vans and keys</h2>
+        <h2 class="t-h2 mb-6">Keys, prices and call-outs</h2>
         <Faq items={FAQ_GENERAL} />
-        <h2 id="hgv" class="t-h2 mt-14 mb-6">Lorries and HGVs</h2>
+        <h2 id="fleet" class="t-h2 mt-14 mb-6">Depots, fleets and compliance</h2>
         <Faq items={FAQ_HGV} />
       </div>
       <DontDo class="lg:sticky lg:top-28 lg:self-start" />

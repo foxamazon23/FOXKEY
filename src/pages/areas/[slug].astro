@@ -5,7 +5,7 @@ import PriceBoard from '../../components/PriceBoard.astro';
 import ProofNotice from '../../components/ProofNotice.astro';
 import CallBand from '../../components/CallBand.astro';
 import Icon from '../../components/Icon.astro';
-import { AREAS, SITE, CAR_SERVICES, HGV_SERVICES, type Service } from '../../config/site';
+import { AREAS, SITE, HGV_SERVICES, HGV_CALLOUT, type Service } from '../../config/site';
 
 export function getStaticPaths() {
   return AREAS.map((area) => ({ params: { slug: area.slug }, props: { area } }));
@@ -14,19 +14,18 @@ const { area } = Astro.props;
 const others = AREAS.filter((a) => a.slug !== area.slug);
 const pick = (list: Service[], ids: string[]) => list.filter((s) => ids.includes(s.id));
 const short = (s: Service) => s.title.split(' – ')[0].split(' (')[0];
-const carPicks = pick(CAR_SERVICES, ['all-keys-lost', 'spare-key', 'remote-repair', 'diagnostics']);
-const hgvPicks = pick(HGV_SERVICES, ['hgv-all-keys-lost', 'hgv-spare-key', 'hgv-diagnostics', 'hgv-modules']);
+const hgvPicks = pick(HGV_SERVICES, ['hgv-all-keys-lost', 'hgv-spare-key', 'hgv-remote', 'hgv-diagnostics', 'hgv-modules', 'hgv-dpf']);
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  name: `Mobile auto locksmith and HGV diagnostics in ${area.name}`,
-  serviceType: 'Mobile auto locksmith, key programming and vehicle diagnostics',
+  name: `Mobile HGV keys and diagnostics in ${area.name}`,
+  serviceType: 'Mobile HGV locksmith, lorry key programming and truck diagnostics',
   provider: { '@id': `${Astro.site}#business` },
   areaServed: { '@type': 'City', name: area.name },
 };
 ---
 <BaseLayout title={`${area.title} | ${SITE.shortName}`} description={area.description} schema={[schema]}>
-  <PageHead title={`Mobile auto locksmith in ${area.name}`} lead={area.intro} crumbs={[{ label: 'Areas', href: '/areas' }, { label: area.name }]}>
+  <PageHead title={`Mobile HGV keys and diagnostics in ${area.name}`} lead={area.intro} crumbs={[{ label: 'Areas', href: '/areas' }, { label: area.name }]}>
     <p class="mt-6 flex flex-wrap items-center gap-2 t-ui font-bold">
       {area.free ? <span class="tag-free">FREE CALL-OUT</span> : <span class="tag-quoted">TRAVEL QUOTED</span>}
       {area.distanceNote}
@@ -40,27 +39,23 @@ const schema = {
   <section class="band">
     <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
       <div class="prose-fk">
-        <h2 style="margin-top:0">Car, van and lorry keys in {area.name}</h2>
+        <h2 style="margin-top:0">Lorry keys and diagnostics in {area.name}</h2>
         {area.body.map((p) => <p>{p}</p>)}
-        <h3>Done at the vehicle in {area.name}</h3>
+        <h3>Done at the lorry in {area.name}</h3>
         <ul>
-          <li>Lost car, van and lorry keys replaced, cut and programmed</li>
-          <li>Spare keys and remotes supplied and programmed</li>
-          <li>Remote and fob repair or reprogramming</li>
-          <li>ECU, BCM, immobiliser and module cloning or coding</li>
-          <li>Full-system diagnostics for cars, vans, lorries and HGVs</li>
+          <li>Lost lorry keys replaced, cut and programmed at the cab</li>
+          <li>Spare keys and remotes supplied and programmed at the yard</li>
+          <li>Cab remote repair or reprogramming</li>
+          <li>ECU, immobiliser, cluster and body module replacement and coding</li>
+          <li>Full-system truck diagnostics and forced DPF regeneration</li>
           <li>Instrument cluster replacement with true mileage transfer</li>
         </ul>
         <p>Open {SITE.hours}. {SITE.equipmentGeneric}</p>
       </div>
       <aside class="space-y-10">
         <div>
-          <h2 class="t-h3 mb-3 flex items-center gap-2"><Icon name="car" class="h-5 w-5 text-sign" />Cars and vans</h2>
-          <PriceBoard services={carPicks} titleOf={short} base="/services" caption={`Popular car and van jobs in ${area.name}`} compact />
-        </div>
-        <div>
-          <h2 class="t-h3 mb-3 flex items-center gap-2"><Icon name="truck" class="h-5 w-5 text-sign" />Lorries and HGVs</h2>
-          <PriceBoard services={hgvPicks} titleOf={short} base="/hgv" caption={`Popular lorry jobs in ${area.name}`} compact />
+          <h2 class="t-h3 mb-3 flex items-center gap-2"><Icon name="truck" class="h-5 w-5 text-sign" />Starting prices</h2>
+          <PriceBoard services={hgvPicks} titleOf={short} base="/hgv" caption={`Lorry jobs in ${area.name}`} callout={area.free ? { title: HGV_CALLOUT.title, text: 'Free' } : undefined} compact />
         </div>
         <ProofNotice headingLevel="h2" />
         <nav aria-label="Other areas">
@@ -71,5 +66,5 @@ const schema = {
     </div>
   </section>
 
-  <CallBand title={`Stuck in ${area.name}?`} />
+  <CallBand title={`Lorry stuck in ${area.name}?`} />
 </BaseLayout>

@@ -34,16 +34,8 @@ import { SEO, SITE, FLEET, OWNERSHIP_PROOF } from '../config/site';
             <div><label for="f-phone" class="label">Phone number</label><input id="f-phone" name="phone" type="tel" class="field num" required autocomplete="tel" /></div>
             <div><label for="f-email" class="label">Email <span class="opt">(optional)</span></label><input id="f-email" name="email" type="email" class="field" autocomplete="email" /></div>
           </div>
-          <fieldset>
-            <legend class="label">Vehicles in the fleet</legend>
-            <div class="flex flex-wrap gap-x-6 gap-y-3">
-              {['Lorries & HGVs', 'Vans', 'Cars'].map((v) => (
-                <label class="flex min-h-11 items-center gap-3 font-bold"><input type="checkbox" name="vehicles" value={v} class="h-6 w-6 accent-sign" />{v}</label>
-              ))}
-            </div>
-          </fieldset>
           <div class="grid gap-6 sm:grid-cols-2">
-            <div><label for="f-size" class="label">Number of vehicles</label><input id="f-size" name="fleet_size" class="field num" inputmode="numeric" required placeholder="12" /></div>
+            <div><label for="f-size" class="label">Number of lorries</label><input id="f-size" name="fleet_size" class="field num" inputmode="numeric" required placeholder="12" /></div>
             <div><label for="f-depot" class="label">Depot location</label><input id="f-depot" name="depot" class="field" required placeholder="Town or postcode" /></div>
           </div>
           <div><label for="f-message" class="label">Makes, current problems or anything else <span class="opt">(optional)</span></label><textarea id="f-message" name="message" rows="4" class="field"></textarea></div>

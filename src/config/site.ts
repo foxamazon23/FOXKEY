@@ -1,5 +1,5 @@
 /**
- * FoxKey Auto & HGV – single source of truth for all site content.
+ * FoxKey HGV – single source of truth for all site content.
  * Edit this file to change text, prices, makes, contact details and switches.
  * Nothing in the pages/components should need changing for routine updates.
  */
@@ -33,9 +33,9 @@ export const SHOW_REVIEWS = false;
 // ---------------------------------------------------------------------------
 
 export const SITE = {
-  name: 'FoxKey Auto & HGV',
+  name: 'FoxKey HGV',
   shortName: 'FoxKey',
-  tagline: 'Mobile Auto Locksmith & Diagnostics – Cars, Vans, Lorries & HGVs',
+  tagline: 'Mobile HGV & Lorry Locksmith and Diagnostics',
   /** Change to your real domain before deploying (also update astro.config.mjs). */
   url: 'https://foxkeyauto.co.uk',
   baseTown: 'Goole',
@@ -47,14 +47,14 @@ export const SITE = {
   whatsapp: 'https://wa.me/447944087924',
   whatsappPrefill:
     'https://wa.me/447944087924?text=' +
-    encodeURIComponent('Hi FoxKey, I need help with my vehicle keys/diagnostics. Vehicle: ... Location: ...'),
+    encodeURIComponent('Hi FoxKey, I need help with a lorry. Make/model: ... Registration: ... Location: ...'),
   hours: '24/7, including weekends and bank holidays',
   hoursShort: '24/7',
   payment: ['Cash', 'card', 'bank transfer'],
-  /** Brand mention – used ONCE on the site (Why FoxKey card). Everywhere else use equipmentGeneric. */
+  /** Brand mention – used ONCE on the site (dealer comparison on Home). Everywhere else use equipmentGeneric. */
   equipmentLine: 'We use professional Abrites diagnostic equipment.',
   /** Neutral wording for all other mentions of equipment. */
-  equipmentGeneric: 'Professional, dealer-level key programming and diagnostic equipment.',
+  equipmentGeneric: 'Professional, dealer-level truck key programming and diagnostic equipment.',
   freeCalloutMiles: 25,
   coverage: {
     primary: 'Goole, Yorkshire and the Humber',
@@ -74,8 +74,7 @@ export const VAT_LABEL = PRICES_INCLUDE_VAT ? 'inc. VAT' : '+ VAT';
 
 export const NAV = [
   { label: 'Home', href: '/' },
-  { label: 'Cars & Vans', href: '/services' },
-  { label: 'HGV & Lorries', href: '/hgv' },
+  { label: 'HGV services', href: '/hgv' },
   { label: 'Prices', href: '/prices' },
   { label: 'Makes', href: '/makes' },
   { label: 'Areas', href: '/areas' },
@@ -118,24 +117,6 @@ export const WHAT_WE_DONT_DO = {
 // MAKES
 // ---------------------------------------------------------------------------
 
-export const CAR_MAKES = [
-  'VW / Audi / Seat / Skoda',
-  'BMW / MINI',
-  'Mercedes-Benz / Smart',
-  'Ford',
-  'Vauxhall / Opel',
-  'Renault / Dacia',
-  'Peugeot / Citroën',
-  'Fiat / Alfa Romeo / Jeep',
-  'Hyundai / Kia',
-  'Toyota / Lexus',
-  'Nissan',
-  'Jaguar / Land Rover',
-  'Porsche',
-  'Subaru',
-  'Mazda',
-];
-
 export type TruckMake = { name: string; enabled: boolean; note?: string };
 
 /** Only makes with enabled: true are shown on the site. Flip to true once you have confirmed licence coverage. */
@@ -149,24 +130,10 @@ export const TRUCK_MAKES: TruckMake[] = [
   { name: 'Iveco (heavy range)', enabled: false },
 ];
 
-/** Light commercial vehicles – shown under the HGV & vans heading. */
-export const VAN_MAKES: TruckMake[] = [
-  { name: 'Mercedes-Benz Sprinter', enabled: true },
-  { name: 'Ford Transit', enabled: true },
-  { name: 'VW Crafter / Transporter', enabled: true },
-  { name: 'Renault Master / Trafic', enabled: true },
-  { name: 'Vauxhall Vivaro / Movano', enabled: true },
-  { name: 'Peugeot Boxer', enabled: true },
-  { name: 'Citroën Relay', enabled: true },
-  { name: 'Fiat Ducato', enabled: true },
-  { name: 'Iveco Daily', enabled: true },
-];
-
 export const enabledTruckMakes = () => TRUCK_MAKES.filter((m) => m.enabled);
-export const enabledVanMakes = () => VAN_MAKES.filter((m) => m.enabled);
 
 // ---------------------------------------------------------------------------
-// SERVICES & PRICES – CARS & VANS
+// SERVICE TYPE
 // ---------------------------------------------------------------------------
 
 export type Service = {
@@ -181,96 +148,6 @@ export type Service = {
   icon: string; // lucide icon name (see Icon.astro)
 };
 
-export const CAR_SERVICES: Service[] = [
-  {
-    id: 'diagnostics',
-    title: 'Mobile diagnostic scan',
-    summary: 'Full scan of all modules with a plain-English fault report.',
-    description:
-      'A full-system scan of every control module on the vehicle (engine, gearbox, ABS, airbags, body and comfort systems), not just the engine light. You get a clear fault report and an honest recommendation on what needs doing, at your home or workplace.',
-    priceFrom: '£49',
-    icon: 'activity',
-  },
-  {
-    id: 'spare-key',
-    title: 'Spare key – supplied, cut & programmed',
-    summary: 'A second key cut and coded to your car while you wait.',
-    description:
-      'Only have one key? A spare costs far less now than an all-keys-lost job later. We supply a quality key or remote, cut it to your locks and programme it to the immobiliser on your driveway. Proof of ownership required.',
-    priceFrom: '£99',
-    icon: 'key-round',
-  },
-  {
-    id: 'all-keys-lost',
-    title: 'All keys lost – new key, cut & programmed',
-    summary: 'Lost every key? We come to you and get you driving again.',
-    description:
-      'No need to recover the vehicle to a dealer. We attend where the car is, read the immobiliser data, produce a new key, cut it and programme it on site. Previously lost keys can usually be deleted so they no longer start the vehicle. Proof of ownership required.',
-    priceFrom: '£179',
-    priceNote: 'Prestige / VAG MQB / BMW / Mercedes: from £249',
-    icon: 'search',
-  },
-  {
-    id: 'remote-repair',
-    title: 'Remote / fob reprogramming or repair',
-    summary: 'Remote stopped working? Often fixable without a new key.',
-    description:
-      'Buttons not responding, remote lost sync or key works in the door but not the ignition? We diagnose and repair or re-synchronise the remote, replacing worn buttons, batteries or circuit boards where needed.',
-    priceFrom: '£49',
-    icon: 'radio',
-  },
-  {
-    id: 'fob-case',
-    title: 'Key fob case replacement',
-    summary: 'Cracked or worn case? We move your electronics into a new shell.',
-    description:
-      'Worn-out or cracked key shell? We move your existing chip and remote board into a new case and cut a new blade where needed, keeping the original programming intact.',
-    priceFrom: '£35',
-    icon: 'package',
-  },
-  {
-    id: 'module-cloning',
-    title: 'ECU / BCM / immobiliser cloning & module coding',
-    summary: 'Replace a faulty module and code it to the vehicle.',
-    description:
-      'Faulty engine ECU, body control module or immobiliser? We clone data from the old unit or code a replacement module so it works with your existing keys, often avoiding a full dealer “key set” replacement. Proof of ownership required.',
-    priceFrom: '£120',
-    icon: 'cpu',
-  },
-  {
-    id: 'coding',
-    title: 'Coding & feature activation',
-    summary: 'Enable options, retrofit coding and component matching.',
-    description:
-      'Retrofits coded in, hidden features enabled where the hardware supports it, and replacement components (cameras, sensors, lights, radios) matched to the vehicle so the warning lights stay off.',
-    priceFrom: '£60',
-    icon: 'sliders-horizontal',
-  },
-  {
-    id: 'service-functions',
-    title: 'Service light / oil reset, battery registration, DPF regen, adaptations',
-    summary: 'Service resets and workshop functions done at your door.',
-    description:
-      'Service interval and oil-life resets, battery registration after a battery change, forced DPF regeneration, electronic parking brake service mode, throttle and steering-angle adaptations and more.',
-    priceFrom: '£35',
-    icon: 'wrench',
-  },
-  {
-    id: 'cluster',
-    title: 'Instrument cluster replacement with true mileage transfer',
-    summary: 'Replacement cluster coded, with the true mileage transferred.',
-    description:
-      'When a dashboard cluster fails we code the replacement to your vehicle and transfer the true recorded mileage to the new unit, so the odometer stays accurate and the vehicle history is preserved. Proof of ownership required.',
-    priceFrom: '£120',
-    icon: 'gauge',
-  },
-];
-
-export const CAR_CALLOUT = {
-  title: 'Call-out',
-  text: `Free within ${SITE.freeCalloutMiles} miles of Goole. Outside that, quoted upfront before we travel.`,
-};
-
 // ---------------------------------------------------------------------------
 // SERVICES & PRICES – HGV & LORRIES
 // ---------------------------------------------------------------------------
@@ -282,7 +159,7 @@ export const HGV_SERVICES: Service[] = [
     summary: 'Full-system lorry diagnostics where the vehicle stands.',
     description:
       'Truck-level diagnostics brought to your yard, depot or the roadside. We scan engine, transmission, brakes, SCR/AdBlue, body and chassis modules on the lorry and give you a clear fault report so you can decide the next step without a tow.',
-    priceFrom: '£89',
+    priceFrom: '£134',
     icon: 'activity',
   },
   {
@@ -291,7 +168,7 @@ export const HGV_SERVICES: Service[] = [
     summary: 'A spare lorry key programmed at your depot.',
     description:
       'A spare key for a lorry is cheap insurance against a vehicle sitting idle. We supply, cut and programme a spare to the truck’s immobiliser at your yard, at a time that fits your schedule. Proof of ownership or operator authorisation required.',
-    priceFrom: '£149',
+    priceFrom: '£224',
     icon: 'key-round',
   },
   {
@@ -300,7 +177,7 @@ export const HGV_SERVICES: Service[] = [
     summary: 'Lorry stranded with no keys? We attend and programme a new one.',
     description:
       'A lorry with no keys is a load going nowhere. We attend the vehicle at the depot, lorry park or roadside, produce and programme a new key and get the vehicle running again. Proof of ownership or written operator authorisation required.',
-    priceFrom: '£299',
+    priceFrom: '£449',
     icon: 'search',
   },
   {
@@ -309,7 +186,7 @@ export const HGV_SERVICES: Service[] = [
     summary: 'Central locking remotes repaired or re-synchronised.',
     description:
       'Remote not locking the cab, buttons worn or key lost sync after a battery change? We repair or reprogramme lorry remotes on site.',
-    priceFrom: '£69',
+    priceFrom: '£104',
     icon: 'radio',
   },
   {
@@ -318,7 +195,7 @@ export const HGV_SERVICES: Service[] = [
     summary: 'Replacement truck modules coded to the vehicle.',
     description:
       'Engine ECU, instrument cluster, immobiliser and body/chassis modules replaced and coded to the lorry so the vehicle accepts the new unit and existing keys, saving a trip to the main dealer. Proof of ownership or operator authorisation required.',
-    priceFrom: '£180',
+    priceFrom: '£270',
     icon: 'cpu',
   },
   {
@@ -327,7 +204,7 @@ export const HGV_SERVICES: Service[] = [
     summary: 'New cluster fitted and coded, true mileage transferred.',
     description:
       'When a lorry cluster fails we code the replacement and transfer the true recorded mileage to the new unit so the odometer reading and vehicle history remain accurate.',
-    priceFrom: '£180',
+    priceFrom: '£270',
     icon: 'gauge',
   },
   {
@@ -336,10 +213,13 @@ export const HGV_SERVICES: Service[] = [
     summary: 'Regens and service resets at your yard, not the dealer’s.',
     description:
       'Forced DPF regeneration when the truck won’t regenerate on its own, plus service interval resets and other maintenance functions, done at your depot to keep the lorry on the road.',
-    priceFrom: '£79',
+    priceFrom: '£119',
     icon: 'wrench',
   },
 ];
+
+/** Starting price of one service, e.g. priceOf('hgv-spare-key') → '£224'. */
+export const priceOf = (id: string) => HGV_SERVICES.find((s) => s.id === id)?.priceFrom ?? '';
 
 export const HGV_CALLOUT = {
   title: 'Call-out, day or night',
@@ -359,12 +239,12 @@ export const GENERAL_PRICE_NOTE =
 export const WHY_FOXKEY = [
   {
     title: 'Fully mobile',
-    text: 'We come to your home, workplace, depot, lorry park or the roadside. No recovery truck, no dealer queue.',
+    text: 'We come to your yard, depot, a lorry park or the roadside. No heavy recovery, no dealer queue.',
     icon: 'truck',
   },
   {
     title: 'Open 24/7',
-    text: 'Days, nights, weekends and bank holidays. Lost keys don’t keep office hours and neither do we.',
+    text: 'Days, nights, weekends and bank holidays. Lorries run around the clock and so do we.',
     icon: 'clock',
   },
   {
@@ -379,7 +259,7 @@ export const WHY_FOXKEY = [
   },
   {
     title: 'Pay when it starts',
-    text: 'For key work you pay once the vehicle starts and the key is working. Cash, card or bank transfer.',
+    text: 'For key work you pay once the lorry starts and the key is working. Cash, card or bank transfer.',
     icon: 'circle-check',
   },
 ];
@@ -392,52 +272,39 @@ export const HOME = {
   /** Owner's exact headline. */
   heroTitle: 'Lost your keys? We come to you – 24/7.',
   heroSubtitle:
-    'Keys cut and programmed, remotes repaired and faults diagnosed on cars, vans, lorries and HGVs, wherever they stopped in Goole and Yorkshire.',
-  heroNote: 'Price agreed before we set off. For key work you pay once the vehicle starts.',
+    'Keys cut and programmed, remotes repaired and faults diagnosed on lorries and HGVs, wherever they stopped in Goole and Yorkshire.',
+  heroNote: 'Price agreed before we set off. For key work you pay once the lorry starts.',
+  heroLabel: 'Mobile HGV locksmith',
   signLabel: 'Road miles from Goole',
-  lanes: {
-    title: 'Car, van or lorry?',
-    text: 'One van carries the kit for both. Pick yours for every service and price.',
-  },
-  cars: {
-    title: 'Cars & Vans',
-    where: 'On your drive, at work, in a car park or at the roadside.',
-    jobs: ['Spare keys and all keys lost', 'Remote and fob repairs', 'ECU, BCM and immobiliser work', 'Diagnostics and service resets'],
-  },
-  hgv: {
-    title: 'Lorries & HGV',
-    where: 'At your yard, depot, a lorry park or the hard shoulder.',
-    jobs: ['HGV spare keys and all keys lost', 'Yard and roadside diagnostics', 'Module replacement and coding', 'Forced DPF regeneration'],
-  },
   prices: {
     title: 'What will it cost?',
-    text: 'Starting prices. We confirm the exact figure for your make, model and year on the phone, before we travel.',
+    text: 'Starting prices for lorry work. We confirm the exact figure for your make, model and year on the phone, before we travel.',
   },
   steps: {
     title: 'From the phone call to a running engine',
     items: [
-      { title: 'Ring or WhatsApp', text: 'Make, model, year and where the vehicle is. You get the price before we set off.' },
-      { title: 'We drive to you', text: 'Keys are cut and programmed at the vehicle. Nothing is posted away and nothing is towed.' },
-      { title: 'Check, test, pay', text: 'We check the V5C and photo ID, test every key, and you pay once the vehicle starts.' },
+      { title: 'Ring or WhatsApp', text: 'Make, model, registration and where the lorry is. You get the price before we set off.' },
+      { title: 'We drive to you', text: 'Keys are cut and programmed at the cab. Nothing is posted away and nothing is towed.' },
+      { title: 'Check, test, pay', text: 'We check the V5C and photo ID or the operator’s letter, test every key, and you pay once the lorry starts.' },
     ],
   },
   compare: {
-    title: 'Why not just ring the dealer?',
+    title: 'Why not just ring the truck dealer?',
     text: 'You can. This is what usually changes when you ring us instead.',
   },
   makes: {
-    title: 'Do you work on my vehicle?',
-    text: 'The makes we programme and diagnose today. Not listed? Send the registration and we will tell you straight away.',
+    title: 'Do you work on my lorry?',
+    text: 'The truck makes we programme and diagnose today. Not listed? Send the registration and we will tell you straight away.',
     plateLabel: 'Start a quote with your registration',
     plateHint: 'We check it when you send the form. Nothing is looked up automatically.',
   },
   ready: {
     title: 'What should I have ready?',
-    text: 'We never programme a key without proof the vehicle is yours. Having these to hand keeps the job quick.',
+    text: 'We never programme a key without proof the lorry is yours or that you are authorised. Having these to hand keeps the job quick.',
   },
   close: {
-    title: 'Stuck right now?',
-    text: 'Ring with the make, model and where it is. We agree the price before we set off.',
+    title: 'Lorry stuck right now?',
+    text: 'Ring with the make, the registration and where it is parked. We agree the price before we set off.',
   },
 };
 
@@ -445,24 +312,24 @@ export const HOME = {
 export const HGV_PAGE = {
   heroTitle: 'HGV & lorry keys and diagnostics – at your yard or roadside, 24/7.',
   heroSubtitle: () =>
-    `Key programming, diagnostics and module coding for ${TRUCK_MAKES.filter((m) => m.enabled).map((m) => m.name).join(', ')} lorries and most vans, at yards and roadsides along the M62 and M18.`,
+    `Key programming, diagnostics and module coding for ${TRUCK_MAKES.filter((m) => m.enabled).map((m) => m.name).join(', ')} lorries, at yards and roadsides along the M62 and M18.`,
   heroNote: 'Free call-out within 25 miles of Goole, day or night, at your yard or the roadside. Price confirmed by phone before we travel, and for key work you pay once the lorry starts.',
 };
 
 /** "Why FoxKey": the dealer route vs FoxKey, row by row. Keep claims general and fair. */
 export const DEALER_COMPARE = [
-  { topic: 'Getting the vehicle there', dealer: 'Usually needs recovering to the workshop.', foxkey: 'We come to the vehicle, wherever it stopped.' },
+  { topic: 'Getting the lorry there', dealer: 'Usually needs heavy recovery to the workshop.', foxkey: 'We come to the lorry, wherever it stopped.' },
   { topic: 'When', dealer: 'Booked into workshop hours, often days ahead.', foxkey: '24/7, including weekends and bank holidays.' },
-  { topic: 'Price', dealer: 'Main-dealer labour rates plus recovery.', foxkey: `From £99 ${VAT_LABEL} for a spare key, agreed before we travel.` },
+  { topic: 'Price', dealer: 'Main-dealer labour rates plus recovery.', foxkey: `From ${priceOf('hgv-spare-key')} ${VAT_LABEL} for a spare lorry key, agreed before we travel.` },
   { topic: 'Equipment', dealer: 'Manufacturer tools in the workshop.', foxkey: 'We use professional Abrites diagnostic equipment.' },
-  { topic: 'Paying', dealer: 'Pay when you collect.', foxkey: 'For key work, pay once the vehicle starts.' },
+  { topic: 'Paying', dealer: 'Pay when you collect.', foxkey: 'For key work, pay once the lorry starts.' },
 ];
 
 export const READY_CHECKLIST = [
-  { title: 'V5C logbook', text: 'In the name of the person we meet.', icon: 'file-text' },
+  { title: 'V5C logbook', text: 'For owner-drivers, in the name of the person we meet.', icon: 'file-text' },
   { title: 'Photo ID with the same address', text: 'Driving licence or passport.', icon: 'id-card' },
   { title: 'Fleet vehicle?', text: 'Written authorisation on the operator’s letterhead works instead.', icon: 'building-2' },
-  { title: 'Where the vehicle is', text: 'Postcode, What3Words or the motorway junction.', icon: 'map-pin' },
+  { title: 'Where the lorry is', text: 'Postcode, What3Words, the depot name or the motorway junction.', icon: 'map-pin' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -472,12 +339,12 @@ export const READY_CHECKLIST = [
 export const FLEET = {
   title: 'Fleet and operator accounts',
   intro:
-    'Running lorries, vans or a mixed fleet? An operator account keeps your vehicles moving with one number to call and one invoice a month.',
+    'Running a fleet of lorries? An operator account keeps your trucks moving with one number to call and one invoice a month.',
   benefits: [
-    { title: 'Monthly invoicing', text: 'One consolidated invoice for all call-outs, with vehicle registrations and job details listed.' },
+    { title: 'Monthly invoicing', text: 'One consolidated invoice for all call-outs, with registrations and job details listed.' },
     { title: 'Priority response', text: 'Account holders go to the front of the queue, day or night.' },
     ...(HAS_FLEET_DISCOUNT ? [{ title: `Fleet discount: ${FLEET_DISCOUNT}`, text: 'Discounted rates on keys, diagnostics and module work across your fleet.' }] : [{ title: 'Fleet rates', text: 'Account rates on keys, diagnostics and module work, agreed when you open the account.' }]),
-    { title: 'Operator authorisation accepted', text: 'For fleet vehicles we accept written authorisation on your company letterhead in place of a V5C and photo ID.' },
+    { title: 'Operator authorisation accepted', text: 'For fleet lorries we accept written authorisation on your company letterhead in place of a V5C and photo ID.' },
   ],
   cta: { label: 'Make a fleet enquiry', href: '/fleet' },
 };
@@ -490,40 +357,44 @@ export type Faq = { q: string; a: string };
 
 export const FAQ_GENERAL: Faq[] = [
   {
-    q: 'Do I need to bring the car to you?',
-    a: 'No. FoxKey is a fully mobile service. We come to your home, workplace, car park or the roadside anywhere in our coverage area, with everything needed to cut and programme keys and carry out diagnostics on site.',
+    q: 'Do you work on cars or vans?',
+    a: 'No. FoxKey works on lorries and HGVs only, so the van, the stock and the equipment are set up for trucks.',
+  },
+  {
+    q: 'Do I need to get the lorry to you?',
+    a: 'No. FoxKey is fully mobile. We come to your yard, depot, a lorry park, a service area or the roadside anywhere in our coverage area, with everything needed to cut and programme keys and run diagnostics at the cab.',
   },
   {
     q: 'What areas do you cover?',
-    a: 'We are based in Goole, East Yorkshire and cover Goole, Yorkshire and the Humber as a priority, including Doncaster, Hull, Selby, Scunthorpe, York and Leeds. We can travel to the rest of the UK on request; travel is quoted separately.',
+    a: 'We are based in Goole, East Yorkshire, and cover Goole, Yorkshire and the Humber as a priority, including Doncaster, Hull, Selby, Scunthorpe, York, Leeds and the M62, M18 and M180 corridors. We can travel to the rest of the UK on request; travel is quoted separately.',
   },
   {
     q: 'Are you really available 24/7?',
     a: 'Yes, including weekends and bank holidays, at the same prices day or night. Call or WhatsApp at any time and we confirm the price before we travel.',
   },
   {
-    q: 'How much does a replacement car key cost?',
-    a: `A spare key starts from £99 and an all-keys-lost job from £179 (prestige, VAG MQB, BMW and Mercedes from £249), ${VAT_LABEL}. The final price depends on the make, model and year and is confirmed by phone before we set off.`,
+    q: 'How much does a lorry key cost?',
+    a: `A spare lorry key starts from ${priceOf('hgv-spare-key')} and an all-keys-lost job from ${priceOf('hgv-all-keys-lost')}, ${VAT_LABEL}. The final price depends on the make, model and year and is confirmed by phone before we set off.`,
   },
   {
     q: 'Is the call-out free?',
-    a: `Yes, within ${SITE.freeCalloutMiles} miles of Goole. Outside that we quote the travel upfront so you know the total before we come.`,
+    a: `Yes, within ${SITE.freeCalloutMiles} miles of Goole, day or night. Outside that we quote the travel upfront so you know the total before we come.`,
   },
   {
     q: 'What proof of ownership do you need?',
-    a: 'For any key, immobiliser or module work we require the V5C logbook and photo ID showing the same address. For fleet vehicles we can accept written authorisation on the operator’s letterhead instead. We will not programme keys without this.',
+    a: 'For any key, immobiliser or module work we need the V5C logbook and photo ID showing the same address, or written authorisation on the operator’s letterhead for fleet lorries. We will not programme keys without this.',
   },
   {
-    q: 'I have lost all my keys. Can you still help?',
-    a: 'Yes. We can produce a new key from the vehicle itself, cut it and programme it to the immobiliser on site. In most cases lost keys can be deleted from the vehicle so they no longer work.',
+    q: 'The driver has lost the only key. Can you still help?',
+    a: 'Yes. We produce a new key at the lorry, cut it and programme it to the immobiliser on site. Where the system allows it, the lost key is removed from the truck so it no longer works.',
   },
   {
-    q: 'Can you make a spare key if I only have one?',
-    a: 'Yes, and we recommend it. Cloning or programming a spare while you still have a working key is quicker and cheaper than an all-keys-lost job later.',
+    q: 'Should we get a spare key made?',
+    a: 'Yes, if a lorry is down to one key. A spare programmed while you still have a working key is quicker and cheaper than an all-keys-lost call-out later, and we can do it at the yard at a time that suits you.',
   },
   {
-    q: 'Which makes do you cover?',
-    a: 'Most European, Japanese and Korean makes, including VW Group, BMW/MINI, Mercedes-Benz, Ford, Vauxhall, Renault/Dacia, Peugeot/Citroën, Fiat Group, Hyundai/Kia, Toyota/Lexus, Nissan, Jaguar Land Rover, Porsche, Subaru and Mazda. See the Makes page for the full list and call if yours isn’t listed.',
+    q: 'Which truck makes do you cover?',
+    a: 'See the Makes page for the trucks we cover today. We only list a make once our equipment covers it. If yours is not listed, call with the registration and we will tell you straight away.',
   },
   {
     q: 'What equipment do you use?',
@@ -531,23 +402,15 @@ export const FAQ_GENERAL: Faq[] = [
   },
   {
     q: 'How do I pay?',
-    a: 'Cash, card or bank transfer. For key work you pay once the vehicle starts and the key is working.',
+    a: 'Cash, card or bank transfer. For key work you pay once the lorry starts and the key is working. Fleet accounts can be invoiced monthly.',
   },
   {
     q: 'Do you offer a warranty?',
     a: WARRANTY_TEXT,
   },
-  {
-    q: 'Can you fix my remote without replacing the whole key?',
-    a: 'Often, yes. Worn buttons, flat batteries, cracked cases and lost remote sync can usually be repaired or re-synchronised for far less than a new key.',
-  },
 ];
 
 export const FAQ_HGV: Faq[] = [
-  {
-    q: 'Do you work on lorries and HGVs as well as cars?',
-    a: 'Yes. We programme keys, carry out diagnostics and code modules on lorries and HGVs as well as light commercials. See the HGV & Lorries page for the makes we currently cover.',
-  },
   {
     q: 'Can you come to our depot or a lorry park?',
     a: 'Yes. We attend yards, depots, lorry parks, service areas and roadside locations across Goole, the M62/M18 corridor and the wider Yorkshire and Humber area, 24/7.',
@@ -567,6 +430,10 @@ export const FAQ_HGV: Faq[] = [
   {
     q: 'My lorry’s instrument cluster has failed. Can you replace it?',
     a: 'Yes. We code the replacement cluster to the vehicle and transfer the true mileage so the odometer stays accurate. We do not alter recorded mileage for any other reason.',
+  },
+  {
+    q: 'Can you fix a cab remote without replacing the whole key?',
+    a: 'Often, yes. Worn buttons, flat batteries, cracked cases and lost remote sync can usually be repaired or re-synchronised on site for far less than a new key.',
   },
   {
     q: 'Do you offer fleet accounts?',
@@ -601,16 +468,16 @@ export const AREAS: Area[] = [
   {
     slug: 'goole',
     name: 'Goole',
-    title: 'Mobile Auto Locksmith Goole | Car, Van & HGV Keys 24/7',
+    title: "Mobile HGV Keys & Diagnostics Goole | Lorry Locksmith 24/7",
     description:
-      'FoxKey is based in Goole. Mobile car, van and lorry key programming and diagnostics at your door, the docks or the lorry parks off the M62. 24/7, free call-out.',
-    intro: 'Goole is home. Our van starts here, so you get the fastest response and a free call-out across the town and the surrounding villages.',
+      "FoxKey is based in Goole. Mobile lorry key programming and HGV diagnostics at the docks, haulage yards and lorry parks off the M62. 24/7, free call-out.",
+    intro: "Goole is home. Our van starts here, so lorries in the town and around junction 36 get the fastest response and a free call-out.",
     body: [
-      'Whether you have locked yourself out on a residential street, lost your only key at the shops or your van won’t start on a trading estate, we are minutes away. Spare keys, all-keys-lost, remote repairs and full diagnostics are all done at the roadside or on your driveway.',
-      'Goole’s port and distribution sites bring a steady flow of lorries through the town. We attend the docks area, haulage yards and the lorry parks and services around the M62 junction 36 for HGV key programming, diagnostics and module coding at any hour, so drivers are not stuck waiting for a dealer to open.',
-      'Being based in Goole also means we know the local layout: the Rawcliffe Road and Boothferry Road estates, the Capitol Park and Glews Hollow sites and the routes out to Howden, Snaith and Rawcliffe are all regular stops.',
+      "Goole’s port and distribution sites bring a steady flow of lorries through the town. We attend the docks area, haulage yards, distribution sheds and the lorry parks and services around M62 junction 36 for key programming, diagnostics and module coding at any hour, so drivers are not left waiting for a dealer to open.",
+      "A lost key, a cab remote that has stopped working or a warning light that will not clear are all handled at the lorry. Spares can be programmed at the yard between shifts, so a truck is never down to its last key.",
+      "Being based here also means we know the layout: the Capitol Park and Glews Hollow sites, the estates off Rawcliffe Road and Boothferry Road and the routes out to Howden, Snaith and Rawcliffe are all regular stops.",
     ],
-    distanceNote: 'Free call-out. Goole is our base.',
+    distanceNote: "Free call-out. Goole is our base.",
     roadMiles: 0,
     free: true,
     lat: 53.7036,
@@ -619,16 +486,16 @@ export const AREAS: Area[] = [
   {
     slug: 'doncaster',
     name: 'Doncaster',
-    title: 'Mobile Auto Locksmith Doncaster | Car & HGV Key Programming 24/7',
+    title: "Mobile HGV Keys & Diagnostics Doncaster | M18 Lorry Locksmith 24/7",
     description:
-      'Mobile car, van and lorry key programming and diagnostics across Doncaster, Thorne, Hatfield and the M18 corridor. 24/7 call-out from FoxKey Auto & HGV.',
-    intro: 'Doncaster is a short run down the M18 from our Goole base and one of our busiest areas for both car and lorry work.',
+      "Mobile lorry key programming and HGV diagnostics across Doncaster, Thorne, Hatfield and the M18 distribution parks. 24/7 call-out from FoxKey HGV.",
+    intro: "Doncaster is a short run down the M18 from our Goole base and one of our busiest areas for lorry work.",
     body: [
-      'For car and van drivers in Doncaster, Bentley, Armthorpe, Thorne, Hatfield and Rossington we offer the full mobile service: lost keys replaced, spares programmed, remotes repaired and dealer-level diagnostics done at your home or workplace, often the same day.',
-      'Doncaster sits at the heart of the M18/M180/A1(M) logistics belt, and the large distribution parks around the motorway junctions and the airport generate plenty of HGV call-outs. We attend depots, yards and lorry parks for truck key programming, diagnostics and module coding so a stranded lorry gets moving again without a recovery bill.',
-      'Thorne and Hatfield lie between Goole and Doncaster, so response times there are among our quickest outside Goole itself.',
+      "Doncaster sits at the heart of the M18, M180 and A1(M) logistics belt, and the large distribution parks around the motorway junctions and the airport generate plenty of HGV call-outs. We attend depots, yards and lorry parks for truck key programming, diagnostics and module coding so a stranded lorry gets moving again without a recovery bill.",
+      "Owner-drivers and fleet operators in Bentley, Armthorpe, Thorne, Hatfield and Rossington get the same mobile service: lost keys replaced, spares programmed and remotes repaired at the cab, with the price confirmed by phone first.",
+      "Thorne and Hatfield lie between Goole and Doncaster, so response times there are among our quickest outside Goole itself.",
     ],
-    distanceNote: 'Roughly 20 miles from Goole, inside our free call-out zone for most of the borough.',
+    distanceNote: "Roughly 20 miles from Goole, inside our free call-out zone for most of the borough.",
     roadMiles: 20,
     free: true,
     lat: 53.5228,
@@ -637,16 +504,16 @@ export const AREAS: Area[] = [
   {
     slug: 'hull',
     name: 'Hull',
-    title: 'Mobile Auto Locksmith Hull | Car, Van & Lorry Keys 24/7',
+    title: "Mobile HGV Keys & Diagnostics Hull | Port & A63 Lorry Locksmith 24/7",
     description:
-      'Mobile car key replacement, van keys and HGV diagnostics across Hull and the East Riding, including the docks and the A63/M62 corridor. 24/7 from FoxKey Auto & HGV.',
-    intro: 'Hull and the East Riding are a straight run along the M62 and A63 from Goole, and we cover the city and its surrounding towns 24/7.',
+      "Mobile lorry key programming and HGV diagnostics across Hull and the East Riding, including the port, the docks lorry parks and the A63. 24/7 from FoxKey HGV.",
+    intro: "Hull is a straight run along the M62 and A63 from Goole, and we cover the port, the city and the East Riding 24/7.",
     body: [
-      'From the Avenues to Hessle, Cottingham, Beverley, Hedon and Willerby, we bring key cutting, programming and diagnostics to your door. All-keys-lost jobs, spare keys, remote repairs and warning-light diagnostics are handled on site without a tow to a dealer.',
-      'Hull’s port estate is one of the busiest freight gateways in the country, and the lorry parks and haulage yards around the docks and the A63 see trucks from across Europe. We attend for HGV key programming, diagnostics and module replacement, including out-of-hours roadside call-outs when a driver is stuck ahead of a sailing or a timed delivery.',
-      'Travel beyond our free zone is quoted upfront by phone, so Hull customers always know the full price before we set off.',
+      "Hull’s port estate is one of the busiest freight gateways in the country, and the lorry parks and haulage yards around the docks and the A63 see trucks from across Europe. We attend for key programming, diagnostics and module replacement, including out-of-hours roadside call-outs when a driver is stuck ahead of a sailing or a timed delivery.",
+      "Yards and depots in Hessle, Melton, Brough, Hedon and along the A63 get the same service: spare keys programmed between runs, cab remotes repaired and warning lights diagnosed without a tow to a dealer.",
+      "Travel beyond our free zone is quoted upfront by phone, so operators in Hull always know the full price before we set off.",
     ],
-    distanceNote: 'Around 30 miles from Goole. Travel is quoted upfront for the city; the western East Riding is free.',
+    distanceNote: "Around 30 miles from Goole. Travel is quoted upfront for the city; the western East Riding is free.",
     roadMiles: 30,
     free: false,
     lat: 53.7457,
@@ -655,16 +522,16 @@ export const AREAS: Area[] = [
   {
     slug: 'selby',
     name: 'Selby',
-    title: 'Mobile Auto Locksmith Selby | Car Keys & Diagnostics 24/7',
+    title: "Mobile HGV Keys & Diagnostics Selby | Lorry Locksmith 24/7",
     description:
-      'Mobile car, van and lorry key programming in Selby, Sherburn-in-Elmet, Tadcaster and the surrounding villages. Free call-out from our Goole base, 24/7.',
-    intro: 'Selby is just up the A614 and A63 from Goole, so the whole district falls within our free call-out zone.',
+      "Mobile lorry key programming and HGV diagnostics in Selby, Sherburn-in-Elmet, Tadcaster and the A1(M)/M62 distribution sites. Free call-out from Goole, 24/7.",
+    intro: "Selby is just up the A614 and A63 from Goole, so the whole district falls within our free call-out zone.",
     body: [
-      'We cover Selby town, Barlby, Brayton, Sherburn-in-Elmet, Tadcaster, Carlton, Snaith and the villages in between. Lost car keys, spares, remote repairs, module coding and diagnostics are all done at your home or place of work.',
-      'The distribution sites around Sherburn and the A1(M)/M62 junctions bring regular van and lorry work. We attend depots and yards for HGV key programming and diagnostics, keeping vehicles on the road rather than waiting for a dealer slot.',
-      'Rural locations are no problem. If the car or tractor unit is on a farm track or a quiet lane, send us a What3Words or postcode and we will find it.',
+      "The distribution sites around Sherburn-in-Elmet and the A1(M)/M62 junctions bring regular lorry work. We attend depots and yards for key programming, diagnostics and module coding, keeping trucks on the road rather than waiting for a dealer slot.",
+      "We cover Selby town, Barlby, Brayton, Sherburn-in-Elmet, Tadcaster, Carlton and Snaith. Lost keys, spares, cab remotes and fault codes are all dealt with at the lorry.",
+      "Rural locations are no problem. If the tractor unit is on a farm track or a quiet lane, send a What3Words or a postcode and we will find it.",
     ],
-    distanceNote: 'Roughly 15 miles from Goole. Free call-out across the Selby district.',
+    distanceNote: "Roughly 15 miles from Goole. Free call-out across the Selby district.",
     roadMiles: 15,
     free: true,
     lat: 53.7836,
@@ -673,16 +540,16 @@ export const AREAS: Area[] = [
   {
     slug: 'scunthorpe',
     name: 'Scunthorpe',
-    title: 'Mobile Auto Locksmith Scunthorpe | Car & HGV Keys 24/7',
+    title: "Mobile HGV Keys & Diagnostics Scunthorpe | M180 Lorry Locksmith 24/7",
     description:
-      'Mobile car, van and lorry key replacement and diagnostics in Scunthorpe, Brigg and North Lincolnshire, including the M180 lorry parks. 24/7 from FoxKey Auto & HGV.',
-    intro: 'Across the Humber from Goole via the M180, Scunthorpe and North Lincolnshire are well within our everyday working area.',
+      "Mobile lorry key programming and HGV diagnostics in Scunthorpe, Brigg and North Lincolnshire, including the M180 lorry parks. 24/7 from FoxKey HGV.",
+    intro: "Across the Humber from Goole via the M180, Scunthorpe and North Lincolnshire are well within our everyday working area.",
     body: [
-      'Car and van owners in Scunthorpe, Brigg, Barton-upon-Humber, Crowle and Epworth get the same mobile service as Goole: keys cut and programmed, remotes repaired, modules cloned and full-system diagnostics at your door, with prices confirmed by phone before we travel.',
-      'The M180 and A18 corridor and the industrial estates around Scunthorpe carry heavy lorry traffic. We attend lorry parks, yards and roadside breakdowns for HGV key programming, diagnostics and module coding, 24 hours a day.',
-      'Scunthorpe is at the edge of our free call-out zone; anything beyond it is quoted upfront so there are no surprises.',
+      "The M180 and A18 corridor and the industrial estates around Scunthorpe carry heavy lorry traffic. We attend lorry parks, yards and roadside breakdowns for key programming, diagnostics and module coding, 24 hours a day.",
+      "Operators in Scunthorpe, Brigg, Barton-upon-Humber, Crowle and Epworth get the same mobile service as Goole: keys cut and programmed at the cab, remotes repaired and full-system diagnostics, with the price confirmed by phone before we travel.",
+      "Scunthorpe is at the edge of our free call-out zone; anything beyond it is quoted upfront so there are no surprises.",
     ],
-    distanceNote: 'Around 20 miles from Goole. Free call-out for most of the town.',
+    distanceNote: "Around 20 miles from Goole. Free call-out for most of the town.",
     roadMiles: 20,
     free: true,
     lat: 53.5809,
@@ -691,16 +558,16 @@ export const AREAS: Area[] = [
   {
     slug: 'york',
     name: 'York',
-    title: 'Mobile Auto Locksmith York | Car Key Replacement & Diagnostics 24/7',
+    title: "Mobile HGV Keys & Diagnostics York | Lorry Locksmith 24/7",
     description:
-      'Mobile car and van key programming, remote repair and diagnostics in York and the surrounding villages. 24/7 call-out from FoxKey Auto & HGV in Goole.',
-    intro: 'York is under an hour from Goole and we regularly attend the city, its ring-road estates and the villages along the A19 and A64.',
+      "Mobile lorry key programming and HGV diagnostics in York and along the A64 and A19. 24/7 call-out from FoxKey HGV in Goole.",
+    intro: "York is under an hour from Goole and we regularly attend the industrial estates and depots around the ring road, the A19 and the A64.",
     body: [
-      'Within the city walls parking is tight and dealer workshops are out of town, which is exactly where a mobile locksmith helps. We attend car parks, residential streets and workplaces across York, Acomb, Clifton, Fulford, Haxby and Copmanthorpe for lost keys, spares and diagnostics.',
-      'The industrial and trading estates around Clifton Moor, Monks Cross and the A64 bring plenty of van work: Transit, Sprinter, Crafter and Vivaro keys and modules are everyday jobs for us. Lorry work in the York area is handled from the same van, 24/7.',
-      'Travel beyond our free zone is quoted upfront when you call.',
+      "Truck dealers are rarely open when a lorry stops at night. We attend yards and depots around Clifton Moor, Monks Cross, Osbaldwick and the A64 for key programming, diagnostics and module coding at the lorry.",
+      "Drivers stopped on the A64, the A19 or the A1237 ring road get a roadside call-out instead of a heavy recovery, and spares can be programmed at the depot at a time that suits the shift pattern.",
+      "Travel beyond our free zone is quoted upfront when you call.",
     ],
-    distanceNote: 'Around 30 miles from Goole. Travel quoted upfront for the city.',
+    distanceNote: "Around 30 miles from Goole. Travel quoted upfront for the city.",
     roadMiles: 30,
     free: false,
     lat: 53.96,
@@ -709,16 +576,16 @@ export const AREAS: Area[] = [
   {
     slug: 'leeds',
     name: 'Leeds',
-    title: 'Mobile Auto Locksmith Leeds | Car, Van & HGV Key Programming 24/7',
+    title: "Mobile HGV Keys & Diagnostics Leeds | M62 Lorry Locksmith 24/7",
     description:
-      'Mobile car, van and lorry key programming and diagnostics in Leeds, Castleford, Wakefield and the M62 corridor. 24/7 from FoxKey Auto & HGV.',
-    intro: 'Leeds and the M62 corridor through Castleford, Pontefract and Wakefield are a direct motorway run from Goole and part of our regular rounds.',
+      "Mobile lorry key programming and HGV diagnostics in Leeds, Castleford, Wakefield and the M62 distribution belt. 24/7 from FoxKey HGV.",
+    intro: "Leeds and the M62 corridor through Castleford, Pontefract and Wakefield are a direct motorway run from Goole and part of our regular rounds.",
     body: [
-      'For car and van drivers across Leeds, Garforth, Rothwell, Morley and Pudsey we provide mobile key replacement, spare key programming, remote repairs and full diagnostics at your door, with upfront pricing confirmed by phone.',
-      'The M62 between Goole and Leeds is lined with distribution centres and lorry parks, particularly around junctions 29 to 32. We attend yards and roadside breakdowns along this stretch for HGV key programming, diagnostics and module coding, around the clock.',
-      'Leeds is beyond our free call-out zone, so travel is quoted upfront. It is still usually far less than a recovery to a dealer.',
+      "The M62 between Goole and Leeds is lined with distribution centres and lorry parks, particularly around junctions 29 to 32. We attend yards and roadside breakdowns along this stretch for key programming, diagnostics and module coding, around the clock.",
+      "Depots in Leeds, Garforth, Rothwell, Morley and Normanton get spares programmed at the yard, cab remotes repaired and fault codes read and explained, with the price confirmed by phone first.",
+      "Leeds is beyond our free call-out zone, so travel is quoted upfront. It is still usually far less than a heavy recovery to a dealer.",
     ],
-    distanceNote: 'Around 35 miles from Goole. Travel quoted upfront.',
+    distanceNote: "Around 35 miles from Goole. Travel quoted upfront.",
     roadMiles: 35,
     free: false,
     lat: 53.8008,
@@ -732,66 +599,61 @@ export const AREAS: Area[] = [
 
 export const SEO = {
   home: {
-    title: 'Mobile Auto Locksmith Goole | Car, Van & HGV Keys 24/7 | FoxKey',
+    title: 'Mobile HGV Keys & Diagnostics Goole | Lorry Locksmith 24/7 | FoxKey',
     description:
-      'Lost your keys? FoxKey comes to you 24/7 in Goole and Yorkshire. Car, van and HGV keys programmed on site. Free call-out within 25 miles.',
+      'Lorry key lost or warning light on? FoxKey comes to your yard or roadside 24/7 from Goole. HGV keys programmed on site. Free call-out within 25 miles.',
   },
   hgv: {
-    title: 'Mobile HGV Keys & Diagnostics Goole, M62 & M18 | FoxKey',
+    title: 'HGV Services: Lorry Keys, Diagnostics & Coding | FoxKey HGV',
     description:
-      'Lorry key lost or warning light on? Mobile HGV key programming and diagnostics at your yard or roadside, 24/7, from Goole along the M62 and M18.',
-  },
-  services: {
-    title: 'Car & Van Key Programming, Diagnostics & Coding | FoxKey Auto & HGV',
-    description:
-      'Mobile car and van services: spare keys, all keys lost, remote repair, ECU and module cloning, coding, service resets and cluster replacement. Prices from £35, we come to you.',
+      'Mobile HGV key programming, all keys lost, cab remotes, diagnostics, module coding and DPF regens at your yard or roadside along the M62 and M18, 24/7.',
   },
   prices: {
-    title: 'Car, Van & HGV Key and Diagnostic Prices | FoxKey Auto & HGV',
+    title: 'HGV Key & Diagnostic Prices | FoxKey HGV',
     description:
-      'Clear “from” prices for mobile car, van, lorry and HGV key programming, diagnostics and module coding. Free call-out within 25 miles of Goole. Final price confirmed by phone.',
+      'Clear “from” prices for mobile lorry and HGV key programming, diagnostics and module coding. Free call-out within 25 miles of Goole. Price confirmed by phone.',
   },
   makes: {
-    title: 'Makes We Cover: Cars, Vans, Lorries & HGVs | FoxKey Auto & HGV',
+    title: 'Truck Makes We Cover | FoxKey HGV',
     description:
-      'Car, van and truck makes covered by FoxKey mobile key programming and diagnostics: VW Group, BMW, Mercedes-Benz, Ford, Vauxhall, Renault, Peugeot, Mercedes trucks and more.',
+      'The lorry and HGV makes FoxKey programmes keys for and diagnoses today. Not listed? Send the registration and we will confirm.',
   },
   quote: {
-    title: 'Get a Quote for Mobile Keys & Diagnostics | FoxKey Auto & HGV',
+    title: 'Get a Quote for Mobile HGV Keys & Diagnostics | FoxKey HGV',
     description:
-      'Request a quote for mobile car, van, lorry or HGV key programming and diagnostics. Tell us the vehicle and location and we will confirm a price by phone.',
+      'Request a quote for mobile lorry and HGV key programming and diagnostics. Tell us the truck and where it is and we confirm a price by phone.',
   },
   fleet: {
-    title: 'Fleet & Operator Accounts for HGV, Lorry & Van Fleets | FoxKey Auto & HGV',
+    title: 'Fleet & Operator Accounts for Lorry Fleets | FoxKey HGV',
     description:
-      'Set up a fleet account with FoxKey: monthly invoicing, priority response and account rates on key programming and diagnostics for lorries, HGVs and vans across Yorkshire.',
+      'Set up a fleet account with FoxKey: monthly invoicing, priority response and account rates on key programming and diagnostics for lorries and HGVs across Yorkshire.',
   },
   about: {
-    title: 'About | Mobile Auto Locksmith in Goole | FoxKey Auto & HGV',
+    title: 'About | Mobile HGV Locksmith in Goole | FoxKey HGV',
     description:
-      'FoxKey Auto & HGV is a mobile auto locksmith and diagnostics service based in Goole, East Yorkshire, covering cars, vans, lorries and HGVs across Yorkshire and the Humber 24/7.',
+      'FoxKey HGV is a mobile lorry locksmith and diagnostics service based in Goole, East Yorkshire, covering yards and roadsides across Yorkshire and the Humber 24/7.',
   },
   faq: {
-    title: 'FAQ: Car Keys, HGV Keys & Diagnostics | FoxKey Auto & HGV',
+    title: 'FAQ: HGV Keys, Diagnostics & Fleet Accounts | FoxKey HGV',
     description:
-      'Answers to common questions about mobile key replacement, proof of ownership, pricing, coverage and HGV diagnostics from FoxKey Auto & HGV in Goole.',
+      'Answers on mobile lorry key replacement, proof of ownership, operator authorisation, prices, coverage and what we do not do, from FoxKey HGV in Goole.',
   },
   contact: {
-    title: 'Contact | 24/7 Mobile Locksmith in Goole | FoxKey Auto & HGV',
+    title: 'Contact | 24/7 Mobile HGV Locksmith in Goole | FoxKey HGV',
     description:
-      'Call or WhatsApp FoxKey Auto & HGV on 07944 087924, 24/7. Mobile car, van, lorry and HGV key programming and diagnostics across Goole, Yorkshire and the Humber.',
+      'Call or WhatsApp FoxKey HGV on 07944 087924, 24/7. Mobile lorry and HGV key programming and diagnostics across Goole, Yorkshire and the Humber.',
   },
   privacy: {
-    title: 'Privacy Policy | FoxKey Auto & HGV',
-    description: 'How FoxKey Auto & HGV handles your personal data under UK GDPR, including enquiry forms, cookies and your rights.',
+    title: 'Privacy Policy | FoxKey HGV',
+    description: 'How FoxKey HGV handles your personal data under UK GDPR, including enquiry forms, cookies and your rights.',
   },
   areas: {
-    title: 'Areas We Cover: Goole, Doncaster, Hull, Selby, Scunthorpe, York & Leeds | FoxKey Auto & HGV',
+    title: 'Areas We Cover: Goole, Doncaster, Hull, Selby & More | FoxKey HGV',
     description:
-      'Mobile auto locksmith and HGV diagnostics coverage across Yorkshire and the Humber: Goole, Doncaster, Hull, Selby, Scunthorpe, York and Leeds. Rest of the UK on request.',
+      'Mobile HGV keys and diagnostics across Yorkshire and the Humber: Goole, Doncaster, Hull, Selby, Scunthorpe, York and Leeds. Rest of the UK on request.',
   },
   thanks: {
-    title: 'Thanks, We’ll Be in Touch | FoxKey Auto & HGV',
-    description: 'Your enquiry has been sent to FoxKey Auto & HGV. For urgent help call or WhatsApp 07944 087924.',
+    title: 'Thanks, We’ll Be in Touch | FoxKey HGV',
+    description: 'Your enquiry has been sent to FoxKey HGV. For urgent help call or WhatsApp 07944 087924.',
   },
 };

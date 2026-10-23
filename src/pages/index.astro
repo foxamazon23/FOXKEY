@@ -7,26 +7,18 @@ import PriceBoard from '../components/PriceBoard.astro';
 import PlateForm from '../components/PlateForm.astro';
 import CallBand from '../components/CallBand.astro';
 import {
-  SEO, SITE, HOME, CAR_SERVICES, HGV_SERVICES, CAR_MAKES, DEALER_COMPARE, READY_CHECKLIST, VAT_LABEL,
-  SHOW_REVIEWS, GOOGLE_BUSINESS_URL, enabledTruckMakes, enabledVanMakes, type Service,
+  SEO, SITE, HOME, HGV_SERVICES, HGV_CALLOUT, DEALER_COMPARE, READY_CHECKLIST, FLEET,
+  SHOW_REVIEWS, GOOGLE_BUSINESS_URL, enabledTruckMakes, type Service,
 } from '../config/site';
 
-const pick = (list: Service[], ids: string[]) => ids.map((id) => list.find((s) => s.id === id)!).filter(Boolean);
-const carTop = pick(CAR_SERVICES, ['spare-key', 'all-keys-lost', 'remote-repair', 'diagnostics', 'module-cloning']);
-const hgvTop = pick(HGV_SERVICES, ['hgv-spare-key', 'hgv-all-keys-lost', 'hgv-diagnostics', 'hgv-modules', 'hgv-dpf']);
 const short = (s: Service) => s.title.split(' – ')[0].split(' (')[0];
-const from = (list: Service[]) => '£' + Math.min(...list.map((s) => Number(s.priceFrom.replace('£', ''))));
-const lanes = [
-  { href: '/services', icon: 'car', ...HOME.cars, from: from(CAR_SERVICES), cta: 'All car and van services' },
-  { href: '/hgv', icon: 'truck', ...HOME.hgv, from: from(HGV_SERVICES), cta: 'All HGV and lorry services' },
-];
 ---
 <BaseLayout title={SEO.home.title} description={SEO.home.description}>
   <!-- Hook: the promise, one primary action, and the direction sign that proves "we come to you" -->
   <section class="on-sign bg-sign text-on-sign">
     <div class="wrap grid items-center gap-x-14 gap-y-10 pt-10 pb-14 md:pt-14 md:pb-20 lg:grid-cols-[1.12fr_0.88fr] [&>*]:min-w-0">
       <div>
-        <p class="t-label mb-5 flex flex-wrap items-center gap-x-2 gap-y-1"><Icon name="clock" class="h-4 w-4 shrink-0" /><span>Mobile auto locksmith</span><span class="flex gap-2"><span aria-hidden="true">·</span>Open {SITE.hoursShort}</span><span class="flex gap-2"><span aria-hidden="true">·</span>{SITE.baseTown}</span></p>
+        <p class="t-label mb-5 flex flex-wrap items-center gap-x-2 gap-y-1"><Icon name="clock" class="h-4 w-4 shrink-0" /><span>{HOME.heroLabel}</span><span class="flex gap-2"><span aria-hidden="true">·</span>Open {SITE.hoursShort}</span><span class="flex gap-2"><span aria-hidden="true">·</span>{SITE.baseTown}</span></p>
         <h1 class="t-display">{HOME.heroTitle}</h1>
         <p class="mt-6 max-w-xl text-[1.1875rem] leading-relaxed text-on-sign-muted">{HOME.heroSubtitle}</p>
         <div id="hero-cta" class="mt-9 flex flex-wrap gap-3">
@@ -39,62 +31,27 @@ const lanes = [
     </div>
   </section>
 
-  <!-- Which job is it -->
-  <section class="band">
-    <div class="wrap">
-      <h2 class="t-h2">{HOME.lanes.title}</h2>
-      <p class="t-lead mt-3 max-w-2xl">{HOME.lanes.text}</p>
-      <div class="mt-9 grid gap-5 md:grid-cols-2">
-        {lanes.map((l) => (
-          <a href={l.href} class="panel group flex flex-col p-6 text-ink no-underline sm:p-8">
-            <div class="flex items-start justify-between gap-6">
-              <span class="inline-flex h-14 w-14 items-center justify-center rounded-md bg-sign text-on-sign"><Icon name={l.icon} class="h-8 w-8" /></span>
-              <p class="text-right"><span class="block t-small">from</span><span class="num block text-[2rem] leading-none font-black">{l.from}</span><span class="block t-small">{VAT_LABEL}</span></p>
-            </div>
-            <h3 class="mt-7 text-[1.875rem] leading-tight font-black tracking-[-0.02em]">{l.title}</h3>
-            <p class="mt-2 t-body">{l.where}</p>
-            <ul class="mt-5 grid gap-2 sm:grid-cols-2">
-              {l.jobs.map((j) => <li class="flex gap-2 t-ui font-bold"><Icon name="check" class="mt-0.5 h-4 w-4 shrink-0 text-sign" />{j}</li>)}
-            </ul>
-            <span class="mt-auto inline-flex items-center gap-2 pt-7 font-extrabold text-sign underline decoration-2 underline-offset-4 group-hover:decoration-[3px]">{l.cta}<Icon name="arrow-right" class="h-4 w-4" /></span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- Prices in brief -->
-  <section class="band bg-surface">
-    <div class="wrap">
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <div class="max-w-2xl">
-          <h2 class="t-h2">{HOME.prices.title}</h2>
-          <p class="t-lead mt-3">{HOME.prices.text}</p>
-        </div>
-        <a href="/prices" class="link">Full price list</a>
+  <section class="band">
+    <div class="wrap grid gap-x-14 gap-y-8 lg:grid-cols-[0.8fr_1.2fr]">
+      <div>
+        <h2 class="t-h2">{HOME.prices.title}</h2>
+        <p class="t-lead mt-3">{HOME.prices.text}</p>
+        <a href="/hgv" class="link mt-5 inline-block">What each job involves</a>
       </div>
-      <div class="mt-9 grid gap-x-12 gap-y-10 lg:grid-cols-2">
-        <div>
-          <h3 class="t-h3 mb-3 flex items-center gap-2"><Icon name="car" class="h-5 w-5 text-sign" />Cars &amp; Vans</h3>
-          <PriceBoard services={carTop} titleOf={short} base="/services" caption="Car and van starting prices" callout={{ title: 'Call-out within 25 miles of Goole', text: 'Free' }} compact />
-        </div>
-        <div>
-          <h3 class="t-h3 mb-3 flex items-center gap-2"><Icon name="truck" class="h-5 w-5 text-sign" />Lorries &amp; HGV</h3>
-          <PriceBoard services={hgvTop} titleOf={short} base="/hgv" caption="HGV and lorry starting prices" callout={{ title: 'Call-out within 25 miles, day or night', text: 'Free' }} compact />
-        </div>
-      </div>
+      <PriceBoard services={HGV_SERVICES} titleOf={short} base="/hgv" caption="HGV and lorry starting prices" callout={{ title: `${HGV_CALLOUT.title}, within ${SITE.freeCalloutMiles} miles of Goole`, text: 'Free' }} compact />
     </div>
   </section>
 
   <!-- How it works: a real sequence, drawn as a route -->
-  <section class="band">
+  <section class="band bg-surface">
     <div class="wrap">
       <h2 class="t-h2 max-w-2xl">{HOME.steps.title}</h2>
       <ol class="relative mt-10 grid gap-8 md:grid-cols-3 md:gap-10">
         <span aria-hidden="true" class="absolute top-6 bottom-6 left-6 w-1.5 -translate-x-1/2 rounded-full bg-sign md:top-6 md:right-[16%] md:bottom-auto md:left-[16%] md:h-1.5 md:w-auto md:translate-x-0 md:-translate-y-1/2"></span>
         {HOME.steps.items.map((s, i) => (
           <li class="relative grid grid-cols-[3rem_1fr] gap-4 md:block md:text-center">
-            <span class="num relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-4 border-paper bg-plate text-[1.25rem] font-black text-plate-ink md:mx-auto">{i + 1}</span>
+            <span class="num relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-4 border-surface bg-plate text-[1.25rem] font-black text-plate-ink md:mx-auto">{i + 1}</span>
             <div class="md:mt-4">
               <h3 class="t-h3">{s.title}</h3>
               <p class="mt-1.5 t-body text-ink md:mx-auto md:max-w-xs">{s.text}</p>
@@ -106,7 +63,7 @@ const lanes = [
   </section>
 
   <!-- Why FoxKey, shown as a comparison -->
-  <section class="band bg-surface">
+  <section class="band">
     <div class="wrap">
       <h2 class="t-h2">{HOME.compare.title}</h2>
       <p class="t-lead mt-3 max-w-2xl">{HOME.compare.text}</p>
@@ -130,35 +87,26 @@ const lanes = [
   </section>
 
   <!-- Makes -->
-  <section class="band">
+  <section class="band bg-surface">
     <div class="wrap grid gap-x-16 gap-y-10 lg:grid-cols-[0.9fr_1.1fr]">
-      <div class="lg:sticky lg:top-28 lg:self-start">
+      <div>
         <h2 class="t-h2">{HOME.makes.title}</h2>
         <p class="t-lead mt-3">{HOME.makes.text}</p>
         <div class="mt-7"><PlateForm /></div>
       </div>
-      <div class="grid gap-10 sm:grid-cols-2">
-        <div>
-          <h3 class="t-label mb-2">Cars &amp; Vans</h3>
-          <ul class="grid grid-cols-2 gap-x-5 border-t-[3px] border-ink sm:grid-cols-1">
-            {CAR_MAKES.map((m) => <li class="border-b border-line py-2.5 t-ui font-bold">{m}</li>)}
-          </ul>
-        </div>
-        <div>
-          <h3 class="t-label mb-2">Lorries &amp; HGV</h3>
-          <ul class="border-t-[3px] border-ink">
-            {enabledTruckMakes().map((m) => <li class="border-b border-line py-2.5 t-ui font-bold">{m.name}</li>)}
-          </ul>
-          <h3 class="t-label mt-8 mb-2">Light commercials</h3>
-          <p class="t-ui">{enabledVanMakes().map((m) => m.name).join(', ')}.</p>
-          <a href="/makes" class="link mt-5 inline-block">Every make we cover</a>
-        </div>
+      <div>
+        <h3 class="t-label mb-2">Lorries &amp; HGV</h3>
+        <ul class="border-t-[3px] border-ink">
+          {enabledTruckMakes().map((m) => <li class="border-b border-line py-3.5 text-[1.125rem] font-bold">{m.name}</li>)}
+        </ul>
+        <p class="mt-4 t-ui text-muted">We list a truck make only once our equipment covers it.</p>
+        <a href="/makes" class="link mt-5 inline-block">Every make we cover</a>
       </div>
     </div>
   </section>
 
   <!-- What to have ready -->
-  <section class="band bg-surface">
+  <section class="band">
     <div class="wrap grid gap-x-16 gap-y-8 lg:grid-cols-[0.9fr_1.1fr]">
       <div>
         <h2 class="t-h2">{HOME.ready.title}</h2>
@@ -166,15 +114,34 @@ const lanes = [
       </div>
       <ul class="grid gap-3 sm:grid-cols-2">
         {READY_CHECKLIST.map((c) => (
-          <li class="flex gap-3 rounded-md bg-paper p-5">
+          <li class="flex gap-3 rounded-md bg-surface p-5">
             <Icon name={c.icon} class="mt-0.5 h-6 w-6 shrink-0 text-sign" />
             <div><p class="font-extrabold">{c.title}</p><p class="mt-1 t-ui text-muted">{c.text}</p></div>
           </li>
         ))}
-        <li class="flex gap-3 rounded-md bg-paper p-5 sm:col-span-2">
+        <li class="flex gap-3 rounded-md bg-surface p-5 sm:col-span-2">
           <Icon name="credit-card" class="mt-0.5 h-6 w-6 shrink-0 text-sign" />
-          <div><p class="font-extrabold">Paying</p><p class="mt-1 t-ui text-muted">{SITE.payment.join(', ')}. For key work you pay once the vehicle starts.</p></div>
+          <div><p class="font-extrabold">Paying</p><p class="mt-1 t-ui text-muted">{SITE.payment.join(', ')}. For key work you pay once the lorry starts. Fleet accounts are invoiced monthly.</p></div>
         </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Fleet -->
+  <section class="band bg-surface">
+    <div class="wrap grid gap-x-14 gap-y-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <div>
+        <h2 class="t-h2">{FLEET.title}</h2>
+        <p class="t-lead mt-3">{FLEET.intro}</p>
+        <a href={FLEET.cta.href} class="btn btn-ink btn-lg mt-7 w-full sm:w-auto">{FLEET.cta.label}<Icon name="arrow-right" class="h-5 w-5" /></a>
+      </div>
+      <ul class="grid gap-x-8 sm:grid-cols-2">
+        {FLEET.benefits.map((b) => (
+          <li class="border-t-[3px] border-ink py-5">
+            <h3 class="font-extrabold">{b.title}</h3>
+            <p class="mt-1 t-ui text-muted">{b.text}</p>
+          </li>
+        ))}
       </ul>
     </div>
   </section>

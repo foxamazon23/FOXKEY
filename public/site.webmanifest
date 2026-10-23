@@ -1,7 +1,7 @@
 {
-  "name": "FoxKey Auto & HGV",
+  "name": "FoxKey HGV",
   "short_name": "FoxKey",
-  "description": "Mobile Auto Locksmith & Diagnostics – Cars, Vans, Lorries & HGVs",
+  "description": "Mobile HGV & Lorry Locksmith and Diagnostics",
   "start_url": "/",
   "display": "browser",
   "background_color": "#FFFFFF",

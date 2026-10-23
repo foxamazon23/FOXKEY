@@ -1,4 +1,4 @@
-# FoxKey Auto & HGV – website
+# FoxKey HGV – website
 
 Site static construit cu **Astro 5 + Tailwind CSS 4**. Toate textele, prețurile, mărcile și datele de contact sunt în **`src/config/site.ts`**.
 

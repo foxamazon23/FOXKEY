@@ -39,7 +39,7 @@ const og = `<!doctype html><html><head><style>${fontCss}
 .brand{display:flex;align-items:center;gap:18px}
 .word{display:flex;flex-direction:column;line-height:.9}
 .word b{font-size:46px;font-weight:900;letter-spacing:-.01em}
-.word span{font-size:17px;font-weight:800;letter-spacing:.24em;color:${C.muted};margin-top:6px}
+.word span{font-size:21px;font-weight:900;letter-spacing:.2em;color:${C.muted};margin-top:6px}
 .shields{margin-left:auto;display:flex;gap:10px}
 .shield{border:3px solid ${C.paper};border-radius:6px;padding:4px 12px 0;font-size:26px;font-weight:900}
 h1{margin-top:auto;font-size:78px;line-height:1;font-weight:900;letter-spacing:-.025em}
@@ -50,19 +50,19 @@ h1{margin-top:auto;font-size:78px;line-height:1;font-weight:900;letter-spacing:-
 .foot p{font-size:25px;font-weight:700;line-height:1.35}
 </style></head><body><div class="og">
 <div class="sign">
-  <div class="brand">${fox(50, C.paper)}<div class="word"><b>FOXKEY</b><span>AUTO &amp; HGV</span></div>
+  <div class="brand">${fox(50, C.paper)}<div class="word"><b>FOXKEY</b><span>HGV</span></div>
     <div class="shields"><span class="shield">M62</span><span class="shield">M18</span></div></div>
   <h1>Lost your keys?<br>We come to you – 24/7.</h1>
 </div>
 <div class="foot"><div class="plate"><i>UK</i><b>07944 087924</b></div>
-<p>Mobile auto locksmith for cars, vans, lorries &amp; HGVs.<br>Goole &amp; Yorkshire. Free call-out within 25 miles.</p></div>
+<p>Mobile HGV &amp; lorry keys and diagnostics.<br>Goole &amp; Yorkshire. Free call-out within 25 miles.</p></div>
 </div></body></html>`;
 
 const logo = `<!doctype html><html><head><style>${fontCss}
 .l{width:512px;height:512px;background:${C.paper};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
 .l b{font-size:78px;font-weight:900;line-height:.9;letter-spacing:-.01em}
-.l span{font-size:26px;font-weight:800;letter-spacing:.24em;color:${C.sign}}
-</style></head><body><div class="l">${tile(200)}<b>FOXKEY</b><span>AUTO &amp; HGV</span></div></body></html>`;
+.l span{font-size:34px;font-weight:900;letter-spacing:.2em;color:${C.sign}}
+</style></head><body><div class="l">${tile(200)}<b>FOXKEY</b><span>HGV</span></div></body></html>`;
 
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium', args: ['--no-sandbox'] });
 const page = await browser.newPage({ deviceScaleFactor: 1 });
@@ -79,9 +79,9 @@ await sharp(logoPng).png({ compressionLevel: 9, palette: true }).toFile('public/
 await browser.close();
 
 writeFileSync('public/site.webmanifest', JSON.stringify({
-  name: 'FoxKey Auto & HGV',
+  name: 'FoxKey HGV',
   short_name: 'FoxKey',
-  description: 'Mobile Auto Locksmith & Diagnostics – Cars, Vans, Lorries & HGVs',
+  description: 'Mobile HGV & Lorry Locksmith and Diagnostics',
   start_url: '/',
   display: 'browser',
   background_color: C.paper,

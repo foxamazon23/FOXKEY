@@ -4,13 +4,13 @@ import PageHead from '../components/PageHead.astro';
 import FormShell from '../components/FormShell.astro';
 import ProofNotice from '../components/ProofNotice.astro';
 import Icon from '../components/Icon.astro';
-import { SEO, SITE, CAR_SERVICES, HGV_SERVICES } from '../config/site';
-const types = ['Car', 'Van', 'Lorry or HGV'];
+import { SEO, SITE, HGV_SERVICES } from '../config/site';
+const types = ['Tractor unit', 'Rigid lorry', 'Other HGV'];
 ---
 <BaseLayout title={SEO.quote.title} description={SEO.quote.description}>
   <PageHead
     title="Get a quote"
-    lead="Tell us about the vehicle and where it is. We reply by phone or WhatsApp with a price before anyone sets off."
+    lead="Tell us about the lorry and where it is. We reply by phone or WhatsApp with a price before anyone sets off."
     crumbs={[{ label: 'Get a quote' }]}
   />
 
@@ -18,7 +18,7 @@ const types = ['Car', 'Van', 'Lorry or HGV'];
     <div class="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
       <FormShell id="quote-form" subject="New quote request from foxkeyauto.co.uk" submitLabel="Send quote request">
         <fieldset>
-          <legend class="label">Vehicle type</legend>
+          <legend class="label">Type of lorry</legend>
           <div class="flex flex-wrap gap-x-6 gap-y-3">
             {types.map((t) => (
               <label class="flex min-h-11 items-center gap-3 font-bold">
@@ -38,8 +38,8 @@ const types = ['Car', 'Van', 'Lorry or HGV'];
         </div>
 
         <div class="grid gap-6 sm:grid-cols-[1fr_1fr_8rem]">
-          <div><label for="q-make" class="label">Make</label><input id="q-make" name="make" class="field" required placeholder="Ford" /></div>
-          <div><label for="q-model" class="label">Model</label><input id="q-model" name="model" class="field" required placeholder="Transit Custom" /></div>
+          <div><label for="q-make" class="label">Make</label><input id="q-make" name="make" class="field" required placeholder="Mercedes-Benz" /></div>
+          <div><label for="q-model" class="label">Model</label><input id="q-model" name="model" class="field" required placeholder="Actros" /></div>
           <div><label for="q-year" class="label">Year</label><input id="q-year" name="year" class="field num" required inputmode="numeric" pattern="(19|20)[0-9]{2}" maxlength="4" placeholder="2018" /></div>
         </div>
 
@@ -47,8 +47,7 @@ const types = ['Car', 'Van', 'Lorry or HGV'];
           <label for="q-service" class="label">What do you need?</label>
           <select id="q-service" name="service" class="field" required>
             <option value="">Choose a service</option>
-            <optgroup label="Cars & Vans">{CAR_SERVICES.map((s) => <option>{s.title}</option>)}</optgroup>
-            <optgroup label="HGV & Lorries">{HGV_SERVICES.map((s) => <option>{s.title}</option>)}</optgroup>
+            {HGV_SERVICES.map((s) => <option>{s.title}</option>)}
             <option>Not sure, please advise</option>
           </select>
         </div>
@@ -56,7 +55,7 @@ const types = ['Car', 'Van', 'Lorry or HGV'];
         <div>
           <label for="q-location" class="label">Where is the vehicle?</label>
           <span id="q-location-hint" class="hint">Postcode, What3Words or the motorway junction.</span>
-          <input id="q-location" name="location" class="field" required placeholder="DN14 or M62 J36" aria-describedby="q-location-hint" />
+          <input id="q-location" name="location" class="field" required placeholder="Depot name, DN14 or M62 J36" aria-describedby="q-location-hint" />
         </div>
 
         <div class="grid gap-6 sm:grid-cols-2">
@@ -66,7 +65,7 @@ const types = ['Car', 'Van', 'Lorry or HGV'];
 
         <div>
           <label for="q-message" class="label">Anything else? <span class="opt">(optional)</span></label>
-          <textarea id="q-message" name="message" rows="4" class="field" placeholder="How many keys you have, whether the vehicle is locked, warning lights…"></textarea>
+          <textarea id="q-message" name="message" rows="4" class="field" placeholder="How many keys you have, whether the cab is locked, warning lights…"></textarea>
         </div>
       </FormShell>
 
