@@ -56,9 +56,11 @@ export const SITE = {
   /** Neutral wording for all other mentions of equipment. */
   equipmentGeneric: 'Professional, dealer-level truck key programming and diagnostic equipment.',
   freeCalloutMiles: 25,
+  /** How far we travel for a job (radius from Goole). Travel beyond the free call-out zone is quoted before we set off. */
+  operatingMiles: 150,
   coverage: {
-    primary: 'Goole, Yorkshire and the Humber',
-    secondary: 'Rest of the UK on request (travel quoted separately)',
+    primary: 'Up to 150 miles from Goole',
+    secondary: 'Further afield on request (travel quoted separately)',
   },
   /** Map embed centred on Goole (no address pin). */
   mapEmbedSrc:
@@ -272,7 +274,7 @@ export const HOME = {
   /** Owner's exact headline. */
   heroTitle: 'Lost your keys? We come to you – 24/7.',
   heroSubtitle:
-    'Keys cut and programmed, remotes repaired and faults diagnosed on lorries and HGVs, wherever they stopped in Goole and Yorkshire.',
+    'Keys cut and programmed, remotes repaired and faults diagnosed on lorries and HGVs, wherever they stopped, up to 150 miles from Goole.',
   heroNote: 'Price agreed before we set off. For key work you pay once the lorry starts.',
   heroLabel: 'Mobile HGV locksmith',
   signLabel: 'Road miles from Goole',
@@ -366,7 +368,7 @@ export const FAQ_GENERAL: Faq[] = [
   },
   {
     q: 'What areas do you cover?',
-    a: 'We are based in Goole, East Yorkshire, and cover Goole, Yorkshire and the Humber as a priority, including Doncaster, Hull, Selby, Scunthorpe, York, Leeds and the M62, M18 and M180 corridors. We can travel to the rest of the UK on request; travel is quoted separately.',
+    a: `We are based in Goole, East Yorkshire, and travel up to ${SITE.operatingMiles} miles for lorry work. That takes in Yorkshire and the Humber, the North East, the North West, the East Midlands, Lincolnshire and the West Midlands, along the M62, M18, M1, M6, A1(M) and M180. Call-out is free within ${SITE.freeCalloutMiles} miles of Goole; further out, travel is quoted before we set off. Beyond 150 miles, ask and we will tell you.`,
   },
   {
     q: 'Are you really available 24/7?',
@@ -413,7 +415,7 @@ export const FAQ_GENERAL: Faq[] = [
 export const FAQ_HGV: Faq[] = [
   {
     q: 'Can you come to our depot or a lorry park?',
-    a: 'Yes. We attend yards, depots, lorry parks, service areas and roadside locations across Goole, the M62/M18 corridor and the wider Yorkshire and Humber area, 24/7.',
+    a: 'Yes. We attend yards, depots, lorry parks, service areas and roadside locations up to 150 miles from Goole, 24/7: along the M62, M18, M1, M6 and A1(M).',
   },
   {
     q: 'What do you need before programming a key to a fleet lorry?',
@@ -593,6 +595,15 @@ export const AREAS: Area[] = [
   },
 ];
 
+/** Major places inside the 150-mile operating radius (no own page; shown on /areas). */
+export const REACH = [
+  { region: 'Yorkshire & the Humber', places: ['Leeds', 'Sheffield', 'Bradford', 'Wakefield', 'Hull', 'York', 'Harrogate'] },
+  { region: 'North East', places: ['Newcastle', 'Sunderland', 'Durham', 'Teesside'] },
+  { region: 'North West', places: ['Manchester', 'Liverpool', 'Warrington', 'Preston'] },
+  { region: 'Midlands', places: ['Nottingham', 'Derby', 'Leicester', 'Stoke-on-Trent', 'Birmingham'] },
+  { region: 'Lincolnshire', places: ['Lincoln', 'Scunthorpe', 'Grimsby', 'Immingham', 'Boston'] },
+];
+
 // ---------------------------------------------------------------------------
 // SEO
 // ---------------------------------------------------------------------------
@@ -626,12 +637,12 @@ export const SEO = {
   fleet: {
     title: 'Fleet & Operator Accounts for Lorry Fleets | FoxKey HGV',
     description:
-      'Set up a fleet account with FoxKey: monthly invoicing, priority response and account rates on key programming and diagnostics for lorries and HGVs across Yorkshire.',
+      'Set up a fleet account with FoxKey: monthly invoicing, priority response and account rates on key programming and diagnostics for lorries and HGVs up to 150 miles from Goole.',
   },
   about: {
     title: 'About | Mobile HGV Locksmith in Goole | FoxKey HGV',
     description:
-      'FoxKey HGV is a mobile lorry locksmith and diagnostics service based in Goole, East Yorkshire, covering yards and roadsides across Yorkshire and the Humber 24/7.',
+      'FoxKey HGV is a mobile lorry locksmith and diagnostics service based in Goole, East Yorkshire, covering yards and roadsides up to 150 miles away, 24/7.',
   },
   faq: {
     title: 'FAQ: HGV Keys, Diagnostics & Fleet Accounts | FoxKey HGV',
@@ -641,16 +652,16 @@ export const SEO = {
   contact: {
     title: 'Contact | 24/7 Mobile HGV Locksmith in Goole | FoxKey HGV',
     description:
-      'Call or WhatsApp FoxKey HGV on 07944 087924, 24/7. Mobile lorry and HGV key programming and diagnostics across Goole, Yorkshire and the Humber.',
+      'Call or WhatsApp FoxKey HGV on 07944 087924, 24/7. Mobile lorry and HGV key programming and diagnostics up to 150 miles from Goole.',
   },
   privacy: {
     title: 'Privacy Policy | FoxKey HGV',
     description: 'How FoxKey HGV handles your personal data under UK GDPR, including enquiry forms, cookies and your rights.',
   },
   areas: {
-    title: 'Areas We Cover: Goole, Doncaster, Hull, Selby & More | FoxKey HGV',
+    title: 'Areas We Cover: Up to 150 Miles from Goole | FoxKey HGV',
     description:
-      'Mobile HGV keys and diagnostics across Yorkshire and the Humber: Goole, Doncaster, Hull, Selby, Scunthorpe, York and Leeds. Rest of the UK on request.',
+      'Mobile HGV keys and diagnostics up to 150 miles from Goole: Yorkshire, the North East and North West, the Midlands and Lincolnshire. Free call-out within 25 miles.',
   },
   thanks: {
     title: 'Thanks, We’ll Be in Touch | FoxKey HGV',

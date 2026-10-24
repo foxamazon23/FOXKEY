@@ -9,6 +9,7 @@ import { writeFileSync, readFileSync, mkdirSync, rmSync, existsSync } from 'node
 import sharp from 'sharp';
 import { chromium } from 'playwright-core';
 import { FOX_HEAD, FOX_BLADE, foxSvg } from '../src/brand/fox.mjs';
+import { vanSvg } from '../src/brand/van.mjs';
 
 mkdirSync('public', { recursive: true });
 
@@ -76,6 +77,17 @@ await page.setContent(logo);
 await page.evaluate(() => document.fonts.ready);
 const logoPng = await page.screenshot({ clip: { x: 0, y: 0, width: 512, height: 512 } });
 await sharp(logoPng).png({ compressionLevel: 9, palette: true }).toFile('public/logo.png');
+
+// Van livery illustration: a web image for the site and a large PNG to hand to a sign-writer.
+mkdirSync('public/images', { recursive: true });
+const vanBig = await browser.newPage({ deviceScaleFactor: 2.5 });
+await vanBig.setViewportSize({ width: 1160, height: 580 });
+await vanBig.setContent(`<!doctype html><html><head><style>${fontCss} body{background:transparent}</style></head><body>${vanSvg()}</body></html>`);
+await vanBig.evaluate(() => document.fonts.ready);
+const bigPng = await vanBig.locator('svg').first().screenshot({ omitBackground: true });
+await sharp(bigPng).png({ compressionLevel: 9 }).toFile('public/images/foxkey-sprinter-livery.png');
+await sharp(bigPng).resize(1600).webp({ quality: 82, alphaQuality: 90 }).toFile('public/images/foxkey-sprinter.webp');
+await sharp(bigPng).resize(800).webp({ quality: 80, alphaQuality: 90 }).toFile('public/images/foxkey-sprinter-800.webp');
 await browser.close();
 
 writeFileSync('public/site.webmanifest', JSON.stringify({

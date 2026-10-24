@@ -21,7 +21,7 @@ const year = new Date().getFullYear();
       <h2 class="t-label mb-3 text-paper">Areas</h2>
       <ul class="space-y-1.5 t-ui">
         {AREAS.map((a) => <li><a href={`/areas/${a.slug}`} class="text-paper no-underline hover:underline">HGV keys {a.name}</a></li>)}
-        <li class="text-[#C9CDCF]">Rest of the UK on request</li>
+        <li><a href="/areas" class="text-paper no-underline hover:underline">Anywhere up to {SITE.operatingMiles} miles</a></li>
       </ul>
     </div>
     <div class="space-y-3 t-ui">

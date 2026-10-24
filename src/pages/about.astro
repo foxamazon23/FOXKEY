@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
-import PhotoSlot from '../components/PhotoSlot.astro';
 import ProofNotice from '../components/ProofNotice.astro';
 import CallBand from '../components/CallBand.astro';
 import { SEO, SITE, WHY_FOXKEY, WARRANTY_TEXT } from '../config/site';
@@ -9,7 +8,7 @@ import { SEO, SITE, WHY_FOXKEY, WARRANTY_TEXT } from '../config/site';
 <BaseLayout title={SEO.about.title} description={SEO.about.description}>
   <PageHead
     title="A mobile locksmith for lorries, based in Goole"
-    lead={`${SITE.name} cuts and programmes keys, repairs cab remotes and diagnoses faults at the lorry, for owner-drivers and haulage operators across Yorkshire and the Humber.`}
+    lead={`${SITE.name} cuts and programmes keys, repairs cab remotes and diagnoses faults at the lorry, for owner-drivers and haulage operators up to ${SITE.operatingMiles} miles from Goole.`}
     crumbs={[{ label: 'About' }]}
     long
   />
@@ -21,14 +20,20 @@ import { SEO, SITE, WHY_FOXKEY, WARRANTY_TEXT } from '../config/site';
         <p>A lorry that will not start on a yard, or a driver who has lost the only key at a lorry park, usually means heavy recovery and days at a truck dealer. Most of that work can be done where the lorry stands, so that is where we do it.</p>
         <p>We work on lorries and HGVs only. The van carries truck key blanks, remotes, cutting equipment and diagnostic tools. {SITE.equipmentGeneric}</p>
         <h2>Where we work</h2>
-        <p>{SITE.baseDescription} We cover {SITE.coverage.primary}, with a free call-out within {SITE.freeCalloutMiles} miles of Goole. {SITE.coverage.secondary}.</p>
+        <p>{SITE.baseDescription} We travel up to {SITE.operatingMiles} miles from Goole, with a free call-out within {SITE.freeCalloutMiles} miles. {SITE.coverage.secondary}.</p>
         <p>We do not publish a street address because we do not have a workshop to visit. Every job happens at your lorry.</p>
         <h2>How we work</h2>
         <p>We confirm the price by phone before we travel. Before any key or module work we check proof of ownership, and for key work you pay once the lorry starts. Fleet accounts are invoiced monthly.</p>
         <p>Warranty: {WARRANTY_TEXT}</p>
       </div>
       <div class="space-y-6">
-        <PhotoSlot label="the FoxKey van" ratio="aspect-[4/3]" />
+        <figure class="rounded-md bg-surface p-4">
+          <picture>
+            <source type="image/webp" srcset="/images/foxkey-sprinter-800.webp 800w, /images/foxkey-sprinter.webp 1600w" sizes="(min-width: 1024px) 540px, 100vw" />
+            <img src="/images/foxkey-sprinter.webp" width="1600" height="772" loading="lazy" decoding="async" alt="Illustration of the FoxKey HGV van: a white 2016 Mercedes-Benz Sprinter with a blue road-sign style panel reading FoxKey HGV, mobile lorry keys and diagnostics 24/7, and the phone number 07944 087924 on a yellow number plate." class="h-auto w-full" />
+          </picture>
+          <figcaption class="mt-2 t-small">The van: a 2016 Mercedes-Benz Sprinter in FoxKey HGV livery (illustration of the decals).</figcaption>
+        </figure>
         <ProofNotice headingLevel="h2" />
       </div>
     </div>

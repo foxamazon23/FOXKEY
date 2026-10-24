@@ -3,13 +3,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHead from '../../components/PageHead.astro';
 import CoverageMap from '../../components/CoverageMap.astro';
 import CallBand from '../../components/CallBand.astro';
-import { SEO, SITE, AREAS } from '../../config/site';
+import { SEO, SITE, AREAS, REACH } from '../../config/site';
 const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles || a.name.localeCompare(b.name));
 ---
 <BaseLayout title={SEO.areas.title} description={SEO.areas.description}>
   <PageHead
     title="Areas we cover"
-    lead={`${SITE.baseDescription} Free call-out within ${SITE.freeCalloutMiles} road miles of Goole. Further out, the travel is quoted before we set off.`}
+    lead={`${SITE.baseDescription} We travel up to ${SITE.operatingMiles} miles for lorry work. Call-out is free within ${SITE.freeCalloutMiles} road miles of Goole; further out, the travel is quoted before we set off.`}
     crumbs={[{ label: 'Areas' }]}
   />
 
@@ -32,9 +32,26 @@ const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles || a.name.loc
             ))}
           </tbody>
         </table>
-        <p class="mt-5 t-ui">{SITE.coverage.secondary}.</p>
       </div>
       <CoverageMap />
+    </div>
+  </section>
+
+  <section class="band bg-surface">
+    <div class="wrap">
+      <h2 class="t-h2">Up to {SITE.operatingMiles} miles from Goole</h2>
+      <p class="t-lead mt-3 max-w-2xl">Lorry work further out is quoted by phone before we set off: the job price plus the travel. These are some of the places inside that range.</p>
+      <div class="mt-9 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
+        {REACH.map((r) => (
+          <div>
+            <h3 class="t-label mb-2">{r.region}</h3>
+            <ul class="border-t-[3px] border-ink">
+              {r.places.map((p) => <li class="border-b border-line py-2 t-ui font-bold">{p}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <p class="mt-8 t-ui">{SITE.coverage.secondary}.</p>
     </div>
   </section>
 

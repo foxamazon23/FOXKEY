@@ -47,7 +47,14 @@ const short = (s: Service) => s.title.split(' – ')[0].split(' (')[0];
   <section class="band bg-surface">
     <div class="wrap">
       <h2 class="t-h2 max-w-2xl">{HOME.steps.title}</h2>
-      <ol class="relative mt-10 grid gap-8 md:grid-cols-3 md:gap-10">
+      <figure class="mx-auto mt-8 max-w-3xl">
+        <picture>
+          <source type="image/webp" srcset="/images/foxkey-sprinter-800.webp 800w, /images/foxkey-sprinter.webp 1600w" sizes="(min-width: 800px) 768px, 100vw" />
+          <img src="/images/foxkey-sprinter.webp" width="1600" height="772" loading="lazy" decoding="async" alt="Illustration of the FoxKey HGV van: a white 2016 Mercedes-Benz Sprinter with a blue road-sign style panel reading FoxKey HGV, mobile lorry keys and diagnostics 24/7, and the phone number 07944 087924 on a yellow number plate." class="h-auto w-full" />
+        </picture>
+        <figcaption class="mt-2 t-small">Our van: a 2016 Mercedes-Benz Sprinter in FoxKey HGV livery (illustration).</figcaption>
+      </figure>
+      <ol class="relative mt-12 grid gap-8 md:grid-cols-3 md:gap-10">
         <span aria-hidden="true" class="absolute top-6 bottom-6 left-6 w-1.5 -translate-x-1/2 rounded-full bg-sign md:top-6 md:right-[16%] md:bottom-auto md:left-[16%] md:h-1.5 md:w-auto md:translate-x-0 md:-translate-y-1/2"></span>
         {HOME.steps.items.map((s, i) => (
           <li class="relative grid grid-cols-[3rem_1fr] gap-4 md:block md:text-center">

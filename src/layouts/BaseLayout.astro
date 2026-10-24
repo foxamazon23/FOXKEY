@@ -24,7 +24,7 @@ const offer = (s: Service, category: string) => ({
   '@type': 'Offer',
   itemOffered: { '@type': 'Service', name: s.title, description: s.description, category },
   priceSpecification: { '@type': 'PriceSpecification', price: s.priceFrom.replace('£', ''), minPrice: s.priceFrom.replace('£', ''), priceCurrency: 'GBP', valueAddedTaxIncluded: PRICES_INCLUDE_VAT },
-  areaServed: 'Yorkshire and the Humber, UK',
+  areaServed: { '@type': 'GeoCircle', geoMidpoint: { '@type': 'GeoCoordinates', latitude: SITE.mapCoords.lat, longitude: SITE.mapCoords.lng }, geoRadius: Math.round(SITE.operatingMiles * 1609.344) },
 });
 
 const business = {
@@ -45,8 +45,7 @@ const business = {
   geo: { '@type': 'GeoCoordinates', latitude: SITE.mapCoords.lat, longitude: SITE.mapCoords.lng },
   areaServed: [
     ...AREAS.map((a) => ({ '@type': 'City', name: a.name })),
-    { '@type': 'AdministrativeArea', name: 'Yorkshire and the Humber' },
-    { '@type': 'Country', name: 'United Kingdom' },
+    { '@type': 'GeoCircle', geoMidpoint: { '@type': 'GeoCoordinates', latitude: SITE.mapCoords.lat, longitude: SITE.mapCoords.lng }, geoRadius: Math.round(SITE.operatingMiles * 1609.344) },
   ],
   openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '00:00', closes: '23:59' }],
   contactPoint: [{ '@type': 'ContactPoint', telephone: SITE.phoneTel, contactType: 'customer service', availableLanguage: 'English', hoursAvailable: '24/7' }],
