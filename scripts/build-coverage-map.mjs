@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { feature } from 'topojson-client';
 
-const VIEW = { lonMin: -5.85, lonMax: 2.0, latMin: 49.9, latMax: 56.25 };
+const VIEW = { lonMin: -4.75, lonMax: 1.85, latMin: 51.55, latMax: 56.0 };
 const LAT0 = 54.3, W = 560;
 const cos = Math.cos((LAT0 * Math.PI) / 180);
 const k = W / ((VIEW.lonMax - VIEW.lonMin) * cos);

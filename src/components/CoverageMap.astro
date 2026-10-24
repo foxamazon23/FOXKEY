@@ -14,31 +14,62 @@ const cos = Math.cos((lat0 * Math.PI) / 180);
 const P = (lat: number, lng: number) => [+((lng - view.lonMin) * cos * k).toFixed(1), +((view.latMax - lat) * k).toFixed(1)];
 const mi = (miles: number) => (miles / 69.05) * k;
 const [gx, gy] = P(SITE.mapCoords.lat, SITE.mapCoords.lng);
-const reach = mi(SITE.operatingMiles), free = mi(SITE.freeCalloutMiles);
+const reach = mi(SITE.operatingMiles);
+// The free call-out is measured in road miles; 25 road miles is roughly 18.5 miles in a straight line from Goole,
+// which matches the towns flagged free in AREAS (Selby, Doncaster, Scunthorpe in; York and Hull quoted).
+const free = mi(SITE.freeCalloutMiles * 0.74);
 
-type Place = { name: string; lat: number; lng: number; dx: number; dy: number; anchor?: 'start' | 'end' | 'middle' };
-// inside the area: white on blue
-const inside: Place[] = [
-  { name: 'Middlesbrough', lat: 54.574, lng: -1.235, dx: -8, dy: 5, anchor: 'end' },
-  { name: 'Leeds', lat: 53.801, lng: -1.549, dx: -8, dy: -6, anchor: 'end' },
-  { name: 'Manchester', lat: 53.481, lng: -2.243, dx: 0, dy: -9, anchor: 'middle' },
-  { name: 'Liverpool', lat: 53.408, lng: -2.992, dx: 6, dy: 18 },
-  { name: 'Sheffield', lat: 53.381, lng: -1.47, dx: 0, dy: 19, anchor: 'middle' },
-  { name: 'Lincoln', lat: 53.231, lng: -0.541, dx: 8, dy: 5 },
-  { name: 'Nottingham', lat: 52.955, lng: -1.158, dx: -8, dy: 5, anchor: 'end' },
+type Place = { name: string; lat: number; lng: number; dx: number; dy: number; anchor?: 'start' | 'end' | 'middle'; extra?: boolean };
+// in the free call-out zone: ink on yellow
+const free_: Place[] = [
+  { name: 'Selby', lat: 53.784, lng: -1.067, dx: 0, dy: -7, anchor: 'middle' },
+  { name: 'Doncaster', lat: 53.523, lng: -1.128, dx: -6, dy: 4, anchor: 'end' },
+  { name: 'Scunthorpe', lat: 53.581, lng: -0.65, dx: 6, dy: 10 },
 ];
-// outside the area, for orientation: grey
+// inside the area: white on blue (extra: hidden on small screens)
+const inside: Place[] = [
+  { name: 'Durham', lat: 54.776, lng: -1.575, dx: -7, dy: 4, anchor: 'end' },
+  { name: 'Darlington', lat: 54.523, lng: -1.553, dx: -7, dy: 8, anchor: 'end', extra: true },
+  { name: 'Middlesbrough', lat: 54.574, lng: -1.235, dx: 0, dy: -8, anchor: 'middle' },
+  { name: 'Scarborough', lat: 54.283, lng: -0.4, dx: -7, dy: 4, anchor: 'end', extra: true },
+  { name: 'Lancaster', lat: 54.047, lng: -2.801, dx: 7, dy: 4, extra: true },
+  { name: 'Blackpool', lat: 53.817, lng: -3.035, dx: -7, dy: 4, anchor: 'end', extra: true },
+  { name: 'Preston', lat: 53.763, lng: -2.703, dx: 7, dy: 4 },
+  { name: 'York', lat: 53.96, lng: -1.087, dx: 0, dy: -8, anchor: 'middle' },
+  { name: 'Leeds', lat: 53.801, lng: -1.549, dx: 0, dy: -8, anchor: 'middle' },
+  { name: 'Bradford', lat: 53.795, lng: -1.759, dx: 0, dy: 15, anchor: 'middle', extra: true },
+  { name: 'Hull', lat: 53.746, lng: -0.337, dx: 0, dy: -8, anchor: 'middle' },
+  { name: 'Manchester', lat: 53.481, lng: -2.243, dx: 0, dy: -8, anchor: 'middle' },
+  { name: 'Liverpool', lat: 53.408, lng: -2.992, dx: 4, dy: 15 },
+  { name: 'Chester', lat: 53.193, lng: -2.893, dx: 7, dy: 4, extra: true },
+  { name: 'Sheffield', lat: 53.381, lng: -1.47, dx: 7, dy: 4 },
+  { name: 'Stoke', lat: 53.003, lng: -2.179, dx: 7, dy: 4, extra: true },
+  { name: 'Derby', lat: 52.923, lng: -1.475, dx: -7, dy: 4, anchor: 'end' },
+  { name: 'Nottingham', lat: 52.955, lng: -1.158, dx: 7, dy: 4 },
+  { name: 'Leicester', lat: 52.637, lng: -1.14, dx: 7, dy: 4 },
+  { name: 'Lincoln', lat: 53.231, lng: -0.541, dx: 7, dy: 4 },
+  { name: 'Grimsby', lat: 53.568, lng: -0.08, dx: 7, dy: 4, extra: true },
+  { name: 'Skegness', lat: 53.144, lng: 0.336, dx: 7, dy: 4, extra: true },
+  { name: 'Boston', lat: 52.979, lng: -0.027, dx: 7, dy: 4, extra: true },
+  { name: 'Peterborough', lat: 52.573, lng: -0.242, dx: 7, dy: 4, extra: true },
+];
+// just outside the area, so the edge is easy to read: grey
 const outside: Place[] = [
-  { name: 'Edinburgh', lat: 55.953, lng: -3.188, dx: 8, dy: 5 },
-  { name: 'Cardiff', lat: 51.481, lng: -3.179, dx: 8, dy: 5 },
-  { name: 'London', lat: 51.507, lng: -0.128, dx: 8, dy: 5 },
+  { name: 'Edinburgh', lat: 55.953, lng: -3.188, dx: 7, dy: 4 },
+  { name: 'Glasgow', lat: 55.861, lng: -4.251, dx: 7, dy: 4 },
+  { name: 'Carlisle', lat: 54.893, lng: -2.933, dx: -7, dy: 4, anchor: 'end' },
+  { name: 'Aberystwyth', lat: 52.415, lng: -4.082, dx: 7, dy: 4 },
+  { name: 'Northampton', lat: 52.24, lng: -0.903, dx: -7, dy: 4, anchor: 'end' },
+  { name: 'Cambridge', lat: 52.205, lng: 0.119, dx: 7, dy: 4 },
+  { name: 'Norwich', lat: 52.63, lng: 1.297, dx: 0, dy: -8, anchor: 'middle' },
+  { name: 'Oxford', lat: 51.752, lng: -1.258, dx: 7, dy: 4 },
 ];
 const pill = (() => { const b = (300 * Math.PI) / 180; return [gx + Math.sin(b) * reach, gy - Math.cos(b) * reach]; })();
 ---
 <figure class={className}>
   <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img" aria-labelledby={`${id}-t ${id}-d`}>
     <title id={`${id}-t`}>Where FoxKey HGV covers: up to {SITE.operatingMiles} miles from {SITE.baseTown}</title>
-    <desc id={`${id}-d`}>A map of Great Britain. The land within {SITE.operatingMiles} miles of Goole is shaded blue: it takes in Leeds, York, Hull, Sheffield, Manchester, Liverpool, Middlesbrough, Lincoln and Nottingham. A yellow area within {SITE.freeCalloutMiles} miles of Goole, including Hull, is the free call-out zone. Edinburgh, Cardiff and London are outside the area.</desc>
+    <desc id={`${id}-d`}>A map of northern England, north Wales and the Midlands. The land within {SITE.operatingMiles} miles of Goole is shaded blue: it takes in {inside.map((c) => c.name).join(', ')}. The yellow free call-out zone within {SITE.freeCalloutMiles} miles of Goole covers {free_.map((c) => c.name).join(', ')}. Just outside the area are {outside.map((c) => c.name).join(', ')}.</desc>
     <defs><clipPath id={`${id}-gb`}><path d={MAP.land} /></clipPath></defs>
     <path d={MAP.land} fill="#E3E6E9" />
     <g clip-path={`url(#${id}-gb)`}>
@@ -47,18 +78,24 @@ const pill = (() => { const b = (300 * Math.PI) / 180; return [gx + Math.sin(b) 
     </g>
     {outside.map((c) => { const [x, y] = P(c.lat, c.lng); return (
       <g class="map-minor">
-        <circle cx={x} cy={y} r="3.5" fill="#6B7377" />
-        <text x={x + c.dx} y={y + c.dy} text-anchor={c.anchor ?? 'start'} fill="#4B5357" font-size="15" font-weight="700">{c.name}</text>
+        <circle cx={x} cy={y} r="3" fill="#6B7377" />
+        <text x={x + c.dx} y={y + c.dy} text-anchor={c.anchor ?? 'start'} fill="#4B5357" font-size="13" font-weight="700" paint-order="stroke" stroke="#E3E6E9" stroke-width="3" stroke-linejoin="round">{c.name}</text>
       </g>
     ); })}
     {inside.map((c) => { const [x, y] = P(c.lat, c.lng); return (
-      <g>
-        <circle cx={x} cy={y} r="3.5" fill="#FFFFFF" />
-        <text x={x + c.dx} y={y + c.dy} text-anchor={c.anchor ?? 'start'} fill="#FFFFFF" font-size="15" font-weight="800" paint-order="stroke" stroke="#0B4EA2" stroke-width="3" stroke-linejoin="round">{c.name}</text>
+      <g class={c.extra ? 'map-minor' : undefined}>
+        <circle cx={x} cy={y} r="3" fill="#FFFFFF" />
+        <text x={x + c.dx} y={y + c.dy} text-anchor={c.anchor ?? 'start'} fill="#FFFFFF" font-size="13" font-weight="800" class="map-city" paint-order="stroke" stroke="#0B4EA2" stroke-width="3" stroke-linejoin="round">{c.name}</text>
+      </g>
+    ); })}
+    {free_.map((c) => { const [x, y] = P(c.lat, c.lng); return (
+      <g class="map-minor">
+        <circle cx={x} cy={y} r="3" fill="#0B0C0C" />
+        <text x={x + c.dx} y={y + c.dy} text-anchor={c.anchor ?? 'start'} fill="#0B0C0C" font-size="12" font-weight="800" class="map-city" paint-order="stroke" stroke="#FFE680" stroke-width="3" stroke-linejoin="round">{c.name}</text>
       </g>
     ); })}
     <circle cx={gx} cy={gy} r="6" fill="#0B0C0C" stroke="#FFFFFF" stroke-width="2.5" />
-    <text x={gx} y={gy + 22} text-anchor="middle" fill="#0B0C0C" font-size="16" font-weight="900">Goole</text>
+    <text x={gx} y={gy + 19} text-anchor="middle" fill="#0B0C0C" font-size="15" font-weight="900" class="map-goole">Goole</text>
     <g transform={`translate(${pill[0]} ${pill[1]})`}>
       <rect x="-50" y="-13" width="100" height="26" rx="13" fill="#FFFFFF" stroke="#0B4EA2" stroke-width="2.5" />
       <text x="0" y="5" text-anchor="middle" fill="#0B4EA2" font-size="14" font-weight="900">{SITE.operatingMiles} MILES</text>
@@ -66,11 +103,13 @@ const pill = (() => { const b = (300 * Math.PI) / 180; return [gx + Math.sin(b) 
   </svg>
   <figcaption class="mt-4 flex flex-wrap gap-x-6 gap-y-2 t-ui">
     <span class="inline-flex items-center gap-2"><span class="inline-block h-4 w-6 rounded-sm bg-sign"></span>We come to you: up to {SITE.operatingMiles} miles</span>
-    <span class="inline-flex items-center gap-2"><span class="inline-block h-4 w-6 rounded-sm bg-plate"></span>Free call-out: up to {SITE.freeCalloutMiles} miles</span>
+    <span class="inline-flex items-center gap-2"><span class="inline-block h-4 w-6 rounded-sm bg-plate"></span>Free call-out: up to {SITE.freeCalloutMiles} road miles</span>
   </figcaption>
 </figure>
 <style>
   @media (max-width: 639px) {
     figure :global(.map-minor) { display: none; }
+    figure :global(.map-city) { font-size: 17px; }
+    figure :global(.map-goole) { font-size: 20px; }
   }
 </style>
