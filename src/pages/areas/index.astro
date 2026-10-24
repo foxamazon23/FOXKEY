@@ -18,7 +18,7 @@ const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles || a.name.loc
       <div class="flex flex-wrap items-end justify-between gap-4">
         <div class="max-w-2xl">
           <h2 class="t-h2">Up to {SITE.operatingMiles} miles from Goole</h2>
-          <p class="t-lead mt-3">The blue circle is how far we travel for lorry work. Inside the yellow circle the call-out is free; further out, the travel is quoted by phone before we set off.</p>
+          <p class="t-lead mt-3">The shaded land is how far we travel for lorry work. In the yellow zone the call-out is free; in the blue zones the travel is quoted by phone before we set off.</p>
         </div>
         <a href={`tel:${SITE.phoneTel}`} class="link num">Not sure if you are in range? Call {SITE.phoneDisplay}</a>
       </div>

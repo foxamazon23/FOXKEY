@@ -1,5 +1,5 @@
 /**
- * Builds src/data/coverage-map.json: the coastline around Goole for the 150-mile coverage map.
+ * Builds src/data/coverage-map.json: the coastline around Goole for the coverage map (up to 100 miles from Goole).
  * Source: Natural Earth 1:10m land (public domain) via the world-atlas package.
  * Run: node scripts/build-coverage-map.mjs (only needed if the map bounds change).
  * Projection: equirectangular, longitude scaled by cos(53.7°) so distances are true near Goole.
@@ -7,7 +7,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { feature } from 'topojson-client';
 
-const VIEW = { lonMin: -5.25, lonMax: 3.15, latMin: 51.2, latMax: 56.15 };
+const VIEW = { lonMin: -3.75, lonMax: 2.0, latMin: 52.0, latMax: 55.42 };
 const LAT0 = 53.7, W = 800;
 const cos = Math.cos((LAT0 * Math.PI) / 180);
 const k = W / ((VIEW.lonMax - VIEW.lonMin) * cos);
