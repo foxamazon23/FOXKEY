@@ -14,7 +14,20 @@ const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles || a.name.loc
   />
 
   <section class="band">
-    <div class="wrap grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+    <div class="wrap">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div class="max-w-2xl">
+          <h2 class="t-h2">Up to {SITE.operatingMiles} miles from Goole</h2>
+          <p class="t-lead mt-3">The blue circle is how far we travel for lorry work. Inside the yellow circle the call-out is free; further out, the travel is quoted by phone before we set off.</p>
+        </div>
+        <a href={`tel:${SITE.phoneTel}`} class="link num">Not sure if you are in range? Call {SITE.phoneDisplay}</a>
+      </div>
+      <CoverageMap class="mx-auto mt-9 max-w-5xl" />
+    </div>
+  </section>
+
+  <section class="band bg-surface">
+    <div class="wrap grid gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
       <div>
         <h2 class="t-h3 mb-3">Towns with their own page</h2>
         <table class="w-full border-collapse text-left">
@@ -33,25 +46,20 @@ const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles || a.name.loc
           </tbody>
         </table>
       </div>
-      <CoverageMap />
-    </div>
-  </section>
-
-  <section class="band bg-surface">
-    <div class="wrap">
-      <h2 class="t-h2">Up to {SITE.operatingMiles} miles from Goole</h2>
-      <p class="t-lead mt-3 max-w-2xl">Lorry work further out is quoted by phone before we set off: the job price plus the travel. These are some of the places inside that range.</p>
-      <div class="mt-9 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
-        {REACH.map((r) => (
-          <div>
-            <h3 class="t-label mb-2">{r.region}</h3>
-            <ul class="border-t-[3px] border-ink">
-              {r.places.map((p) => <li class="border-b border-line py-2 t-ui font-bold">{p}</li>)}
-            </ul>
-          </div>
-        ))}
+      <div>
+        <h2 class="t-h3 mb-3">Places in range, by region</h2>
+        <div class="grid gap-x-8 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+          {REACH.map((r) => (
+            <div>
+              <h3 class="t-label mb-2">{r.region}</h3>
+              <ul class="border-t-[3px] border-ink">
+                {r.places.map((p) => <li class="border-b border-line py-2 t-ui font-bold">{p}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p class="mt-8 t-ui">{SITE.coverage.secondary}.</p>
       </div>
-      <p class="mt-8 t-ui">{SITE.coverage.secondary}.</p>
     </div>
   </section>
 
