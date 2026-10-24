@@ -8,18 +8,24 @@
 import { writeFileSync, readFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import sharp from 'sharp';
 import { chromium } from 'playwright-core';
-import { FOX_HEAD, FOX_BLADE, foxSvg } from '../src/brand/fox.mjs';
+import { FOX_OUTLINE, FOX_EARS, FOX_FILL, FOX_STROKE, FOX_EAR_STROKE, foxSvg } from '../src/brand/fox.mjs';
 import { join, extname } from 'node:path';
 
 mkdirSync('public', { recursive: true });
 
-const C = { sign: '#0B4EA2', plate: '#FFD500', ink: '#0B0C0C', paper: '#FFFFFF', muted: '#DCE7F5' };
+const C = { sign: '#0B4EA2', signDark: '#083B7C', plate: '#FFD500', ink: '#0B0C0C', paper: '#FFFFFF', muted: '#DCE7F5' };
 
 // Favicon: the white fox pictogram on a motorway-blue tile with a white inset rule, the same tile as the site logo.
 const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="12" fill="${C.sign}"/>
-  <rect x="3.5" y="3.5" width="57" height="57" rx="8.5" fill="none" stroke="${C.paper}" stroke-width="3"/>
-  <g transform="translate(13 11) scale(0.594)"><path fill="${C.paper}" fill-rule="evenodd" d="${FOX_HEAD}"/><path fill="${C.paper}" d="${FOX_BLADE}"/></g>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0.45" stop-color="${C.sign}"/><stop offset="1" stop-color="${C.signDark}"/></linearGradient></defs>
+  <rect width="64" height="64" rx="12" fill="url(#g)"/>
+  <rect x="3.5" y="3.5" width="57" height="57" rx="8.5" fill="none" stroke="${C.paper}" stroke-width="2.6"/>
+  <rect x="7.4" y="7.4" width="49.2" height="49.2" rx="5.5" fill="none" stroke="${C.paper}" stroke-width="1.4"/>
+  <g transform="translate(14.5 11.5) scale(0.55)">
+    <path d="${FOX_OUTLINE}" fill="none" stroke="${C.paper}" stroke-width="${FOX_STROKE * 1.25}" stroke-linejoin="miter" stroke-miterlimit="6"/>
+    <path d="${FOX_EARS}" fill="none" stroke="${C.paper}" stroke-width="${FOX_EAR_STROKE * 1.2}"/>
+    <path d="${FOX_FILL}" fill="${C.paper}"/>
+  </g>
 </svg>`;
 writeFileSync('public/favicon.svg', favicon);
 await sharp(Buffer.from(favicon), { density: 600 }).resize(180, 180).png().toFile('public/apple-touch-icon.png');
@@ -31,8 +37,8 @@ for (const f of ['public/logo-dark.svg', 'public/logo-light.svg', 'public/logo.s
 const fontData = readFileSync('node_modules/@fontsource-variable/overpass/files/overpass-latin-wght-normal.woff2').toString('base64');
 const fontCss = `@font-face{font-family:Overpass;src:url(data:font/woff2;base64,${fontData}) format('woff2');font-weight:100 900}
 *{box-sizing:border-box;margin:0}body{font-family:Overpass,Arial,sans-serif;color:${C.ink}}`;
-const fox = (size, fill) => foxSvg(fill, `width="${size}" height="${Math.round((size * 75) / 64)}"`);
-const tile = (size) => `<span style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;background:${C.sign};border-radius:${size * 0.18}px;box-shadow:inset 0 0 0 ${size * 0.045}px ${C.sign},inset 0 0 0 ${size * 0.09}px ${C.paper}">${fox(Math.round(size * 0.58), C.paper)}</span>`;
+const fox = (size, fill, weight = 1) => foxSvg(fill, `width="${size}" height="${Math.round((size * 84) / 72)}"`, weight);
+const tile = (size) => `<span style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;background:linear-gradient(180deg,${C.sign} 45%,${C.signDark});border-radius:${size * 0.18}px;box-shadow:inset 0 0 0 ${size * 0.045}px ${C.sign},inset 0 0 0 ${size * 0.08}px ${C.paper},inset 0 0 0 ${size * 0.115}px ${C.sign},inset 0 0 0 ${size * 0.135}px ${C.paper}">${fox(Math.round(size * 0.6), C.paper)}</span>`;
 
 const og = `<!doctype html><html><head><style>${fontCss}
 .og{width:1200px;height:630px;background:${C.paper};padding:40px;display:flex;flex-direction:column;gap:28px}

@@ -9,7 +9,7 @@ interface Props { tone?: 'dark' | 'light'; class?: string }
 const { tone = 'dark', class: className = '' } = Astro.props;
 ---
 <a href="/" class={`inline-flex items-center gap-2.5 no-underline ${className}`} aria-label={`${SITE.name}, home`}>
-  <span class="sign-tile h-11 w-11"><FoxMark class="mt-[6%] w-[58%]" /></span>
+  <span class="sign-tile h-11 w-11"><FoxMark class="mt-[4%] w-[60%]" weight={1.15} /></span>
   <span class:list={['flex flex-col leading-none', tone === 'dark' ? 'text-ink' : 'text-on-sign']}>
     <span class="text-[1.4rem] font-black tracking-[-0.01em]">FOXKEY</span>
     <span class:list={['mt-1 text-[0.875rem] font-black tracking-[0.2em]', tone === 'dark' ? 'text-sign' : 'text-on-sign-muted']}>HGV</span>
