@@ -1,11 +1,10 @@
 ---
-/** The FoxKey mark in one colour (currentColor): an outlined fox head whose chin runs into a key. */
-import { FOX_VIEWBOX, FOX_OUTLINE, FOX_EARS, FOX_FILL, FOX_STROKE, FOX_EAR_STROKE } from '../brand/fox.mjs';
-interface Props { class?: string; title?: string; weight?: number }
-const { class: className = 'h-10 w-9', title, weight = 1 } = Astro.props;
+/** The FoxKey fox pictogram in one colour (currentColor). The chin runs into a key blade. */
+import { FOX_VIEWBOX, FOX_HEAD, FOX_BLADE } from '../brand/fox.mjs';
+interface Props { class?: string; title?: string }
+const { class: className = 'h-10 w-9', title } = Astro.props;
 ---
 <svg class={className} viewBox={FOX_VIEWBOX} xmlns="http://www.w3.org/2000/svg" role={title ? 'img' : undefined} aria-label={title} aria-hidden={title ? undefined : 'true'}>
-  <path d={FOX_OUTLINE} fill="none" stroke="currentColor" stroke-width={FOX_STROKE * weight} stroke-linejoin="miter" stroke-miterlimit="6" />
-  <path d={FOX_EARS} fill="none" stroke="currentColor" stroke-width={FOX_EAR_STROKE * weight} stroke-linejoin="miter" />
-  <path d={FOX_FILL} fill="currentColor" />
+  <path fill="currentColor" fill-rule="evenodd" d={FOX_HEAD} />
+  <path fill="currentColor" d={FOX_BLADE} />
 </svg>

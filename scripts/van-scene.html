@@ -21,7 +21,7 @@ canvas { display: block; }
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { drawFox } from '/src/brand/fox.mjs';
+import { FOX_HEAD, FOX_BLADE } from '/src/brand/fox.mjs';
 
 const q = new URLSearchParams(location.search);
 const OUT_W = +(q.get('w') || 2400), OUT_H = +(q.get('h') || 1200);
@@ -402,7 +402,7 @@ for (const wx of [FX, RX]) for (const side of [1, -1]) {
 }
 
 // ---------------------------------------------------------------- livery
-const fox = drawFox;
+const fox = (ctx, x, y, w, fill) => { ctx.save(); ctx.translate(x, y); ctx.scale(w / 64, w / 64); ctx.fillStyle = fill; ctx.fill(new Path2D(FOX_HEAD), 'evenodd'); ctx.fill(new Path2D(FOX_BLADE)); ctx.restore(); };
 const rr = (ctx, x, y, w, h, r) => { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); };
 const fitText = (ctx, text, x, y, maxW, font) => { ctx.font = font; const w = ctx.measureText(text).width; ctx.save(); ctx.translate(x, y); if (w > maxW) ctx.scale(maxW / w, 1); ctx.fillText(text, 0, 0); ctx.restore(); };
 const decal = (canvas, x0, x1, y0, y1) => {
@@ -433,8 +433,8 @@ function doorCanvas() {
   const c = document.createElement('canvas'); c.width = 1200; c.height = 560;
   const x = c.getContext('2d');
   x.fillStyle = BLUE; rr(x, 10, 40, 300, 300, 48); x.fill();
-  x.strokeStyle = '#FFFFFF'; x.lineWidth = 12; rr(x, 28, 58, 264, 264, 34); x.stroke(); x.lineWidth = 6; rr(x, 46, 76, 228, 228, 22); x.stroke();
-  fox(x, 78, 92, 164, '#FFFFFF');
+  x.strokeStyle = '#FFFFFF'; x.lineWidth = 14; rr(x, 30, 60, 260, 260, 32); x.stroke();
+  fox(x, 82, 92, 156, '#FFFFFF');
   x.fillStyle = INK; fitText(x, 'FOXKEY', 350, 210, 820, '900 200px Overpass');
   x.fillStyle = BLUE; x.font = '900 110px Overpass'; x.letterSpacing = '30px'; x.fillText('HGV', 358, 330); x.letterSpacing = '0px';
   x.fillStyle = INK; x.font = '800 74px Overpass'; x.fillText('Goole  ·  up to 150 miles  ·  24/7', 14, 480);
