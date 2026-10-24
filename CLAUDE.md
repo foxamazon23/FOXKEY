@@ -26,7 +26,7 @@ Astro 5 + Tailwind 4 static site for **FoxKey HGV**, a mobile lorry/HGV locksmit
 - HGV and lorries only. No car or van services, makes or copy anywhere. Brand name "FoxKey HGV"; the logo shows FOXKEY with HGV underneath. `/services` (old Cars & Vans page) redirects to `/hgv`.
 - Prices were raised 50% by the owner (rounded to whole pounds).
 - Operating area: up to 150 miles from Goole (`SITE.operatingMiles`); free call-out stays 25 miles, travel beyond is quoted. Places in range are listed in `REACH` on /areas.
-- The van is a 2016 Mercedes-Benz Sprinter. `src/brand/van.mjs` draws it side-on in FoxKey HGV livery; `npm run assets` renders `public/images/foxkey-sprinter*.webp` (site, Home and About) and `foxkey-sprinter-livery.png` (large, for a sign-writer). Always captioned as an illustration until a real photo replaces it. No manufacturer badge drawn.
+- The van is a 2016 Mercedes-Benz Sprinter (MWB high roof). `scripts/van-scene.html` models it in Three.js (dev dependency `three`) from its real dimensions and paints the FoxKey HGV decals onto it; `npm run assets` renders it with software WebGL to `public/images/foxkey-sprinter*.webp` (Home and About) and `foxkey-sprinter-livery.png` (2400 px). Captioned as a 3D render until a real photo replaces it. No manufacturer badge is modelled. Decal text and layout live in `sideCanvas()` / `doorCanvas()` in that file.
 - British English, prices in £, "HGV" in titles/menus, "lorry/lorries" in body copy.
 - Palette and font: see the design system above (the owner rejected the original charcoal/orange). Icons: Lucide.
 - Abrites appears once (dealer comparison on Home), as text only. No dealer/partner claims.

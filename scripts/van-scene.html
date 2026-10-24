@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--
+  FoxKey HGV van: a 2016 Mercedes-Benz Sprinter (MWB, high roof) modelled in Three.js from its real dimensions,
+  wearing the FoxKey HGV decals. Rendered to a still image by scripts/generate-assets.mjs (npm run assets).
+  Query: ?w=&h= output size, cam=x,y,z, look=x,y,z, fov=degrees. No manufacturer badge is modelled.
+-->
+<style>
+@font-face { font-family: Overpass; src: url(/node_modules/@fontsource-variable/overpass/files/overpass-latin-wght-normal.woff2) format('woff2'); font-weight: 100 900; }
+html, body { margin: 0; background: transparent; }
+canvas { display: block; }
+</style>
+<script type="importmap">{ "imports": { "three": "/node_modules/three/build/three.module.js", "three/addons/": "/node_modules/three/examples/jsm/" } }</script>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
+import { FOX_HEAD, FOX_BLADE } from '/src/brand/fox.mjs';
+
+const q = new URLSearchParams(location.search);
+const OUT_W = +(q.get('w') || 2400), OUT_H = +(q.get('h') || 1300);
+const CAM = (q.get('cam') || '-2.6,1.55,9.8').split(',').map(Number);
+const LOOK = (q.get('look') || '2.85,1.18,0').split(',').map(Number);
+const FOV = +(q.get('fov') || 23);
+
+await document.fonts.load('900 100px Overpass');
+await document.fonts.load('800 100px Overpass');
+
+const BLUE = '#0B4EA2', YELLOW = '#FFD500', INK = '#0B0C0C', LIGHT = '#DCE7F5', BAND = '#1F4FA6';
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(OUT_W, OUT_H);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = 0.88;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.03).texture;
+scene.environmentIntensity = 0.85;
+
+// ---------- dimensions (metres): 2016 Sprinter MWB high roof ----------
+const W = 1.99;           // body width
+const HW = W / 2;
+const FX = 1.0, RX = 4.665; // axle positions from the front
+const WR = 0.355;         // tyre radius
+const AR = 0.445;         // arch radius
+
+// ---------- materials ----------
+const paint = new THREE.MeshPhysicalMaterial({ color: 0xe3e5e7, roughness: 0.26, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.05 });
+const plastic = new THREE.MeshStandardMaterial({ color: 0x23272b, roughness: 0.72, metalness: 0 });
+const plasticGloss = new THREE.MeshPhysicalMaterial({ color: 0x15181b, roughness: 0.25, clearcoat: 0.6 });
+const glass = new THREE.MeshPhysicalMaterial({ color: 0x0c1218, roughness: 0.03, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1.4 });
+const chrome = new THREE.MeshStandardMaterial({ color: 0xd6dade, roughness: 0.18, metalness: 1 });
+const lens = new THREE.MeshPhysicalMaterial({ color: 0xe9eef2, roughness: 0.06, metalness: 0.55, clearcoat: 1 });
+const rubber = new THREE.MeshStandardMaterial({ color: 0x18191b, roughness: 0.88 });
+const steel = new THREE.MeshStandardMaterial({ color: 0xb7bcc1, roughness: 0.35, metalness: 0.85 });
+const amber = new THREE.MeshPhysicalMaterial({ color: 0xf0a020, roughness: 0.15, clearcoat: 1 });
+const smoke = new THREE.MeshPhysicalMaterial({ color: 0x3a4148, roughness: 0.06, metalness: 0.5, clearcoat: 1, clearcoatRoughness: 0.03 });
+const headGlass = new THREE.MeshPhysicalMaterial({ color: 0xaab3bb, roughness: 0.05, metalness: 0.85, clearcoat: 1, clearcoatRoughness: 0.02 });
+const redLens = new THREE.MeshPhysicalMaterial({ color: 0xa3141a, roughness: 0.12, clearcoat: 1 });
+
+const add = (geo, mat, x, y, z, opts = {}) => {
+  const m = new THREE.Mesh(geo, mat);
+  m.position.set(x, y, z);
+  if (opts.rx) m.rotation.x = opts.rx;
+  if (opts.ry) m.rotation.y = opts.ry;
+  if (opts.rz) m.rotation.z = opts.rz;
+  m.castShadow = opts.cast !== false;
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+};
+
+// ---------- body shell: side profile extruded across the width ----------
+const s = new THREE.Shape();
+s.moveTo(0.12, 0.36);
+s.lineTo(0.03, 0.52);
+s.quadraticCurveTo(-0.01, 0.80, 0.03, 0.98);
+s.quadraticCurveTo(0.08, 1.10, 0.32, 1.12);
+s.lineTo(1.06, 1.42);
+s.lineTo(1.63, 2.40);
+s.quadraticCurveTo(1.76, 2.67, 2.08, 2.68);
+s.lineTo(5.80, 2.68);
+s.quadraticCurveTo(5.93, 2.68, 5.93, 2.55);
+s.lineTo(5.93, 0.42);
+const a0 = Math.asin((0.42 - 0.36) / AR);
+s.lineTo(RX + AR * Math.cos(a0), 0.42);
+s.absarc(RX, 0.36, AR, a0, Math.PI - a0, false);
+s.lineTo(FX + AR * Math.cos(a0), 0.42);
+s.absarc(FX, 0.36, AR, a0, Math.PI - a0, false);
+s.lineTo(0.34, 0.40);
+s.lineTo(0.12, 0.36);
+
+const BT = 0.07;
+let body = new THREE.ExtrudeGeometry(s, { depth: W - 2 * BT, bevelEnabled: true, bevelThickness: BT, bevelSize: 0.05, bevelSegments: 10, curveSegments: 40 });
+body.translate(0, 0, -(W - 2 * BT) / 2);
+{
+  const p = body.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i);
+    let f = 1;
+    if (x < 1.3) f *= THREE.MathUtils.lerp(0.9, 1, THREE.MathUtils.smoothstep(x, -0.1, 1.3));
+    if (y > 2.47) f *= THREE.MathUtils.lerp(1, 0.94, THREE.MathUtils.smoothstep(y, 2.47, 2.75));
+    if (y < 0.5 && x < 0.6) f *= 0.98;
+    p.setZ(i, p.getZ(i) * f);
+  }
+}
+body = toCreasedNormals(body, Math.PI / 5);
+add(body, paint, 0, 0, 0);
+
+// underbody and arch liners
+add(new THREE.BoxGeometry(5.2, 0.22, 1.7), plastic, 3.0, 0.36, 0);
+for (const wx of [FX, RX]) add(new THREE.BoxGeometry(0.9, 0.46, wx === FX ? 1.66 : 1.84), plastic, wx, 0.6, 0, { cast: false });
+
+// ---------- glass ----------
+{ // windscreen: a quad following the raked A-pillars, sitting just proud of the shell
+  const d = new THREE.Vector2(1.63 - 1.06, 2.40 - 1.42).normalize();
+  const n = new THREE.Vector2(-d.y, d.x); // outward (forward/up)
+  const off = 0.05 + 0.006;
+  const b = new THREE.Vector2(1.11, 1.51).addScaledVector(n, off);
+  const t = new THREE.Vector2(1.585, 2.31).addScaledVector(n, off);
+  const zb = 0.80, zt = 0.86;
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute([b.x, b.y, -zb, b.x, b.y, zb, t.x, t.y, zt, t.x, t.y, -zt], 3));
+  g.setIndex([0, 1, 2, 0, 2, 3]);
+  g.computeVertexNormals();
+  add(g, glass, 0, 0, 0, { cast: false });
+}
+const sideWin = new THREE.Shape();
+sideWin.moveTo(1.36, 1.50); sideWin.lineTo(1.80, 2.33); sideWin.quadraticCurveTo(1.83, 2.38, 1.90, 2.38);
+sideWin.lineTo(2.36, 2.38); sideWin.quadraticCurveTo(2.40, 2.38, 2.40, 2.34); sideWin.lineTo(2.40, 1.54);
+sideWin.quadraticCurveTo(2.40, 1.50, 2.36, 1.50); sideWin.lineTo(1.36, 1.50);
+for (const side of [1, -1]) {
+  const g = new THREE.ShapeGeometry(sideWin, 16);
+  const m = add(g, glass, 0, 0, side * (HW + 0.004), { cast: false });
+  if (side < 0) m.scale.z = -1;
+}
+
+// shut lines, handles, rub strip
+const seam = new THREE.MeshStandardMaterial({ color: 0x5f666c, roughness: 0.6 });
+const zs = HW + 0.003;
+for (const x of [2.47, 2.57, 4.16, 5.84]) add(new THREE.BoxGeometry(0.007, 2.0, 0.006), seam, x, 1.43, zs, { cast: false });
+add(new THREE.BoxGeometry(0.007, 0.62, 0.006), seam, 1.40, 1.17, zs, { cast: false });
+add(new THREE.BoxGeometry(1.08, 0.007, 0.006), seam, 1.93, 0.86, zs, { cast: false });
+add(new THREE.BoxGeometry(1.68, 0.007, 0.006), seam, 5.0, 1.52, zs, { cast: false });
+add(new RoundedBoxGeometry(0.17, 0.045, 0.03, 2, 0.012), plastic, 2.3, 1.36, HW + 0.012);
+add(new RoundedBoxGeometry(0.17, 0.045, 0.03, 2, 0.012), plastic, 2.75, 1.36, HW + 0.012);
+for (const [x0, x1] of [[1.47, 4.2], [5.13, 5.92]]) add(new RoundedBoxGeometry(x1 - x0, 0.09, 0.04, 2, 0.015), plastic, (x0 + x1) / 2, 0.66, HW + 0.012);
+
+// ---------- front end ----------
+add(new RoundedBoxGeometry(0.36, 0.32, 1.80, 4, 0.08), plastic, 0.12, 0.48, 0);           // bumper
+add(new RoundedBoxGeometry(0.08, 0.36, 0.96, 3, 0.03), plasticGloss, -0.015, 0.83, 0);     // grille
+for (const y of [0.73, 0.83, 0.93]) add(new RoundedBoxGeometry(0.03, 0.035, 0.92, 2, 0.012), chrome, -0.055, y, 0);
+for (const side of [1, -1]) {
+  // headlight unit set into the front corner, wrapping round towards the side
+  const hl = add(new RoundedBoxGeometry(0.16, 0.25, 0.40, 4, 0.05), headGlass, 0.01, 0.9, side * 0.70, { cast: false });
+  hl.rotation.y = side * 0.45;
+  const inner = add(new RoundedBoxGeometry(0.05, 0.1, 0.18, 3, 0.02), smoke, -0.07, 0.91, side * 0.64, { cast: false });
+  inner.rotation.y = side * 0.45;
+  const wrap = add(new RoundedBoxGeometry(0.36, 0.21, 0.06, 4, 0.025), headGlass, 0.2, 0.9, side * 0.895, { cast: false });
+  wrap.rotation.y = side * 0.12;
+  
+  add(new RoundedBoxGeometry(0.16, 0.05, 0.12, 2, 0.02), amber, 0.13, 0.69, side * 0.84);    // fog/indicator in bumper
+  // mirrors
+  add(new RoundedBoxGeometry(0.05, 0.05, 0.26, 2, 0.02), plastic, 1.43, 1.66, side * (HW + 0.12));
+  add(new RoundedBoxGeometry(0.14, 0.44, 0.22, 4, 0.05), plastic, 1.43, 1.86, side * (HW + 0.25));
+  // side indicator repeater
+  add(new RoundedBoxGeometry(0.07, 0.03, 0.02, 2, 0.01), amber, 0.95, 1.12, side * (HW - 0.06));
+  // rear light cluster
+  add(new RoundedBoxGeometry(0.06, 0.62, 0.14, 2, 0.02), redLens, 5.92, 1.0, side * (HW - 0.1));
+}
+add(new RoundedBoxGeometry(0.26, 0.24, 1.92, 4, 0.06), plastic, 5.94, 0.42, 0);              // rear bumper
+
+// front number plate
+{
+  const c = document.createElement('canvas'); c.width = 1040; c.height = 222;
+  const x = c.getContext('2d');
+  x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, 1040, 222);
+  x.strokeStyle = '#111'; x.lineWidth = 6; x.strokeRect(6, 6, 1028, 210);
+  x.fillStyle = '#111'; x.font = '900 168px Overpass'; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.fillText('FK16 HGV', 520, 122);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  add(new THREE.PlaneGeometry(0.52, 0.111), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.4 }), -0.065, 0.5, 0, { ry: -Math.PI / 2, cast: false });
+}
+
+// ---------- wheels ----------
+const tyreProfile = [[0.215, -0.118], [0.318, -0.118], [0.345, -0.104], [0.355, -0.07], [0.357, 0], [0.355, 0.07], [0.345, 0.104], [0.318, 0.118], [0.215, 0.118]].map(([r, y]) => new THREE.Vector2(r, y));
+const tyreGeo = new THREE.LatheGeometry(tyreProfile, 96);
+const rimGeo = new THREE.CylinderGeometry(0.215, 0.215, 0.2, 64);
+const capGeo = new THREE.CylinderGeometry(0.19, 0.2, 0.02, 64);
+const hubGeo = new THREE.CylinderGeometry(0.07, 0.08, 0.03, 32);
+for (const wx of [FX, RX]) for (const side of [1, -1]) {
+  const z = side * (HW - 0.135);
+  add(tyreGeo, rubber, wx, WR, z, { rx: Math.PI / 2 });
+  add(rimGeo, steel, wx, WR, z, { rx: Math.PI / 2 });
+  add(capGeo, steel, wx, WR, z + side * 0.105, { rx: Math.PI / 2 });
+  add(hubGeo, plastic, wx, WR, z + side * 0.12, { rx: Math.PI / 2 });
+  for (let k = 0; k < 8; k++) {
+    const a = (k / 8) * Math.PI * 2;
+    add(new THREE.CylinderGeometry(0.018, 0.018, 0.012, 16), plastic, wx + Math.cos(a) * 0.14, WR + Math.sin(a) * 0.14, z + side * 0.117, { rx: Math.PI / 2, cast: false });
+  }
+}
+
+// ---------- livery (decals) ----------
+const fox = (ctx, x, y, w, fill) => {
+  ctx.save(); ctx.translate(x, y); ctx.scale(w / 64, w / 64); ctx.fillStyle = fill;
+  ctx.fill(new Path2D(FOX_HEAD), 'evenodd'); ctx.fill(new Path2D(FOX_BLADE)); ctx.restore();
+};
+const rr = (ctx, x, y, w, h, r) => { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); };
+const fitText = (ctx, text, x, y, maxW, font) => { ctx.font = font; const w = ctx.measureText(text).width; ctx.save(); ctx.translate(x, y); if (w > maxW) ctx.scale(maxW / w, 1); ctx.fillText(text, 0, 0); ctx.restore(); };
+const decalPlane = (canvas, x0, x1, y0, y1, z, flip = false) => {
+  const tex = new THREE.CanvasTexture(canvas); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 16;
+  const mat = new THREE.MeshPhysicalMaterial({ map: tex, color: 0xc4c4c4, transparent: true, roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.06, polygonOffset: true, polygonOffsetFactor: -2 });
+  const m = add(new THREE.PlaneGeometry(x1 - x0, y1 - y0), mat, (x0 + x1) / 2, (y0 + y1) / 2, z, { cast: false });
+  if (flip) m.rotation.y = Math.PI;
+  return m;
+};
+
+function sideCanvas() {
+  const c = document.createElement('canvas'); c.width = 2400; c.height = 1280;
+  const x = c.getContext('2d');
+  // motorway sign panel
+  x.fillStyle = BLUE; rr(x, 30, 30, 2340, 860, 80); x.fill();
+  x.strokeStyle = '#FFFFFF'; x.lineWidth = 26; rr(x, 70, 70, 2260, 780, 52); x.stroke();
+  fox(x, 170, 165, 300, '#FFFFFF');
+  x.fillStyle = '#FFFFFF'; x.textBaseline = 'alphabetic';
+  fitText(x, 'FOXKEY', 560, 450, 1650, '900 360px Overpass');
+  x.fillStyle = LIGHT; x.font = '900 150px Overpass'; x.letterSpacing = '42px'; x.fillText('HGV', 572, 625); x.letterSpacing = '0px';
+  x.fillStyle = '#FFFFFF';
+  fitText(x, 'MOBILE LORRY KEYS & DIAGNOSTICS   ·   24/7', 170, 780, 2060, '800 92px Overpass');
+  // phone on a rear number plate
+  x.fillStyle = YELLOW; rr(x, 420, 950, 1560, 300, 34); x.fill();
+  x.strokeStyle = INK; x.lineWidth = 14; rr(x, 427, 957, 1546, 286, 30); x.stroke();
+  x.fillStyle = BAND; rr(x, 434, 964, 170, 272, [26, 0, 0, 26]); x.fill();
+  x.fillStyle = '#FFFFFF'; x.font = '900 62px Overpass'; x.textAlign = 'center'; x.fillText('24/7', 519, 1206);
+  x.fillStyle = INK; x.textAlign = 'center';
+  x.save(); x.font = '900 210px Overpass'; const w = x.measureText('07944 087924').width; const max = 1240; x.translate(1290, 1180); if (w > max) x.scale(max / w, 1); x.fillText('07944 087924', 0, 0); x.restore();
+  return c;
+}
+function doorCanvas() {
+  const c = document.createElement('canvas'); c.width = 1200; c.height = 560;
+  const x = c.getContext('2d');
+  x.fillStyle = BLUE; rr(x, 10, 40, 300, 300, 48); x.fill();
+  x.strokeStyle = '#FFFFFF'; x.lineWidth = 14; rr(x, 30, 60, 260, 260, 32); x.stroke();
+  fox(x, 82, 92, 156, '#FFFFFF');
+  x.fillStyle = INK; fitText(x, 'FOXKEY', 350, 210, 820, '900 200px Overpass');
+  x.fillStyle = BLUE; x.font = '900 110px Overpass'; x.letterSpacing = '30px'; x.fillText('HGV', 358, 330); x.letterSpacing = '0px';
+  x.fillStyle = INK; x.font = '800 74px Overpass'; x.fillText('Goole  ·  up to 150 miles  ·  24/7', 14, 480);
+  return c;
+}
+decalPlane(sideCanvas(), 2.66, 5.74, 0.80, 2.45, HW + 0.006);
+decalPlane(doorCanvas(), 1.42, 2.40, 0.82, 1.28, HW + 0.006);
+
+// ---------- ground, light ----------
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.ShadowMaterial({ opacity: 0.32 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+{ // contact shadow
+  const c = document.createElement('canvas'); c.width = 512; c.height = 256;
+  const x = c.getContext('2d'); const g = x.createRadialGradient(256, 128, 10, 256, 128, 250);
+  g.addColorStop(0, 'rgba(0,0,0,0.55)'); g.addColorStop(0.6, 'rgba(0,0,0,0.25)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.fillRect(0, 0, 512, 256);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(7.0, 2.9), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false }));
+  m.rotation.x = -Math.PI / 2; m.position.set(2.95, 0.002, 0); scene.add(m);
+}
+scene.add(new THREE.HemisphereLight(0xffffff, 0xcfd2d4, 0.55));
+const sun = new THREE.DirectionalLight(0xffffff, 2.3);
+sun.position.set(-6, 9, 6); sun.target.position.set(3, 0, 0);
+sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -10, right: 10, top: 10, bottom: -10, near: 1, far: 40 });
+sun.shadow.radius = 8; sun.shadow.bias = -0.0003; sun.shadow.normalBias = 0.02;
+scene.add(sun, sun.target);
+const fill = new THREE.DirectionalLight(0xdfe8ff, 0.35); fill.position.set(4, 3, 9); scene.add(fill);
+
+const camera = new THREE.PerspectiveCamera(FOV, OUT_W / OUT_H, 0.1, 100);
+camera.position.set(...CAM); camera.lookAt(...LOOK);
+renderer.render(scene, camera);
+window.__done = true;
+</script>
+</body>
+</html>
