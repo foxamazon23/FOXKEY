@@ -14,15 +14,13 @@ const sorted = [...AREAS].sort((a, b) => a.roadMiles - b.roadMiles || a.name.loc
   />
 
   <section class="band">
-    <div class="wrap">
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <div class="max-w-2xl">
-          <h2 class="t-h2">Up to {SITE.operatingMiles} miles from Goole</h2>
-          <p class="t-lead mt-3">The shaded land is how far we travel for lorry work. In the yellow zone the call-out is free; in the blue zones the travel is quoted by phone before we set off.</p>
-        </div>
-        <a href={`tel:${SITE.phoneTel}`} class="link num">Not sure if you are in range? Call {SITE.phoneDisplay}</a>
+    <div class="wrap grid items-center gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)]">
+      <div>
+        <h2 class="t-h2">Up to {SITE.operatingMiles} miles from Goole</h2>
+        <p class="t-lead mt-3 max-w-xl">Everywhere in blue, we come to you. In the yellow zone around Goole the call-out is free; anywhere else in blue, we quote the travel by phone before we set off.</p>
+        <p class="mt-6 t-ui"><a href={`tel:${SITE.phoneTel}`} class="link num">Not sure if you are in range? Call {SITE.phoneDisplay}</a></p>
       </div>
-      <CoverageMap class="mx-auto mt-9 max-w-5xl" />
+      <CoverageMap class="mx-auto w-full max-w-[26rem]" />
     </div>
   </section>
 

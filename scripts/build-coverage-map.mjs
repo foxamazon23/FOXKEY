@@ -1,36 +1,36 @@
 /**
- * Builds src/data/coverage-map.json: the coastline around Goole for the coverage map (up to 100 miles from Goole).
- * Source: Natural Earth 1:10m land (public domain) via the world-atlas package.
+ * Builds src/data/coverage-map.json: the outline of Great Britain for the coverage map.
+ * Source: Natural Earth 1:10m admin-0 countries (public domain) via the world-atlas package.
+ * Only Great Britain is drawn (Northern Ireland, Ireland and the continent are left out to keep the map clean).
  * Run: node scripts/build-coverage-map.mjs (only needed if the map bounds change).
- * Projection: equirectangular, longitude scaled by cos(53.7°) so distances are true near Goole.
+ * Projection: equirectangular, longitude scaled by cos(54.3°), so the coverage circle stays round.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { feature } from 'topojson-client';
 
-const VIEW = { lonMin: -3.75, lonMax: 2.0, latMin: 52.0, latMax: 55.42 };
-const LAT0 = 53.7, W = 800;
+const VIEW = { lonMin: -5.85, lonMax: 2.0, latMin: 49.9, latMax: 56.25 };
+const LAT0 = 54.3, W = 560;
 const cos = Math.cos((LAT0 * Math.PI) / 180);
 const k = W / ((VIEW.lonMax - VIEW.lonMin) * cos);
 const H = Math.round((VIEW.latMax - VIEW.latMin) * k);
 const P = ([lon, lat]) => [(lon - VIEW.lonMin) * cos * k, (VIEW.latMax - lat) * k];
 
-const topo = JSON.parse(readFileSync('node_modules/world-atlas/land-10m.json', 'utf8'));
-const land = feature(topo, topo.objects.land);
-const polys = land.geometry ? (land.geometry.type === 'Polygon' ? [land.geometry.coordinates] : land.geometry.coordinates) : land.features.flatMap((f) => (f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.coordinates));
+const topo = JSON.parse(readFileSync('node_modules/world-atlas/countries-10m.json', 'utf8'));
+const uk = feature(topo, topo.objects.countries).features.find((f) => String(f.id) === '826');
+const polys = uk.geometry.type === 'Polygon' ? [uk.geometry.coordinates] : uk.geometry.coordinates;
 
-const pad = 40, parts = [];
-for (const poly of polys) for (const ring of poly) {
+const parts = [];
+for (const poly of polys) {
+  const ring = poly[0];
+  const lons = ring.map((p) => p[0]), lats = ring.map((p) => p[1]);
+  if (Math.max(...lons) < -5.5 && Math.min(...lats) > 54 && Math.max(...lats) < 55.4) continue;   // Northern Ireland
+  if (Math.min(...lats) > VIEW.latMax || Math.max(...lats) < VIEW.latMin) continue;               // far islands
   const pts = ring.map(P);
-  const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
-  if (Math.max(...xs) < -pad || Math.min(...xs) > W + pad || Math.max(...ys) < -pad || Math.min(...ys) > H + pad) continue;
-  // clamp everything outside the (padded) frame onto its edge, then drop points closer than 1.6 px:
-  // the fill stays correct inside the frame and the continent's far coastline costs nothing
-  const clamp = ([x, y]) => [Math.min(W + pad, Math.max(-pad, x)), Math.min(H + pad, Math.max(-pad, y))];
-  const out = [clamp(pts[0])];
-  for (const raw of pts) { const p = clamp(raw), q = out[out.length - 1]; if (Math.hypot(p[0] - q[0], p[1] - q[1]) > 1.6) out.push(p); }
-  if (out.length < 4) continue;
-  parts.push('M' + out.map(([x, y]) => `${Math.round(x)} ${Math.round(y)}`).join('L') + 'Z');
+  const out = [pts[0]];
+  for (const p of pts) { const q = out[out.length - 1]; if (Math.hypot(p[0] - q[0], p[1] - q[1]) > 1.1) out.push(p); }
+  if (out.length < 5) continue;
+  parts.push('M' + out.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join('L') + 'Z');
 }
 mkdirSync('src/data', { recursive: true });
-writeFileSync('src/data/coverage-map.json', JSON.stringify({ source: 'Natural Earth 1:10m land, public domain', view: VIEW, lat0: LAT0, w: W, h: H, k, land: parts.join('') }));
+writeFileSync('src/data/coverage-map.json', JSON.stringify({ source: 'Natural Earth 1:10m admin-0, public domain', view: VIEW, lat0: LAT0, w: W, h: H, k, land: parts.join('') }));
 console.log(`coverage map: ${W}x${H}, ${parts.length} rings, ${(parts.join('').length / 1024).toFixed(0)} KB`);
